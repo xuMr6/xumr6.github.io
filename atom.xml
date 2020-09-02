@@ -6,7 +6,7 @@
   <link href="https://github.com/xuMr6/xumr6.github.io.git/atom.xml" rel="self"/>
   
   <link href="https://github.com/xuMr6/xumr6.github.io.git/"/>
-  <updated>2020-09-02T03:47:29.066Z</updated>
+  <updated>2020-09-02T08:22:33.827Z</updated>
   <id>https://github.com/xuMr6/xumr6.github.io.git/</id>
   
   <author>
@@ -15,6 +15,19 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://github.com/xuMr6/xumr6.github.io.git/2020/09/02/about/"/>
+    <id>https://github.com/xuMr6/xumr6.github.io.git/2020/09/02/about/</id>
+    <published>2020-09-02T08:22:33.827Z</published>
+    <updated>2020-09-02T08:22:33.827Z</updated>
+    
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>xuxin5</title>
@@ -70,19 +83,6 @@
   
   <entry>
     <title>xuxin</title>
-    <link href="https://github.com/xuMr6/xumr6.github.io.git/2020/09/02/1%20copy/"/>
-    <id>https://github.com/xuMr6/xumr6.github.io.git/2020/09/02/1%20copy/</id>
-    <published>2020-09-02T03:47:10.914Z</published>
-    <updated>2020-09-02T03:47:10.917Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>xuxin</title>
     <link href="https://github.com/xuMr6/xumr6.github.io.git/2020/09/02/1/"/>
     <id>https://github.com/xuMr6/xumr6.github.io.git/2020/09/02/1/</id>
     <published>2020-09-02T02:44:36.526Z</published>
@@ -111,6 +111,21 @@
     
     
     
+    
+  </entry>
+  
+  <entry>
+    <title>xuxin</title>
+    <link href="https://github.com/xuMr6/xumr6.github.io.git/2018/01/16/1%20copy/"/>
+    <id>https://github.com/xuMr6/xumr6.github.io.git/2018/01/16/1%20copy/</id>
+    <published>2018-01-16T02:16:10.000Z</published>
+    <updated>2020-09-02T08:50:26.913Z</updated>
+    
+    
+    
+    
+    
+    <category term="python" scheme="https://github.com/xuMr6/xumr6.github.io.git/tags/python/"/>
     
   </entry>
   
