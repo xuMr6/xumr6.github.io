@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        XuMr
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            redis最完整的解释
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <p>简介</p>
+<p>Redis （全称：Remote Dictionary Server 远程字典服务）是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。它是一个运行在内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。</p>
+<p>我们平时在项目中设计数据访问的时候往往都是采用直接访问数据库，采用数据库连接池来实现，但是如果我们的项目访问量过大或者访问过于频繁，将会对我们的数据库带来很大的压力。为了解决这个问题从而redis数据库脱颖而出，redis数据库出现时是以非关系数据库的光环展示在广大程序猿的面前的，后来redis的迭代版本支持了缓存数据、登录session状态（分布式session共享）等。所以又被作为内存缓存的形式应用到大型企业级项目中。</p>
+<p>Redis是什么？<br>主流的理解有以下三种</p>
+<p>1.key value store.是一个以key-value形式存储的数据库，定位直指MySQL，用来作为唯一的存储系统。</p>
+<p>2.memory cache.是一个把数据存储在内存中的高速缓存，用来在应用和数据库间提供缓冲，替代memcachd。</p>
+<p>3.data structrue server.把它支持对复杂数据结构的高速操作作为卖点，提供某些特殊业务场景的计算和展现需求。比如排行榜应用，Top 10之类的。</p>
+<p>Redis特点<br>Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。</p>
+<p>Redis 与其他 key - value 缓存产品有以下三个特点：</p>
+<p>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</p>
+<p>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</p>
+<p>Redis支持数据的备份，即master-slave模式的数据备份。</p>
+<p>Redis 优势<br>性能极高 – Redis能读的速度是110000次/s,写的速度是81000次/s 。这主要归功于这些数据都存在于内存中，并且是单线程。</p>
+<p>丰富的数据类型 – Redis支持二进制案例的 Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作。</p>
+<p>原子性 – Redis的所有操作都是原子性的，同时Redis还支持对几个操作全并后的原子性执行。</p>
+<p>丰富的特性 – Redis还支持 publish/subscribe（发布/订阅）、通知,、key 过期、Lua 脚本、事务、Pipeline（管道，即当指令到达一定数量后，客户端才会执行）等等特性。</p>
+<p>兼容性强 – 支持多种编程语言。支持Java、PHP、Golang、Python、Ruby、Lua、Nodejs等。</p>
+<p>高可用和分布式 – Redis-Sentinel（v2.8）支持高可用，Redis-Cluster（v3.0）支持分布式</p>
+<p>Redis使用场景<br>1、缓存——热数据</p>
+<p>这是 Redis 使用最多的场景。Redis 能够替代 Memcached，让你的缓存从只能存储数据变得能够更新数据，因此你不再需要每次都重新生成数据。</p>
+<p>2、计数器</p>
+<p>诸如统计点击数、转发数、评论数等应用。由于单线程，可以避免并发问题，保证不会出错，而且100%毫秒级性能！爽。 命令：INCRBY 当然爽完了，别忘记持久化，毕竟是redis只是存了内存！</p>
+<p>3、消息队列</p>
+<p>相当于消息系统，运行稳定并且快速，支持模式匹配，能够实时订阅与取消频道，和ActiveMQ，RocketMQ等工具类似，但是个人觉得简单用一下还行，如果对于数据一致性要求高的话还是用RocketMQ等专业系统。 由于redis把数据添加到队列是返回添加元素在队列的第几位，所以可以做判断用户是第几个访问这种业务 队列不仅可以把并发请求变成串行，并且还可以做队列或者栈使用</p>
+<p>4、位操作（大数据处理）</p>
+<p>用于数据量上亿的场景下，例如几亿用户系统的签到，去重登录次数统计，某用户是否在线状态等等。 腾讯10亿用户，要几毫秒内查询到某个用户是否在线，你能怎么做？千万别说给每个用户建立一个key，然后挨个记（你可以算一下需要的内存会很恐怖，而且这种类似的需求很多，腾讯光这个得多花多少钱。。）这里要用到位操作——使用setbit、getbit、bitcount命令。</p>
+<p>原理是： redis内构建一个足够长的数组，每个数组元素只能是0和1两个值，然后这个数组的下标index用来表示我们上面例子里面的用户id（必须是数字哈），那么很显然，这个几亿长的大数组就能通过下标和元素值（0和1）来构建一个记忆系统，上面我说的几个场景也就能够实现。用到的命令是：setbit、getbit、bitcount。</p>
+<p>5、分布式锁与单线程机制</p>
+<p>验证前端的重复请求（可以自由扩展类似情况），可以通过redis进行过滤：每次请求将request Ip、参数、接口等hash作为key存储redis（幂等性请求），设置多长时间有效期，然后下次请求过来的时候先在redis中检索有没有这个key，进而验证是不是一定时间内过来的重复提交 秒杀系统，基于redis是单线程特征，防止出现数据库“爆破” 全局增量ID生成，类似“秒杀”</p>
+<p>6、最新列表</p>
+<p>例如新闻列表页面最新的新闻列表，如果总数量很大的情况下，尽量不要使用select a from A limit 10这种low货，尝试redis的 LPUSH命令构建List，一个个顺序都塞进去就可以啦。不过万一内存清掉了咋办？也简单，查询不到存储key的话，用mysql查询并且初始化一个List到redis中就好了。</p>
+<p>7、排行榜</p>
+<p>谁得分高谁排名往上。命令：ZADD（有续集，sorted set）</p>
+<p>（附）Redis命令目录<br>Key（键）<br>DEL<br>DUMP<br>EXISTS<br>EXPIRE<br>EXPIREAT<br>KEYS<br>MIGRATE<br>MOVE<br>OBJECT<br>PERSIST<br>PEXPIRE<br>PEXPIREAT<br>PTTL<br>RANDOMKEY<br>RENAME<br>RENAMENX<br>RESTORE<br>SORT<br>TTL<br>TYPE<br>SCAN</p>
+<p>String（字符串）<br>APPEND<br>BITCOUNT<br>BITOP<br>BITFIELD<br>DECR<br>DECRBY<br>GET<br>GETBIT<br>GETRANGE<br>GETSET<br>INCR<br>INCRBY<br>INCRBYFLOAT<br>MGET<br>MSET<br>MSETNX<br>PSETEX<br>SET<br>SETBIT<br>SETEX<br>SETNX<br>SETRANGE<br>STRLEN</p>
+<p>Hash（哈希表）<br>HDEL<br>HEXISTS<br>HGET<br>HGETALL<br>HINCRBY<br>HINCRBYFLOAT<br>HKEYS<br>HLEN<br>HMGET<br>HMSET<br>HSET<br>HSETNX<br>HVALS<br>HSCAN<br>HSTRLEN</p>
+<p>List（列表）<br>BLPOP<br>BRPOP<br>BRPOPLPUSH<br>LINDEX<br>LINSERT<br>LLEN<br>LPOP<br>LPUSH<br>LPUSHX<br>LRANGE<br>LREM<br>LSET<br>LTRIM<br>RPOP<br>RPOPLPUSH<br>RPUSH<br>RPUSHX</p>
+<p>Set（集合）<br>SADD<br>SCARD<br>SDIFF<br>SDIFFSTORE<br>SINTER<br>SINTERSTORE<br>SISMEMBER<br>SMEMBERS<br>SMOVE<br>SPOP<br>SRANDMEMBER<br>SREM<br>SUNION<br>SUNIONSTORE<br>SSCAN</p>
+<p>SortedSet（有序集合）<br>ZADD<br>ZCARD<br>ZCOUNT<br>ZINCRBY<br>ZRANGE<br>ZRANGEBYSCORE<br>ZRANK<br>ZREM<br>ZREMRANGEBYRANK<br>ZREMRANGEBYSCORE<br>ZREVRANGE<br>ZREVRANGEBYSCORE<br>ZREVRANK<br>ZSCORE<br>ZUNIONSTORE<br>ZINTERSTORE<br>ZSCAN<br>ZRANGEBYLEX<br>ZLEXCOUNT<br>ZREMRANGEBYLEX</p>
+<p>HyperLogLog<br>PFADD<br>PFCOUNT<br>PFMERGE</p>
+<p>GEO（地理位置）<br>GEOADD<br>GEOPOS<br>GEODIST<br>GEORADIUS<br>GEORADIUSBYMEMBER<br>GEOHASH</p>
+<p>Pub/Sub（发布/订阅）<br>PSUBSCRIBE<br>PUBLISH<br>PUBSUB<br>PUNSUBSCRIBE<br>SUBSCRIBE<br>UNSUBSCRIBE</p>
+<p>Transaction（事务）<br>DISCARD<br>EXEC<br>MULTI<br>UNWATCH<br>WATCH</p>
+<p>Script（脚本）<br>EVAL<br>EVALSHA<br>SCRIPT EXISTS<br>SCRIPT FLUSH<br>SCRIPT KILL<br>SCRIPT LOAD</p>
+<p>Connection（连接）<br>AUTH<br>ECHO<br>PING<br>QUIT<br>SELECT</p>
+<p>Server（服务器）<br>BGREWRITEAOF<br>BGSAVE<br>CLIENT GETNAME<br>CLIENT KILL<br>CLIENT LIST<br>CLIENT SETNAME<br>CONFIG GET<br>CONFIG RESETSTAT<br>CONFIG REWRITE<br>CONFIG SET<br>DBSIZE<br>DEBUG OBJECT<br>DEBUG SEGFAULT<br>FLUSHALL<br>FLUSHDB<br>INFO<br>LASTSAVE<br>MONITOR<br>PSYNC<br>SAVE<br>SHUTDOWN<br>SLAVEOF<br>SLOWLOG<br>SYNC<br>TIME</p>
+<h1 id="redis五大数据类型"><a href="#redis五大数据类型" class="headerlink" title="redis五大数据类型"></a>redis五大数据类型</h1><h2 id="Redis支持五种数据类型："><a href="#Redis支持五种数据类型：" class="headerlink" title="Redis支持五种数据类型："></a>Redis支持五种数据类型：</h2><p>string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)。</p>
+<h2 id="redis五大数据类型实现原理"><a href="#redis五大数据类型实现原理" class="headerlink" title="redis五大数据类型实现原理"></a>redis五大数据类型实现原理</h2><p>目录<br>1、对象的类型与编码</p>
+<p>2、字符串对象</p>
+<p>3、列表对象</p>
+<p>4、哈希对象</p>
+<p>5、集合对象</p>
+<p>6、有序集合对象</p>
+<p>7、五大数据类型的应用场景</p>
+<p>8、内存回收和内存共享</p>
+<p>9、对象的空转时长</p>
+<p>　　在Redis中，并没有直接使用这些数据结构来实现键值对数据库，而是基于这些数据结构创建了一个对象系统，这些对象系统也就是前面说的五大数据类型，每一种数据类型都至少用到了一种数据结构。通过这五种不同类型的对象，Redis可以在执行命令之前，根据对象的类型判断一个对象是否可以执行给定的命令，而且可以针对不同的场景，为对象设置多种不同的数据结构，从而优化对象在不同场景下的使用效率。</p>
+<h4 id="1、对象的类型与编码"><a href="#1、对象的类型与编码" class="headerlink" title="1、对象的类型与编码"></a>1、对象的类型与编码</h4><p>　　Redis使用前面说的五大数据类型来表示键和值，每次在Redis数据库中创建一个键值对时，至少会创建两个对象，一个是键对象，一个是值对象，而Redis中的每个对象都是由 redisObject 结构来表示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">typedef struct redisObject&#123;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;类型</span><br><span class="line"></span><br><span class="line">     unsigned type:4;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;编码</span><br><span class="line"></span><br><span class="line">     unsigned encoding:4;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;指向底层数据结构的指针</span><br><span class="line"></span><br><span class="line">     void *ptr;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;引用计数</span><br><span class="line"></span><br><span class="line">     int refcount;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;记录最后一次被程序访问的时间</span><br><span class="line"></span><br><span class="line">     unsigned lru:22;</span><br><span class="line"></span><br><span class="line">&#125;robj</span><br></pre></td></tr></table></figure>
+<p>①、type属性</p>
+<p>对象的type属性记录了对象的类型，这个类型就是前面讲的五大数据类型：<br><img src="https://img-blog.csdnimg.cn/20200730114725844.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以通过如下命令来判断对象类型：<br>1     | type<br>——– | —–<br><img src="https://img-blog.csdnimg.cn/20200730114933965.png" alt="在这里插入图片描述"><br>注意：在Redis中，键总是一个字符串对象，而值可以是字符串、列表、集合等对象，所以我们通常说的键为字符串键，表示的是这个键对应的值为字符串对象，我们说一个键为集合键时，表示的是这个键对应的值为集合对象。<br>②、encoding 属性和 *prt 指针<br>　对象的 prt 指针指向对象底层的数据结构，而数据结构由 encoding 属性来决定。<br><img src="https://img-blog.csdnimg.cn/20200730115001858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>　而每种类型的对象都至少使用了两种不同的编码：<br><img src="https://img-blog.csdnimg.cn/20200730115021438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>　可以通过如下命令查看值对象的编码：<br>　1     | OBJECT ENCODING    key<br>——– | —–<br>　比如 string 类型：（可以是 embstr编码的简单字符串或者是 int 整数值实现）<br>　<img src="https://img-blog.csdnimg.cn/20200730115108340.png" alt="在这里插入图片描述"><br>2、字符串对象<br>　　字符串是Redis最基本的数据类型，不仅所有key都是字符串类型，其它几种数据类型构成的元素也是字符串。注意字符串的长度不能超过512M。</p>
+<p>　　①、编码</p>
+<p>　　字符串对象的编码可以是int，raw或者embstr。</p>
+<p>　　1、int 编码：保存的是可以用 long 类型表示的整数值。</p>
+<p>　　2、raw 编码：保存长度大于44字节的字符串（redis3.2版本之前是39字节，之后是44字节）。</p>
+<p>　　3、embstr 编码：保存长度小于44字节的字符串（redis3.2版本之前是39字节，之后是44字节）。<br><img src="https://img-blog.csdnimg.cn/20200730115125291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>　　由上可以看出，int 编码是用来保存整数值，raw编码是用来保存长字符串，而embstr是用来保存短字符串。其实 embstr 编码是专门用来保存短字符串的一种优化编码，raw 和 embstr 的区别：<br><img src="https://img-blog.csdnimg.cn/20200730115137332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200730115151399.png" alt="在这里插入图片描述"><br>　embstr与raw都使用redisObject和sds保存数据，区别在于，embstr的使用只分配一次内存空间（因此redisObject和sds是连续的），而raw需要分配两次内存空间（分别为redisObject和sds分配空间）。因此与raw相比，embstr的好处在于创建时少分配一次空间，删除时少释放一次空间，以及对象的所有数据连在一起，寻找方便。而embstr的坏处也很明显，如果字符串的长度增加需要重新分配内存时，整个redisObject和sds都需要重新分配空间，因此redis中的embstr实现为只读。</p>
+<p>　　ps：Redis中对于浮点数类型也是作为字符串保存的，在需要的时候再将其转换成浮点数类型。</p>
+<p>　　②、编码的转换</p>
+<p>　　当 int 编码保存的值不再是整数，或大小超过了long的范围时，自动转化为raw。</p>
+<p>　　对于 embstr 编码，由于 Redis 没有对其编写任何的修改程序（embstr 是只读的），在对embstr对象进行修改时，都会先转化为raw再进行修改，因此，只要是修改embstr对象，修改后的对象一定是raw的，无论是否达到了44个字节。<br>　　3、列表对象<br>　　list 列表，它是简单的字符串列表，按照插入顺序排序，你可以添加一个元素到列表的头部（左边）或者尾部（右边），它的底层实际上是个链表结构。</p>
+<p>　　①、编码</p>
+<p>　　列表对象的编码可以是 ziplist(压缩列表) 和 linkedlist(双端链表)。 关于链表和压缩列表的特性可以看我前面的这篇博客。</p>
+<p>　　比如我们执行以下命令，创建一个 key = ‘numbers’，value = ‘1 three 5’ 的三个值的列表。<br>　1     | rpush numbers 1 “three” 5<br>———|———–<br>　ziplist 编码表示如下：<br><img src="https://img-blog.csdnimg.cn/20200730115351403.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200730115402538.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>　②、编码转换</p>
+<p>　　当同时满足下面两个条件时，使用ziplist（压缩列表）编码：</p>
+<p>　　1、列表保存元素个数小于512个</p>
+<p>　　2、每个元素长度小于64字节</p>
+<p>　　不能满足这两个条件的时候使用 linkedlist 编码。</p>
+<p>　　上面两个条件可以在redis.conf 配置文件中的 list-max-ziplist-value选项和 list-max-ziplist-entries 选项进行配置。<br>　　4、哈希对象<br>　　哈希对象的键是一个字符串类型，值是一个键值对集合。</p>
+<p>　　①、编码</p>
+<p>　　哈希对象的编码可以是 ziplist 或者 hashtable。</p>
+<p>　　当使用ziplist，也就是压缩列表作为底层实现时，新增的键值对是保存到压缩列表的表尾。比如执行以下命令：<br>　　　1     |hset profile name “Tom”<br>———|———–<br>2     |   hset profile age 25<br>3|hset profile career “Programmer”<br>　　如果使用ziplist，profile 存储如下：<br>　　<img src="https://img-blog.csdnimg.cn/20200730115531362.png" alt="在这里插入图片描述"><br>当使用 hashtable 编码时，上面命令存储如下：<br><img src="https://img-blog.csdnimg.cn/2020073011554657.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>hashtable 编码的哈希表对象底层使用字典数据结构，哈希对象中的每个键值对都使用一个字典键值对。</p>
+<p>　　在前面介绍压缩列表时，我们介绍过压缩列表是Redis为了节省内存而开发的，是由一系列特殊编码的连续内存块组成的顺序型数据结构，相对于字典数据结构，压缩列表用于元素个数少、元素长度小的场景。其优势在于集中存储，节省空间。</p>
+<p>　　②、编码转换</p>
+<p>　　和上面列表对象使用 ziplist 编码一样，当同时满足下面两个条件时，使用ziplist（压缩列表）编码：</p>
+<p>　　1、列表保存元素个数小于512个</p>
+<p>　　2、每个元素长度小于64字节</p>
+<p>　　不能满足这两个条件的时候使用 hashtable 编码。第一个条件可以通过配置文件中的 set-max-intset-entries 进行修改。</p>
+<p>5、集合对象<br> 　　集合对象 set 是 string 类型（整数也会转换成string类型进行存储）的无序集合。注意集合和列表的区别：集合中的元素是无序的，因此不能通过索引来操作元素；集合中的元素不能有重复。</p>
+<p>　　①、编码</p>
+<p>　　集合对象的编码可以是 intset 或者 hashtable。</p>
+<p>　　intset 编码的集合对象使用整数集合作为底层实现，集合对象包含的所有元素都被保存在整数集合中。</p>
+<p>　　hashtable 编码的集合对象使用 字典作为底层实现，字典的每个键都是一个字符串对象，这里的每个字符串对象就是一个集合中的元素，而字典的值则全部设置为 null。这里可以类比Java集合中HashSet 集合的实现，HashSet 集合是由 HashMap 来实现的，集合中的元素就是 HashMap 的key，而 HashMap 的值都设为 null。<br>　　　1     |     SADD numbers 1 3 5<br>———|———–<br><img src="https://img-blog.csdnimg.cn/20200730115628591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>1|SADD Dfruits “apple” “banana” “cherry”<br>—–|—<br><img src="https://img-blog.csdnimg.cn/20200730115654208.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>　②、编码转换</p>
+<p>　　当集合同时满足以下两个条件时，使用 intset 编码：</p>
+<p>　　1、集合对象中所有元素都是整数</p>
+<p>　　2、集合对象所有元素数量不超过512</p>
+<p>　　不能满足这两个条件的就使用 hashtable 编码。第二个条件可以通过配置文件的 set-max-intset-entries 进行配置。</p>
+<p>6、有序集合对象<br>　　和上面的集合对象相比，有序集合对象是有序的。与列表使用索引下标作为排序依据不同，有序集合为每个元素设置一个分数（score）作为排序依据。</p>
+<p>　　①、编码</p>
+<p>　　有序集合的编码可以是 ziplist 或者 skiplist。</p>
+<p>　　ziplist 编码的有序集合对象使用压缩列表作为底层实现，每个集合元素使用两个紧挨在一起的压缩列表节点来保存，第一个节点保存元素的成员，第二个节点保存元素的分值。并且压缩列表内的集合元素按分值从小到大的顺序进行排列，小的放置在靠近表头的位置，大的放置在靠近表尾的位置。<br>　　1|ZADD price 8.5 apple 5.0 banana 6.0 cherry<br>—|—-<br><img src="https://img-blog.csdnimg.cn/20200730115731851.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200730115736295.png" alt="在这里插入图片描述"><br>skiplist 编码的有序集合对象使用 zet 结构作为底层实现，一个 zset 结构同时包含一个字典和一个跳跃表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct zset&#123;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;跳跃表</span><br><span class="line"></span><br><span class="line">     zskiplist *zsl;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;字典</span><br><span class="line"></span><br><span class="line">     dict *dice;</span><br><span class="line"></span><br><span class="line">&#125; zset;</span><br></pre></td></tr></table></figure>
+<p>字典的键保存元素的值，字典的值则保存元素的分值；跳跃表节点的 object 属性保存元素的成员，跳跃表节点的 score 属性保存元素的分值。</p>
+<p>　　这两种数据结构会通过指针来共享相同元素的成员和分值，所以不会产生重复成员和分值，造成内存的浪费。</p>
+<p>　　说明：其实有序集合单独使用字典或跳跃表其中一种数据结构都可以实现，但是这里使用两种数据结构组合起来，原因是假如我们单独使用 字典，虽然能以 O(1) 的时间复杂度查找成员的分值，但是因为字典是以无序的方式来保存集合元素，所以每次进行范围操作的时候都要进行排序；假如我们单独使用跳跃表来实现，虽然能执行范围操作，但是查找操作有 O(1)的复杂度变为了O(logN)。因此Redis使用了两种数据结构来共同实现有序集合。</p>
+<p>　　②、编码转换</p>
+<p>　　当有序集合对象同时满足以下两个条件时，对象使用 ziplist 编码：</p>
+<p>　　1、保存的元素数量小于128；</p>
+<p>　　2、保存的所有元素长度都小于64字节。</p>
+<p>　　不能满足上面两个条件的使用 skiplist 编码。以上两个条件也可以通过Redis配置文件zset-max-ziplist-entries 选项和 zset-max-ziplist-value 进行修改。</p>
+<p>7、五大数据类型的应用场景<br>　　对于string 数据类型，因为string 类型是二进制安全的，可以用来存放图片，视频等内容，另外由于Redis的高性能读写功能，而string类型的value也可以是数字，可以用作计数器（INCR,DECR），比如分布式环境中统计系统的在线人数，秒杀等。</p>
+<p>　　对于 hash 数据类型，value 存放的是键值对，比如可以做单点登录存放用户信息。</p>
+<p>　　对于 list 数据类型，可以实现简单的消息队列，另外可以利用lrange命令，做基于redis的分页功能</p>
+<p>　　对于 set 数据类型，由于底层是字典实现的，查找元素特别快，另外set 数据类型不允许重复，利用这两个特性我们可以进行全局去重，比如在用户注册模块，判断用户名是否注册；另外就是利用交集、并集、差集等操作，可以计算共同喜好，全部的喜好，自己独有的喜好等功能。</p>
+<p>　　对于 zset 数据类型，有序的集合，可以做范围查找，排行榜应用，取 TOP N 操作等。</p>
+<p>8、内存回收和内存共享</p>
+<p>①、内存回收</p>
+<p>　　前面讲 Redis 的每个对象都是由 redisObject 结构表示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">typedef struct redisObject&#123;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;类型</span><br><span class="line"></span><br><span class="line">     unsigned type:4;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;编码</span><br><span class="line"></span><br><span class="line">     unsigned encoding:4;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;指向底层数据结构的指针</span><br><span class="line"></span><br><span class="line">     void *ptr;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;引用计数</span><br><span class="line"></span><br><span class="line">     int refcount;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;记录最后一次被程序访问的时间</span><br><span class="line"></span><br><span class="line">     unsigned lru:22;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">&#125;robj</span><br></pre></td></tr></table></figure>
+<p>　其中关键的 type属性，encoding 属性和 ptr 指针都介绍过了，那么 refcount 属性是干什么的呢？</p>
+<p>　　因为 C 语言不具备自动回收内存功能，那么该如何回收内存呢？于是 Redis自己构建了一个内存回收机制，通过在 redisObject 结构中的 refcount 属性实现。这个属性会随着对象的使用状态而不断变化：</p>
+<p>　　1、创建一个新对象，属性 refcount 初始化为1</p>
+<p>　　2、对象被一个新程序使用，属性 refcount 加 1</p>
+<p>　　3、对象不再被一个程序使用，属性 refcount 减 1</p>
+<p>　　4、当对象的引用计数值变为 0 时，对象所占用的内存就会被释放。</p>
+<p>　　在 Redis 中通过如下 API 来实现：<br>　　<img src="https://img-blog.csdnimg.cn/20200730115900823.png" alt="在这里插入图片描述"><br>　学过Java的应该知道，引用计数的内存回收机制其实是不被Java采用的，因为不能克服循环引用的例子（比如 A 具有 B 的引用，B 具有 C 的引用，C 具有 A 的引用，除此之外，这三个对象没有任何用处了），这时候 A B C 三个对象会一直驻留在内存中，造成内存泄露。那么 Redis 既然采用引用计数的垃圾回收机制，如何解决这个问题呢？</p>
+<p>　　在前面介绍 redis.conf 配置文件时，在  MEMORY MANAGEMENT 下有个 maxmemory-policy 配置：</p>
+<p>　　maxmemory-policy ：当内存使用达到最大值时，redis使用的清楚策略。有以下几种可以选择：</p>
+<p>　　　　1）volatile-lru   利用LRU算法移除设置过过期时间的key (LRU:最近使用 Least Recently Used ) </p>
+<p>　　　　2）allkeys-lru   利用LRU算法移除任何key </p>
+<p>　　　　3）volatile-random 移除设置过过期时间的随机key </p>
+<p>　　　　4）allkeys-random  移除随机key</p>
+<p>　　　　5）volatile-ttl   移除即将过期的key(minor TTL) </p>
+<p>　　　　6）noeviction  noeviction   不移除任何key，只是返回一个写错误 ，默认选项</p>
+<p>　　通过这种配置，也可以对内存进行回收。</p>
+<p>②、内存共享 </p>
+<p>　　refcount 属性除了能实现内存回收以外，还能用于内存共享。</p>
+<p>　　比如通过如下命令 set k1 100,创建一个键为 k1，值为100的字符串对象，接着通过如下命令 set k2 100 ，创建一个键为 k2，值为100 的字符串对象，那么 Redis 是如何做的呢？</p>
+<p>　　1、将数据库键的值指针指向一个现有值的对象</p>
+<p>　　2、将被共享的值对象引用refcount 加 1<br>　　<img src="https://img-blog.csdnimg.cn/20200730115914627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>　注意：Redis的共享对象目前只支持整数值的字符串对象。之所以如此，实际上是对内存和CPU（时间）的平衡：共享对象虽然会降低内存消耗，但是判断两个对象是否相等却需要消耗额外的时间。对于整数值，判断操作复杂度为O(1)；对于普通字符串，判断复杂度为O(n)；而对于哈希、列表、集合和有序集合，判断的复杂度为O(n^2)。</p>
+<p>　　虽然共享对象只能是整数值的字符串对象，但是5种类型都可能使用共享对象（如哈希、列表等的元素可以使用）。</p>
+<p>9、对象的空转时长<br>　　在 redisObject 结构中，前面介绍了 type、encoding、ptr 和 refcount 属性，最后一个 lru 属性，该属性记录了对象最后一次被命令程序访问的时间。</p>
+<p>　　使用 OBJECT IDLETIME 命令可以打印给定键的空转时长，通过将当前时间减去值对象的 lru 时间计算得到。<br>　　<img src="https://img-blog.csdnimg.cn/20200730115927457.png" alt="在这里插入图片描述"><br>lru 属性除了计算空转时长以外，还可以配合前面内存回收配置使用。如果Redis打开了maxmemory选项，且内存回收算法选择的是volatile-lru或allkeys—lru，那么当Redis内存占用超过maxmemory指定的值时，Redis会优先选择空转时间最长的对象进行释放。</p>
+<h2 id="redis五大数据类型常用命令"><a href="#redis五大数据类型常用命令" class="headerlink" title="redis五大数据类型常用命令"></a>redis五大数据类型常用命令</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/redis/redis-data-types.html">https://www.runoob.com/redis/redis-data-types.html</a></p>
+<h2 id="redis持久化原理"><a href="#redis持久化原理" class="headerlink" title="redis持久化原理"></a>redis持久化原理</h2><p>redis支持非常丰富的内存数据结构类型，redis一共支持4种持久化方式：</p>
+<p>1、定时快照方式（snapshot）</p>
+<p>2、基于语句追加文件的方式（aof）</p>
+<p>3、虚拟内存</p>
+<p>4、Diskstore方式</p>
+<p>redis支持小量数据落地功能，后两种方式兵不成熟，下面分别介绍下这几种持久化方式：</p>
+<p>定时快照方式（snapshot）：</p>
+<p>该持久化方式实际是在redis内部一个定时器事件，每隔固定事件去检查当前数据发生的改变次数与时间是否满足配置的持久化触发的条件，如果满足则，通过操作fork调用来创建出一个子进程，这个子进程默认会与父进程贡献相同的地址空间，这就可以通过子进程来遍历整个内存来进行存储操作，而主进程则仍然可以提供服务，当有写入时由操作系统按照内存页（page）为单位来进行copy-on-write保证父子进程之间不会互相影响。该持久化的主要缺点是定时快照只是代表一段时间内的内存映射，所以系统重启会丢失上次快照与重启之间所有的数据。</p>
+<p>基于语句追加方式（aof）：</p>
+<p>aof方式实际类型似mysql的基于语句binlog方式，即每条会使redis内存数据发生改变的命令都会追加到一个log文件中，也就是说这个log文件就是redis的持久化数据。</p>
+<p>aof的方式主要缺点是追加log文件可能导致体积过大，当系统重启恢复数据时如果是aof的方式则加载数据会非常慢，几十G的数据可能需要几小时才能加载完，当然这个耗时并不是因为磁盘文件读取速度慢，而是由于读取的所有命令都要在内存中执行一遍。另外由于每条命令都要写log，所以使用aof的方式，redis的读写性能也会有所下降。</p>
+<h2 id="什么是redis哨兵模式"><a href="#什么是redis哨兵模式" class="headerlink" title="什么是redis哨兵模式"></a>什么是redis哨兵模式</h2><p>哨兵模式是一种特殊模式，首先redis提供了哨兵的命令，哨兵是一个独立的进程，作为进程，它会独立运行。其原理是哨兵通过发送命令，等待redis服务器响应，从而监控运行的redis实例。</p>
+<p>Sentinel（哨兵）是Redis的高可用性解决方案：由一个或多个Sentinel实例组成的Sentinel系统可以监视任意多个主服务器，以及这些主服务器属下的所有从服务器，并在被监视的主服务器进入下线状态，自动将下线主服务器属下的某个从服务器升级为新的主服务器。</p>
+<p>主要功能：</p>
+<p>1、不时的监控redis是否按照预期良好的运行；</p>
+<p>2、如果发生某个redis节点运行出现状况，能够通知另外一个进程(例如它的客户端)。</p>
+<p>3、能够进行自动切换，当一个mater节点不可用时能够选举出master的多个slave（如果有超过一个slave的话）中的一个来作为新的master，其他的slave节点会将它所追随的master地址改为被提升master的slave的新地址。</p>
+<p>4、哨兵为客户端提供服务发现，客户端练肌肉哨兵，哨兵提供当前master的地址然后提供服务，如果出现切换，也就是master挂了，哨兵会提供客户端一个新地址。</p>
+<h1 id="redis击穿、穿透、雪崩以及解决方案"><a href="#redis击穿、穿透、雪崩以及解决方案" class="headerlink" title="redis击穿、穿透、雪崩以及解决方案"></a>redis击穿、穿透、雪崩以及解决方案</h1><p>1 击穿: 指的是单个key在缓存中查不到，去数据库查询，这样如果数据量不大或者并发不大的话是没有什么问题的。</p>
+<p>   如果数据库数据量大并且是高并发的情况下那么就可能会造成数据库压力过大而崩溃</p>
+<p>注意: 这里指的是单个key发生高并发!!!</p>
+<p>解决方案:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">1) 通过synchronized+双重检查机制：某个key只让一个线程查询，阻塞其它线程</span><br><span class="line">    在同步块中，继续判断检查，保证不存在，才去查DB。</span><br><span class="line"> 例如:    </span><br><span class="line"> private static volaite Object lockHelp&#x3D;new Object();</span><br><span class="line">  public String getValue(String key)&#123;</span><br><span class="line">    String value&#x3D;redis.get(key,String.class);</span><br><span class="line">    if(value&#x3D;&#x3D;&quot;null&quot;||value&#x3D;&#x3D;null||StringUtils.isBlank(value)&#123;</span><br><span class="line">        synchronized(lockHelp)&#123;</span><br><span class="line">               value&#x3D;redis.get(key,String.class);</span><br><span class="line">                if(value&#x3D;&#x3D;&quot;null&quot;||value&#x3D;&#x3D;null||StringUtils.isBlank(value)&#123;</span><br><span class="line">                    value&#x3D;db.query(key);</span><br><span class="line">                     redis.set(key,value,1000);</span><br><span class="line">                 &#125;</span><br><span class="line">           &#125;</span><br><span class="line">          &#125;    </span><br><span class="line">       return value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>缺点: 会阻塞其它线程</p>
+<ol start="2">
+<li><p>设置value永不过期</p>
+<p> 这种方式可以说是最可靠的，最安全的但是占空间，内存消耗大，并且不能保持数据最新 这个需要根据具体的业务逻辑来做 </p>
+<p>个人觉得如果要保持数据最新不放这么试试，仅供参考：</p>
+<p>起个定时任务或者利用TimerTask 做定时，每个一段时间多这些值进行数据库查询更新一次缓存，当然前提时不会给数据库造成压力过大(这个很重要)</p>
+</li>
+<li><p>使用互斥锁(mutex key)</p>
+<p>业界比较常用的做法，是使用mutex。简单地来说，就是在缓存失效的时候（判断拿出来的值为空），不是立即去load db，而是先使用缓存工具的某些带成功操作返回值的操作（比如Redis的SETNX或者Memcache的ADD）去set一个mutex key，当操作返回成功时，再进行load db的操作并回设缓存；否则，就重试整个get缓存的方法。</p>
+</li>
+</ol>
+<p>SETNX，是「SET if Not eXists」的缩写，也就是只有不存在的时候才设置，可以利用它来实现锁的效果。在redis2.6.1之前版本未实现setnx的过期时间，所以这里给出两种版本代码参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public String get(key) &#123;</span><br><span class="line">      String value &#x3D; redis.get(key);</span><br><span class="line">      if (value &#x3D;&#x3D; null) &#123; &#x2F;&#x2F;代表缓存值过期</span><br><span class="line">          &#x2F;&#x2F;设置3min的超时，防止del操作失败的时候，下次缓存过期一直不能load db</span><br><span class="line">          if (redis.setnx(key_mutex, 1, 3 * 60) &#x3D;&#x3D; 1) &#123;  &#x2F;&#x2F;代表设置成功</span><br><span class="line">               value &#x3D; db.get(key);</span><br><span class="line">                      redis.set(key, value, expire_secs);</span><br><span class="line">                      redis.del(key_mutex);</span><br><span class="line"></span><br><span class="line">                     return value;</span><br><span class="line">              &#125; else &#123;  &#x2F;&#x2F;这个时候代表同时候的其他线程已经load db并回设到缓存了，这时候重试获取缓存值即可</span><br><span class="line">                      sleep(10);</span><br><span class="line">                      get(key);  &#x2F;&#x2F;重试</span><br><span class="line">              &#125;</span><br><span class="line">          &#125; else &#123;</span><br><span class="line">              return value;      </span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>缺点:</p>
+<ol>
+<li><p>代码复杂度增大</p>
+</li>
+<li><p>存在死锁的风险</p>
+</li>
+<li><p>存在线程池阻塞的风险</p>
+</li>
+</ol>
+<p>2 雪崩</p>
+<p>雪崩指的是多个key查询并且出现高并发，缓存中失效或者查不到，然后都去db查询，从而导致db压力突然飙升，从而崩溃。</p>
+<p>出现原因:<br> 1 key同时失效<br> 2 redis本身崩溃了</p>
+<p>方案:</p>
+<p>在缓存失效后，通过加锁或者队列来控制读数据库写缓存的线程数量。比如对某个key只允许一个线程查询数据和写缓存，其他线程等待。(跟击穿的第一个方案类似，但是这样是避免不了其它key去查数据库，只能减少查询的次数)<br>可以通过缓存reload机制，预先去更新缓存，再即将发生大并发访问前手动触发加载缓存<br>不同的key，设置不同的过期时间，具体值可以根据业务决定，让缓存失效的时间点尽量均匀<br>做二级缓存，或者双缓存策略。A1为原始缓存，A2为拷贝缓存，A1失效时，可以访问A2，A1缓存失效时间设置为短期，A2设置为长期。(这种方式复杂点)<br>3 击透</p>
+<p>   一般是出现这种情况是因为恶意频繁查询才会对系统造成很大的问题: key缓存并且数据库不存在，所以每次查询都会查询数据库从而导致数据库崩溃。</p>
+<p>解决方案:</p>
+<pre><code>      1) 使用布隆过滤器: 热点数据等场景(具体看使用场景)</code></pre>
+<p>布隆过滤器是什么？</p>
+<p>布隆过滤器可以理解为一个不怎么精确的 set 结构，当你使用它的 contains 方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判概率。</p>
+<p>当布隆过滤器说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。打个比方，当它说不认识你时，肯定就不认识；当它说见过你时，可能根本就没见过面，不过因为你的脸跟它认识的人中某脸比较相似 (某些熟脸的系数组合)，所以误判以前见过你。</p>
+<p>缺点: 1 会存在一定的误判率</p>
+<pre><code>      2  对新增加的数据无法进行布隆过滤
+
+      3 数据的key不会频繁的更改</code></pre>
+<p>   google 的 gauva 中有布隆过滤的实现</p>
+<pre><code> BloomFilter的关键在于hash算法的设定和bit数组的大小确定，通过权衡得到一个错误概率可以接受的结果。
+
+ 我们设置的容错率越小那么过滤函数也就多，分配的空间也就越大(存放bits)，那么误判率也就越小。</code></pre>
+<p>2 将击透的key缓存起来，但是时间不能太长，下次进来是直接返回不存在，但是这种情况无法过滤掉动态的key，就是说每次请求进来都是不同额key，这样还是会造成这个问题</p>
+<h1 id="redis事务"><a href="#redis事务" class="headerlink" title="redis事务"></a>redis事务</h1><p>Redis事务的概念：</p>
+<p>　　Redis 事务的本质是一组命令的集合。事务支持一次执行多个命令，一个事务中所有命令都会被序列化。在事务执行过程，会按照顺序串行化执行队列中的命令，其他客户端提交的命令请求不会插入到事务执行命令序列中。</p>
+<p>　　总结说：redis事务就是一次性、顺序性、排他性的执行一个队列中的一系列命令。　　</p>
+<p>Redis事务没有隔离级别的概念：</p>
+<p>　　批量操作在发送 EXEC 命令前被放入队列缓存，并不会被实际执行，也就不存在事务内的查询要看到事务里的更新，事务外查询不能看到。<br>Redis不保证原子性：</p>
+<p>　　Redis中，单条命令是原子性执行的，但事务不保证原子性，且没有回滚。事务中任意命令执行失败，其余的命令仍会被执行。</p>
+<p>Redis事务的三个阶段：</p>
+<p>开始事务<br>命令入队<br>执行事务<br>Redis事务相关命令：</p>
+<p>　　watch key1 key2 … : 监视一或多个key,如果在事务执行之前，被监视的key被其他命令改动，则事务被打断 （ 类似乐观锁 ）</p>
+<p>　　multi : 标记一个事务块的开始（ queued ）</p>
+<p>　　exec : 执行所有事务块的命令 （ 一旦执行exec后，之前加的监控锁都会被取消掉 ）　</p>
+<p>　　discard : 取消事务，放弃事务块中的所有命令</p>
+<p>　　unwatch : 取消watch对所有key的监控</p>
+<p>Redis事务使用案例：</p>
+<p>（1）正常执行<br><img src="https://img-blog.csdnimg.cn/20200730134958394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>（2）放弃事务<br><img src="https://img-blog.csdnimg.cn/20200730135013872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>（3）若在事务队列中存在命令性错误（类似于java编译性错误），则执行EXEC命令时，所有命令都不会执行<br><img src="https://img-blog.csdnimg.cn/20200730135043261.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>（4）若在事务队列中存在语法性错误（类似于java的1/0的运行时异常），则执行EXEC命令时，其他正确命令会被执行，错误命令抛出异常。<br><img src="https://img-blog.csdnimg.cn/20200730135051943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>（5）使用watch</p>
+<p>案例一：使用watch检测balance，事务期间balance数据未变动，事务执行成功<br><img src="https://img-blog.csdnimg.cn/20200730135112415.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>案例二：使用watch检测balance，在开启事务后（标注1处），在新窗口执行标注2中的操作，更改balance的值，模拟其他客户端在事务执行期间更改watch监控的数据，然后再执行标注1后命令，执行EXEC后，事务未成功执行。<br><img src="https://img-blog.csdnimg.cn/20200730135127649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>一但执行 EXEC 开启事务的执行后，无论事务使用执行成功， WARCH 对变量的监控都将被取消。</p>
+<p>故当事务执行失败后，需重新执行WATCH命令对变量进行监控，并开启新的事务进行操作。</p>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><p>　　watch指令类似于乐观锁，在事务提交时，如果watch监控的多个KEY中任何KEY的值已经被其他客户端更改，则使用EXEC执行事务时，事务队列将不会被执行，同时返回Nullmulti-bulk应答以通知调用者事务执行失败。</p>
+<h2 id="redis乐观锁"><a href="#redis乐观锁" class="headerlink" title="redis乐观锁"></a>redis乐观锁</h2><p>乐观锁（又名乐观并发控制，Optimistic Concurrency Control，缩写“OCC”），是一种并发控制的方法。它假设多用户并发的事务在处理时不会彼此互相影响，各事务能够在不产生锁的情况下处理各自影响的那部分数据。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。</p>
+<p>与乐观所相对的，就是悲观锁（又名悲观并发控制，Pessimistic Concurrency Control，缩写“PCC”），它可以阻止一个事务以影响其他用户的方式来修改数据。如果一个事务执行的操作都某行数据应用了锁，那只有当这个事务把锁释放，其他事务才能够执行与该锁冲突的操作。</p>
+<p>通俗的说，就是悲观锁就是“先取锁在访问”，因为悲观锁会“悲观”地认为访问会产生冲突，因此这种保守的策略虽然在数据处理的安全行上提供了保障，但是在效率方面会让数据库产生极大的开销，而且还有可能出现死锁的情况。</p>
+<p>在Redis中WATCH命令的实现是基于乐观锁，即，假设访问不会产生冲突，但是在提交数据之前会先检查该事务该事物读取数据后，其他事务是否修改数据，如果其他事务修改了数据，像MySQL提供了回滚操作，而Redis不支持回滚，因为antirez认为这与Redis简单高效的设计主旨不相符，并且Redis事务执行时错误在开发环境时是可以避免的。</p>
+<p>乐观锁控制的事务一般包括三个阶段：</p>
+<p>读取：当执行完MULTI命令后，客户端进入事务模式，客户端接下来输入的命令会读入到事务队列中，入队过程中出错会设置CLIENT_DIRTY_EXEC标识。<br>校验：如果数据库有键被修改，那么会检测被修改的键是否是被WATCH命令监视的命令，如果是则会设置对应的标识（CLIENT_DIRTY_CAS），并且在命令执行前会检测这两个标识，如果检测到该标识，则会取消事务的执行。<br>写入：如果没有设置以上两种标识，那么会执行事务的命令，而Redis是单进程模型，因此可以避免执行事务命令时其他请求可能修改数据库键的可能。<br>Redis的乐观锁不是通常实现乐观锁的一般方法：检测版本号，而是在执行完一个写命令后，会进行检查，检查是否是被WATCH监视的键。 </p>
+<h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p> 悲观锁（Pessimistic Lock），顾名思义，就是很悲观，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，当其他线程想要访问数据时，都需要阻塞挂起。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁、表锁，读锁，写锁等，都是在操作之前先上锁。</p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>分布式锁，是一种思想，它的实现方式有很多。比如，我们将沙滩当做分布式锁的组件，那么它看起来应该是这样的：</p>
+<p>.加锁<br>在沙滩上踩一脚，留下自己的脚印，就对应了加锁操作。其他进程或者线程，看到沙滩上已经有脚印，证明锁已被别人持有，则等待。</p>
+<p>解锁<br>把脚印从沙滩上抹去，就是解锁的过程。</p>
+<p>锁超时<br>为了避免死锁，我们可以设置一阵风，在单位时间后刮起，将脚印自动抹去。</p>
+<p>分布式锁的实现有很多，比如基于数据库、memcached、Redis、系统文件、zookeeper等。它们的核心的理念跟上面的过程大致相同。</p>
+<h2 id="Hash冲突"><a href="#Hash冲突" class="headerlink" title="Hash冲突"></a>Hash冲突</h2><p>1、 什么是hash表</p>
+<p>根据设定的哈希函数H(key)和处理冲突的方法将一组关键字映像到一个有限的连续的地址集（区间）上，并以关键字在地址集中的“像”作为记录在表中的存储位置，这种表便称为哈希表，这一映像过程称为哈希造表或者散列，所得的存储位置称哈希地址或散列地址。</p>
+<p>2、 hash冲突</p>
+<p>对应不同的关键字可能获得相同的hash地址，即 key1≠key2，但是f(key1)=f(key2)。这种现象就是冲突，而且这种冲突只能尽可能的减少，不能完全避免。因为哈希函数是从关键字集合和地址集合的映像，通常关键字集合比较大，而地址集合的元素仅为哈希表中的地址值。</p>
+<p>3、 处理冲突的方法。</p>
+<p>通常用的冲突处理方法有以下几种：</p>
+<p>(1)、开放定址法<br><img src="https://img-blog.csdnimg.cn/20200805081435649.png" alt="[公式]"><br>其中H(key)为hash函数，m为哈希表的长度， [公式] 为增量序列，其取值有三种防止：a、线性探测再散列： <img src="https://img-blog.csdnimg.cn/20200805081457758.png" alt="[公式]"><br>b、二次探测再散列：<br><img src="https://img-blog.csdnimg.cn/20200805081525280.png" alt="[公式]"><br>c、随机探测再散列，<br><img src="https://img-blog.csdnimg.cn/20200805081542310.png" alt="[公式]"><br>eg：H(key) = key MOD 7，哈希表中已经存在关键字：11，12，15，在插入</p>
+<p>关键字18的时候，通过哈希函数的到的地址为4，产生冲突，使用线性探测得到的下一个地址为5，依然冲突，继续探测得到地址6，为空，冲突处理结束，使用二次探测解决冲突第一个地址为5，冲突，再次探测，地址为3，为空，冲突处理结束。</p>
+<p>线性探测：<br><img src="https://img-blog.csdnimg.cn/20200805081601214.png" alt="在这里插入图片描述"><br>二次探测：<br><img src="https://img-blog.csdnimg.cn/2020080508161287.png" alt="在这里插入图片描述"><br>随机探测：<br><img src="https://img-blog.csdnimg.cn/20200805081634721.png" alt="在这里插入图片描述"><br>从上述可以看出使用线性探测的时候，当i，i+1,位置上都已填有记录的时候，下一个哈希地址为，i，i+1i+2的记录都将填入i+2的地址，者会造成第一个哈希地址不同的记录争夺同一个后继哈希地址的现象称为“二次聚集”，即在处理相同哈希值冲突的时候造成了不同哈希值的冲突，但是在另一个方面可以看出，只要未满使用线性探测总能找到空位置。</p>
+<p>（2）、在哈希法<br><img src="https://img-blog.csdnimg.cn/20200805081725807.png" alt="在这里插入图片描述"><br>[公式] 都是不同的哈希函数，对产生地址冲突的关键字再次进行哈希计算，获取另一个哈希地址，知道不在产生冲突，这种方法不易产生“二次聚集”，但是增加的计算的时间。</p>
+<p>（3）、链地址法</p>
+<p>每个哈希地址对应的一个线性表，将地址相同的记录按序写入链表，这种处理方法如果收到哈希共计，出现大量的哈希冲突，会导致查询的时间复杂度增长，甚至退化为O(n)，为了提高查询效率我们可以使用跳表或者红黑树等结构替换线性表。</p>
+<p>eg: H(key) = key MOD 7，已存在的记录为，0，4，7，9，11，12<br><img src="https://img-blog.csdnimg.cn/20200805081741644.png" alt="本图片来源于网络,如有侵权立删"><br>（4）、建立公共溢出区<br>顾名思义，在创建哈希表时，同时创建另一个表，将所有发生哈希冲突的记录都存储到溢出表。</p>
+
+    </div>
+
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2018-2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io"></a><a class="flink" href="https://github.com/sanjinhub/hexo-theme-geek"></a>
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="white">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>

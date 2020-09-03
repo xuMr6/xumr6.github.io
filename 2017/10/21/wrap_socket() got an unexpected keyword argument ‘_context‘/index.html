@@ -25,12 +25,22 @@
     <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
     <div class="post-title">
         <p>
-            xuxin2
+            wrap_socket() got an unexpected keyword argument ‘_context‘
         </p>
         <hr>
     </div>
     <div class="post-content">
-        
+        <p>python3.8使用celery报错wrap_socket() got an unexpected keyword argument ‘_context’<br>原启动方法为:<br>起执行任务的服务</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">elery worker -A celery_task -l info -P eventlet</span><br></pre></td></tr></table></figure>
+<p>起提交任务的服务</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery beat -A celery_task -l info</span><br></pre></td></tr></table></figure>
+
+<p>改变服务器启动方法不要用eventlet，加个参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery worker -A celery_task --loglevel=info --pool=solo</span><br></pre></td></tr></table></figure>
+
+<p>注意:celery_task是文件名,注意修改</p>
+<p><strong>解决一切疑难杂症,值得一试</strong></p>
+
     </div>
 
     

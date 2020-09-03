@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        XuMr
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            网络协议http与https,tcp和udp,tcp/ip
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="HTTP和HTTPS是什么？"><a href="#HTTP和HTTPS是什么？" class="headerlink" title="HTTP和HTTPS是什么？"></a>HTTP和HTTPS是什么？</h1><p>我们使用浏览器访问一个网站页面，在浏览器的地址栏中我们会看到一串URL，如图<br><img src="https://img-blog.csdnimg.cn/20200730105900432.png" alt="在这里插入图片描述"><br>网站的URL会分为两部分：通信协议和域名地址。</p>
+<p>域名地址都很好理解，不同的域名地址表示网站中不同的页面，而通信协议，简单来说就是浏览器和服务器之间沟通的语言。网站中的通信协议一般就是HTTP协议和HTTPS协议。</p>
+<p>HTTP协议</p>
+<p>HTTP协议是一种使用明文数据传输的网络协议。一直以来HTTP协议都是最主流的网页协议，但是互联网发展到今天，HTTP协议的明文传输会让用户存在一个非常大的安全隐患。试想一下，假如你在一个HTTP协议的网站上面购物，你需要在页面上输入你的银行卡号和密码，然后你把数据提交到服务器实现购买。假如这个适合，你的传输数据被第三者给截获了，由于HTTP明文数据传输的原因，你的银行卡号和密码，将会被这个截获人所得到。现在你还敢在一个HTTP的网站上面购物吗？你还会在一个HTTP的网站上面留下你的个人信息吗？<br><img src="https://img-blog.csdnimg.cn/20200730105912831.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>HTTPS协议</p>
+<p>HTTPS协议可以理解为HTTP协议的升级，就是在HTTP的基础上增加了数据加密。在数据进行传输之前，对数据进行加密，然后再发送到服务器。这样，就算数据被第三者所截获，但是由于数据是加密的，所以你的个人信息让然是安全的。这就是HTTP和HTTPS的最大区别。<br><img src="https://img-blog.csdnimg.cn/20200730105929243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>其实如果你足够细心，你会发现现在很多大型互联网网站，如百度、淘宝、腾讯很早就已经把HTTP换成HTTPS了。<br><img src="https://img-blog.csdnimg.cn/20200730105938604.png" alt="在这里插入图片描述"></p>
+<p>HTTP和HTTPS的其他不同</p>
+<p>数据加密传输，是HTTP和HTTPS之间的本质性区别，其实除了这个之外，HTTPS网站和HTTP网站还有其他地方不同。</p>
+<p>当你使用Chrome浏览器访问一个HTTP网站的时候，你会发现浏览器会对该HTTP网站显示“不安全”的安全警告，提示用户当前所访问的网站可能会存在风险。<br><img src="https://img-blog.csdnimg.cn/20200730105949107.png" alt="在这里插入图片描述"><br>而假如你访问的是一个HTTPS网站时，情况却是完全不一样。你会发现浏览器的地址栏会变成绿色，企业名称会展示在地址栏中，地址栏上面还会出现一把“安全锁”的图标。这些都会给与用户很大的视觉上的安全体验。以下是EV证书在不同浏览器中的展现。<br><img src="https://img-blog.csdnimg.cn/20200730110006419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTQ5OTA0MA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>除了浏览器视觉上不同以外，HTTPS网站和HTTP网站还有一个很重要的区别，就是对搜索排名的提升，这也是很多站长所关注的地方。</p>
+<p>百度和谷歌两大搜索引擎都已经明确表示，HTTPS网站将会作为搜索排名的一个重要权重指标。也就是说HTTPS网站比起HTTP网站在搜索排名中更有优势。</p>
+<p>HTTPS网站相比起HTTP网站拥有着多种的优势，HTTP明显已经不能适应当今这个互联网时代，可以预见到HTTP在不久的将来将会全面被HTTPS所取代。</p>
+<h1 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(1)同步：端口下如果同是来了两个客户端请求，第一个连接得到响应，与服务端建立通讯，而第二个请求就会被一直阻塞直到第一个请求完成操作，各请求之间排队，顺序执行。</span><br><span class="line">　(2)异步呢，就是同时来两个或者多个请求，服务端就同时响应多个客户端，同时给他们连接。各个客户端与服务器的通讯是并行的，一个客户端不必等另一个客户端完成操作。通常用这两个方法来接收一个客户端请求。</span><br><span class="line">　(3)阻塞 调用是指调用结果返回之前，当前线程会被挂起。比如：Console.ReadLine(),如果你不向控制台输入数据，这个方法就会一直等待，知道你输入数据后才会向下执行。这个时候当前线程被挂起来了，让CPU去做其他事情。</span><br><span class="line">　(4)非阻塞和阻塞的概念相对应，指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</span><br></pre></td></tr></table></figure>
+<h3 id="syn攻击"><a href="#syn攻击" class="headerlink" title="syn攻击"></a>syn攻击</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在三次握手过程中，服务器发送SYN-ACK之后，收到客户端的ACK之前的TCP连接称为半连接(half-open connect).此时服务器处于Syn_RECV状态.当收到ACK后，服务器转入ESTABLISHED状态.</span><br><span class="line">Syn攻击就是 攻击客户端 在短时间内伪造大量不存在的IP地址，向服务器不断地发送syn包，服务器回复确认包，并等待客户的确认，由于源地址是不存在的，服务器需要不断的重发直 至超时，这些伪造的SYN包将长时间占用未连接队列，正常的SYN请求被丢弃，目标系统运行缓慢，严重者引起网络堵塞甚至系统瘫痪。</span><br><span class="line">Syn攻击是一个典型的DDOS攻击。检测SYN攻击非常的方便，当你在服务器上看到大量的半连接状态时，特别是源IP地址是随机的，基本上可以断定这是一次SYN攻击.在Linux下可以如下命令检测是否被Syn攻击</span><br><span class="line">netstat -n -p TCP | grep SYN_RECV</span><br><span class="line">一般较新的TCP&#x2F;IP协议栈都对这一过程进行修正来防范Syn攻击，修改tcp协议实现。主要方法有SynAttackProtect保护机制、SYN cookies技术、增加最大半连接和缩短超时时间等.</span><br><span class="line">但是不能完全防范syn攻击。</span><br></pre></td></tr></table></figure>
+<p>TCP和UDP是OSI模型中的运输层中的协议。TCP提供可靠的通信传输，而UDP则常被用于广播提供面向无连接的通信服务</p>
+<p>握手<br>“我想给你发数据，可以吗？” （请提供序列号作为起始数据段）SYN：同步序列编号（Synchronize Sequence Numbers）<br>“可以，你什么时候发？” （已提供序列号）SYN+ACK应答<br>“我现在就发，你接着吧！”  ACK消息响应</p>
+<p>挥手 （A为主动关闭方，可以是SERVICE也可以是CLIENT）<br>SERVER：传输好了，我要关了   1 ) 当主机A完成数据传输后,发送FIN,提出停止TCP连接的请求，进入FIN_WAIT1状态<br>CLIENT：我看一下                       2 ) 主机B收到FIN后，将发送ACK，进入CLOSE_WAIT状态<br>CLIENT：OK ，可以关                 3 ) 由B 端再提出反方向的关闭请求,将发送FIN，并进入LAST_ACK状态<br>SERVER： 嗯，我关了                 4 ) 主机A对主机B的请求进行确认收到FIN,将发送ACK,双方向的关闭结束.进入TIME_WAIT状态，经过2MSL时间后关闭<br><img src="https://img-blog.csdnimg.cn/20200730111819462.png" alt="在这里插入图片描述"></p>
+<p>UDP（User Data Protocol，用户数据报协议）<br>我们经常使用“ping”命令来测试两台主机之间TCP/IP通信是否正常，其实“ping”命令的原理就是向对方主机发送UDP数据包，然后对方主机确认收到数据包，如果数据包是否到达的消息及时反馈回来，那么网络就是通的。<br>UDP应用场景： 1.面向数据报方式  2.网络数据大多为短消息   3.拥有大量Client  4.对数据安全性无特殊要求  5.网络负担非常重，但对响应速度要求高</p>
+<p>小结TCP与UDP的区别：    1.基于连接与无连接；    2.对系统资源的要求（TCP较多，UDP少）；    3.UDP程序结构较简单；    4.流模式与数据报模式 ；    5.TCP保证数据正确性，UDP可能丢包，TCP保证数据顺序，UDP不保证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">TCP: </span><br><span class="line">TCP编程的服务器端一般步骤是： TCP包头的最小长度，为20字节。</span><br><span class="line">　　1、创建一个socket，用函数socket()； </span><br><span class="line">　　2、设置socket属性，用函数setsockopt(); * 可选 </span><br><span class="line">　　3、绑定IP地址、端口等信息到socket上，用函数bind(); </span><br><span class="line">　　4、开启监听，用函数listen()； </span><br><span class="line">　　5、接收客户端上来的连接，用函数accept()； </span><br><span class="line">　　6、收发数据，用函数send()和recv()，或者read()和write(); </span><br><span class="line">　　7、关闭网络连接； </span><br><span class="line">　　8、关闭监听； </span><br><span class="line">TCP编程的客户端一般步骤是： </span><br><span class="line">　　1、创建一个socket，用函数socket()； </span><br><span class="line">　　2、设置socket属性，用函数setsockopt();* 可选 </span><br><span class="line">　　3、绑定IP地址、端口等信息到socket上，用函数bind();* 可选 </span><br><span class="line">　　4、设置要连接的对方的IP地址和端口等属性； </span><br><span class="line">　　5、连接服务器，用函数connect()； </span><br><span class="line">　　6、收发数据，用函数send()和recv()，或者read()和write(); </span><br><span class="line">　　7、关闭网络连接；</span><br><span class="line"></span><br><span class="line">UDP:与之对应的UDP编程步骤要简单许多，分别如下： </span><br><span class="line">UDP编程的服务器端一般步骤是： </span><br><span class="line">　　1、创建一个socket，用函数socket()； </span><br><span class="line">　　2、设置socket属性，用函数setsockopt();* 可选 </span><br><span class="line">　　3、绑定IP地址、端口等信息到socket上，用函数bind(); </span><br><span class="line">　　4、循环接收数据，用函数recvfrom(); </span><br><span class="line">　　5、关闭网络连接； </span><br><span class="line">UDP编程的客户端一般步骤是： </span><br><span class="line">　　1、创建一个socket，用函数socket()； </span><br><span class="line">　　2、设置socket属性，用函数setsockopt();* 可选 </span><br><span class="line">　　3、绑定IP地址、端口等信息到socket上，用函数bind();* 可选 </span><br><span class="line">　　4、设置对方的IP地址和端口等属性; </span><br><span class="line">　　5、发送数据，用函数sendto(); </span><br><span class="line">　　6、关闭网络连接；</span><br></pre></td></tr></table></figure>
+
+<h1 id="为什么会有TCP-IP协议"><a href="#为什么会有TCP-IP协议" class="headerlink" title="为什么会有TCP/IP协议"></a>为什么会有TCP/IP协议</h1><p>在世界上各地，各种各样的电脑运行着各自不同的操作系统为大家服务，这些电脑在表达同一种信息的时候所使用的方法是千差万别。就好像圣经中上帝打乱了各地人的口音，让他们无法合作一样。计算机使用者意识到，计算机只是单兵作战并不会发挥太大的作用。只有把它们联合起来，电脑才会发挥出它最大的潜力。于是人们就想方设法的用电线把电脑连接到了一起。</p>
+<p>但是简单的连到一起是远远不够的，就好像语言不同的两个人互相见了面，完全不能交流信息。因而他们需要定义一些共通的东西来进行交流，TCP/IP就是为此而生。TCP/IP不是一个协议，而是一个协议族的统称。里面包括了IP协议，IMCP协议，TCP协议，以及我们更加熟悉的http、ftp、pop3协议等等。电脑有了这些，就好像学会了外语一样，就可以和其他的计算机终端做自由的交流了。</p>
+<p>TCP/IP模型<br><img src="https://img-blog.csdnimg.cn/20200730112605800.png" alt="在这里插入图片描述"><br>应用层:<br>向用户提供一组常用的应用程序，比如电子邮件、文件传输访问、远程登录等。远程登录TELNET使用TELNET协议提供在网络其它主机上注册的接口。TELNET会话提供了基于字符的虚拟终端。文件传输访问FTP使用FTP协议来提供网络内机器间的文件拷贝功能。</p>
+<p>传输层:<br>提供应用程序间的通信。其功能包括：一、格式化信息流；二、提供可靠传输。为实现后者，传输层协议规定接收端必须发回确认，并且假如分组丢失，必须重新发送。</p>
+<p>网络层 ：<br>负责相邻计算机之间的通信。其功能包括三方面。<br>一、处理来自传输层的分组发送请求，收到请求后，将分组装入IP数据报，填充报头，选择去往信宿机的路径，然后将数据报发往适当的网络接口。</p>
+<p>二、处理输入数据报：首先检查其合法性，然后进行寻径–假如该数据报已到达信宿机，则去掉报头，将剩下部分交给适当的传输协议；假如该数据报尚未到达信宿，则转发该数据报。</p>
+<p>三、处理路径、流控、拥塞等问题。</p>
+<p>网络接口层：<br>这是TCP/IP软件的最低层，负责接收IP数据报并通过网络发送之，或者从网络上接收物理帧，抽出IP数据报，交给IP层。</p>
+<p>IP<br>IP 用于计算机之间的通信。</p>
+<p>IP 是无连接的通信协议。它不会占用两个正在通信的计算机之间的通信线路。这样，IP 就降低了对网络线路的需求。每条线可以同时满足许多不同的计算机之间的通信需要。</p>
+<p>通过 IP，消息（或者其他数据）被分割为小的独立的包，并通过因特网在计算机之间传送。</p>
+<p>IP 负责将每个包路由至它的目的地。</p>
+<p>IP地址<br>每个计算机必须有一个 IP 地址才能够连入因特网。</p>
+<p>每个 IP 包必须有一个地址才能够发送到另一台计算机。</p>
+<p>网络上每一个节点都必须有一个独立的Internet地址（也叫做IP地址）。现在，通常使用的IP地址是一个32bit的数字，也就是我们常说的IPv4标准，这32bit的数字分成四组，也就是常见的255.255.255.255的样式。IPv4标准上，地址被分为五类，我们常用的是B类地址。具体的分类请参考其他文档。需要注意的是IP地址是网络号+主机号的组合，这非常重要。</p>
+<p>CP/IP 使用 32 个比特来编址。一个计算机字节是 8 比特。所以 TCP/IP 使用了 4 个字节。<br>一个计算机字节可以包含 256 个不同的值：<br>00000000、00000001、00000010、00000011、00000100、00000101、00000110、00000111、00001000 … 直到 11111111。<br>现在，你知道了为什么 TCP/IP 地址是介于 0 到 255 之间的 4 个数字。</p>
+<p>TCP 使用固定的连接<br>TCP 用于应用程序之间的通信。</p>
+<p>当应用程序希望通过 TCP 与另一个应用程序通信时，它会发送一个通信请求。这个请求必须被送到一个确切的地址。在双方“握手”之后，TCP 将在两个应用程序之间建立一个全双工 (full-duplex) 的通信。</p>
+<p>这个全双工的通信将占用两个计算机之间的通信线路，直到它被一方或双方关闭为止。</p>
+<p>UDP 和 TCP 很相似，但是更简单，同时可靠性低于 TCP。</p>
+<p>IP 路由器<br>当一个 IP 包从一台计算机被发送，它会到达一个 IP 路由器。</p>
+<p>IP 路由器负责将这个包路由至它的目的地，直接地或者通过其他的路由器。</p>
+<p>在一个相同的通信中，一个包所经由的路径可能会和其他的包不同。而路由器负责根据通信量、网络中的错误或者其他参数来进行正确地寻址。</p>
+<p>域名<br>12 个阿拉伯数字很难记忆。使用一个名称更容易。</p>
+<p>用于 TCP/IP 地址的名字被称为域名。<a target="_blank" rel="noopener" href="http://www.baidu.com就是一个域名./">www.baidu.com就是一个域名。</a></p>
+<p>当你键入一个像<a target="_blank" rel="noopener" href="https://www.baidu.com/%E8%BF%99%E6%A0%B7%E7%9A%84%E5%9F%9F%E5%90%8D%EF%BC%8C%E5%9F%9F%E5%90%8D%E4%BC%9A%E8%A2%AB%E4%B8%80%E7%A7%8D">https://www.baidu.com/这样的域名，域名会被一种</a> DNS 程序翻译为数字。</p>
+<p>在全世界，数量庞大的 DNS 服务器被连入因特网。DNS 服务器负责将域名翻译为 TCP/IP 地址，同时负责使用新的域名信息更新彼此的系统。</p>
+<p>当一个新的域名连同其 TCP/IP 地址一同注册后，全世界的 DNS 服务器都会对此信息进行更新。</p>
+<p>TCP/IP<br>TCP/IP 意味着 TCP 和 IP 在一起协同工作。</p>
+<p>TCP 负责应用软件（比如你的浏览器）和网络软件之间的通信。</p>
+<p>IP 负责计算机之间的通信。</p>
+<p>TCP 负责将数据分割并装入 IP 包，然后在它们到达的时候重新组合它们。</p>
+<p>IP 负责将包发送至接受者。</p>
+
+    </div>
+
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2018-2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io"></a><a class="flink" href="https://github.com/sanjinhub/hexo-theme-geek"></a>
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="white">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>

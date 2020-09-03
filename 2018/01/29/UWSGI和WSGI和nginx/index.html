@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        XuMr
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            UWSGI和WSGI和nginx
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="什么是UWSGI和WSGI"><a href="#什么是UWSGI和WSGI" class="headerlink" title="什么是UWSGI和WSGI"></a>什么是UWSGI和WSGI</h1><h1 id="uwsgi协议"><a href="#uwsgi协议" class="headerlink" title="uwsgi协议"></a>uwsgi协议</h1><p>uwsgi（小写！）协议是uWSGI服务器使用的本机协议。</p>
+<p>它是一个二进制协议，可以携带任何类型的数据。uwsgi数据包的前4个字节描述了该数据包包含的数据的类型。</p>
+<p><strong>每个uwsgi请求都会以uwsgi格式生成响应。</strong></p>
+<p>甚至Web服务器处理程序也遵守此规则，因为HTTP响应是有效的uwsgi数据包（请参阅<code>modifier1</code>= 72）。</p>
+<p>该协议主要通过TCP起作用，但是主进程可以绑定到UDP单播/多播，用于<a target="_blank" rel="noopener" href="https://uwsgi-docs.readthedocs.io/en/latest/SNMP.html">嵌入式SNMP服务器</a>或群集管理/消息请求。</p>
+<p>SCTP支持正在开发中。</p>
+<h3 id="什么是-WSGI"><a href="#什么是-WSGI" class="headerlink" title="什么是 WSGI"></a>什么是 WSGI</h3><p>先说一下<code>CGI</code>，（通用网关接口， Common Gateway Interface/CGI），定义客户端与Web服务器的交流方式的一个程序。例如正常情况下客户端发来一个请求，根据<code>HTTP</code>协议Web服务器将请求内容解析出来，进过计算后，再将加us安出来的内容封装好，例如服务器返回一个<code>HTML</code>页面，并且根据<code>HTTP</code>协议构建返回内容的响应格式。涉及到<code>TCP</code>连接、<code>HTTP</code>原始请求和相应格式的这些，都由一个软件来完成，这时，以上的工作需要一个程序来完成，而这个程序便是<code>CGI</code>。</p>
+<p>那什么是<code>WSGI</code>呢？<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://zh.wikipedia.org/wiki/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E5%85%B3%E6%8E%A5%E5%8F%A3">维基</a>上的解释为，<strong>Web服务器网关接口(Python Web Server Gateway Interface，WSGI)**，是为<code>Python</code>语言定义的Web服务器和Web应用程序或框架之间的一种简单而通用的接口。从语义上理解，貌似<code>WSGI</code>就是<code>Python</code>为了解决</strong>Web服务器端与客户端**之间的通信问题而产生的，并且<code>WSGI</code>是基于现存的<code>CGI</code>标准而设计的，同样是一种程序（或者<code>Web</code>组件的接口规范？）。</p>
+<p><a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://zh.wikipedia.org/wiki/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E5%85%B3%E6%8E%A5%E5%8F%A3">WSGI</a>区分为两部分：一种为“服务器”或“网关”，另一种为“应用程序”或“应用框架”。<br> 所谓的<code>WSGI</code>中间件同时实现了<code>API</code>的两方，即在<code>WSGI</code>服务器和<code>WSGI</code>应用之间起调解作用：从<code>WSGI</code>服务器的角度来说，中间件扮演应用程序，而从应用程序的角度来说，中间件扮演服务器。中间件具有的功能：</p>
+<ul>
+<li>重写环境变量后，根据目标URL，将请求消息路由到不同的应用对象。</li>
+<li>允许在一个进程中同时运行多个应用程序或应用框架</li>
+<li>负载均衡和远程处理，通过在网络上转发请求和相应消息。</li>
+<li>进行内容后处理，例如应用<code>XSLT</code>样式表。（以上 from 维基）</li>
+</ul>
+<p>看了这么多，总结一下，其实可以说<code>WSGI</code>就是基于<code>Python</code>的以<code>CGI</code>为标准做一些扩展。</p>
+<h3 id="什么是ASGI"><a href="#什么是ASGI" class="headerlink" title="什么是ASGI"></a>什么是<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://blog.ernest.me/post/asgi-draft-spec-zh">ASGI</a></h3><p>异步网关协议接口，一个介于网络协议服务和<code>Python</code>应用之间的标准接口，能够处理多种通用的协议类型，包括<code>HTTP</code>，<code>HTTP2</code>和<code>WebSocket</code>。<br> 然而目前的常用的<code>WSGI</code>主要是针对<code>HTTP</code>风格的请求响应模型做的设计，并且越来越多的不遵循这种模式的协议逐渐成为<code>Web</code>变成的标准之一，例如<code>WebSocket</code>。<br> <code>ASGI</code>尝试保持在一个简单的应用接口的前提下，提供允许数据能够在任意的时候、被任意应用进程发送和接受的抽象。并且同样描述了一个新的，兼容<code>HTTP</code>请求响应以及<code>WebSocket</code>数据帧的序列格式。允许这些协议能通过网络或本地<code>socket</code>进行传输，以及让不同的协议被分配到不同的进程中。</p>
+<h3 id="WSGI和ASGI的区别在哪"><a href="#WSGI和ASGI的区别在哪" class="headerlink" title="WSGI和ASGI的区别在哪"></a>WSGI和ASGI的区别在哪</h3><p>以上，<code>WSGI</code>是基于<code>HTTP</code>协议模式的，不支持<code>WebSocket</code>，而<code>ASGI</code>的诞生则是为了解决<code>Python</code>常用的<code>WSGI</code>不支持当前<code>Web</code>开发中的一些新的协议标准。同时，<code>ASGI</code>对于<code>WSGI</code>原有的模式的支持和<code>WebSocket</code>的扩展，即<code>ASGI</code>是<code>WSGI</code>的扩展。</p>
+<h1 id="nginx的正向代理和反向代理"><a href="#nginx的正向代理和反向代理" class="headerlink" title="nginx的正向代理和反向代理"></a>nginx的正向代理和反向代理</h1><h1 id="nginx概述"><a href="#nginx概述" class="headerlink" title="nginx概述"></a>nginx概述</h1><p>nginx是一款自由的、开源的、高性能的HTTP服务器和反向代理服务器；同时也是一个IMAP、POP3、SMTP代理服务器；nginx可以作为一个HTTP服务器进行网站的发布处理，另外nginx可以作为反向代理进行负载均衡的实现。</p>
+<h2 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h2><p>在如今的网络环境下，我们如果由于技术需要去访问国外的某些网站，此时你会发现位于国外的某些网站我们通过浏览器是没有办法访问的，此时大家都可能会用一个操作FQ进行访问，FQ的方式主要是找到一个可以访问国外网站的代理服务器，我们将请求发送给代理服务器，代理服务器去访问国外的网站，然后将访问到的数据传递给我们。这就是正向代理。正向代理最大的特点是客户端非常明确要访问的服务器地址；服务器只清楚请求来自哪个代理服务器，而不清楚来自哪个具体的客户端；正向代理模式屏蔽或者隐藏了真实客户端信息。</p>
+<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>比如某宝网站，每天同时连接到网站的访问人数已经爆表，单个服务器远远不能满足人民日益增长的购买欲望了，此时就出现了一个大家耳熟能详的名词：分布式部署；也就是通过部署多台服务器来解决访问人数限制的问题；某宝网站中大部分功能也是直接使用nginx进行反向代理实现的，并且通过封装nginx和其他的组件之后起了一个高大上的名字：Tengine</p>
+
+    </div>
+
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2018-2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io"></a><a class="flink" href="https://github.com/sanjinhub/hexo-theme-geek"></a>
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="white">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        XuMr
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            orm最全宝典
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h2 id="一、基本查询"><a href="#一、基本查询" class="headerlink" title="一、基本查询"></a>一、基本查询</h2><ul>
+<li>1.查询编号为1的图书【两种方式】<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BookInfo.objects.filter(id=<span class="number">1</span>)  <span class="comment"># 得到的是查询集</span></span><br><span class="line">BookInfo.objects.get(id=<span class="number">1</span>)  <span class="comment"># 有且只有一个id=1的数据,才能正确</span></span><br></pre></td></tr></table></figure></li>
+<li>2.查询所有图书的数量<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BookInfo.objects.filter().count()</span><br></pre></td></tr></table></figure></li>
+<li>3.查询书名包含雪山的图书【开头，结尾】<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BookInfo.objects.filter(btitle__startswith=<span class="string">&#x27;雪山&#x27;</span>)</span><br><span class="line">BookInfo.objects.filter(btitle__endswith=<span class="string">&#x27;雪山&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+<li>4.查询书籍名不为空的书籍<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">book = BookInfo.objects.get(id=<span class="number">6</span>)</span><br><span class="line">book.btitle = <span class="literal">None</span></span><br><span class="line">book.save()</span><br><span class="line">book = BookInfo.objects.filter(img__isnull=<span class="literal">False</span>)</span><br><span class="line">print(book)</span><br></pre></td></tr></table></figure></li>
+<li>5.查询书籍编号为1，3，5的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(id__in=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>])</span><br><span class="line">books = BookInfo.objects.filter(id__range=[<span class="number">1</span>, <span class="number">3</span>])</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>6.查询编号大于3的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(id__gt=<span class="number">3</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>7.查询编号大于等于3的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(id__gte=<span class="number">3</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>8.查询编号不等于3的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.exclude(id=<span class="number">3</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>9.查询1980年发表的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(bpub_date__year=<span class="string">&#x27;1980&#x27;</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>10.查询1980年1月1号之后发表的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(bpub_date__gt=<span class="string">&#x27;1990-01-01&#x27;</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<h2 id="二、关联过滤查询"><a href="#二、关联过滤查询" class="headerlink" title="二、关联过滤查询"></a>二、关联过滤查询</h2><p> 根据关联的模型的属性过滤</p>
+<ul>
+<li>19.查询书籍编号为1，中的所有英雄<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">heros = HeroInfo.objects.filter(hbook_id=<span class="number">1</span>)</span><br><span class="line">print(heros)</span><br><span class="line">book = BookInfo.objects.get(id=<span class="number">1</span>)</span><br><span class="line">heros = HeroInfo.objects.filter(hbook=book)</span><br><span class="line">print(heros)</span><br><span class="line">- <span class="number">20.</span>查询书籍名称为雪山飞狐的，所有的英雄</span><br><span class="line">heros = HeroInfo.objects.filter(hbook__btitle=<span class="string">&#x27;雪山飞狐&#x27;</span>)</span><br><span class="line">print(heros)</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>21.查询英雄编号为1，所属的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">book = HeroInfo.objects.get(id=<span class="number">1</span>).hbook</span><br><span class="line">print(book.btitle)</span><br></pre></td></tr></table></figure></li>
+<li>22.查询英雄中有乔峰的书籍<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(heroinfo__hname=<span class="string">&#x27;乔峰&#x27;</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>23.查询英雄名字中包含‘郭’的书籍<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(heroinfo__hname__contains=<span class="string">&#x27;不&#x27;</span>).distinct()</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>24.查询书籍阅读量大于30的书籍中的所有英雄<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">heros = HeroInfo.objects.filter(hbook__bread__gt=<span class="number">30</span>)</span><br><span class="line">print(heros)</span><br></pre></td></tr></table></figure></li>
+<li>25.取1号图书中的所有英雄<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">book = BookInfo.objects.get(id=<span class="number">1</span>)</span><br><span class="line">print(book.heros.all())</span><br></pre></td></tr></table></figure>
+<h2 id="三、FQ查询"><a href="#三、FQ查询" class="headerlink" title="三、FQ查询"></a>三、FQ查询</h2></li>
+<li>11.查询阅读量大于等于评论量的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.all()</span><br><span class="line">book_list = []</span><br><span class="line"><span class="keyword">for</span> book <span class="keyword">in</span> books:</span><br><span class="line">    <span class="keyword">if</span> book.bread&gt;=book.bcomment:</span><br><span class="line">        book_list.append(book)</span><br><span class="line">BookInfo.objects.filter(bread__gte=F(<span class="string">&#x27;bcomment&#x27;</span>))</span><br></pre></td></tr></table></figure></li>
+<li>12.查询阅读量大于等于2倍评论量的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BookInfo.objects.filter(bread__gte=F(<span class="string">&#x27;bcomment&#x27;</span>)*<span class="number">2</span>)</span><br></pre></td></tr></table></figure></li>
+<li>13.查询阅读量大于20，并且编号小于3的图书<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BookInfo.objects.filter(bread__gt=<span class="number">20</span>, id__lt=<span class="number">3</span>)</span><br><span class="line">BookInfo.objects.filter(bread__gt=<span class="number">20</span>).filter(id__lt=<span class="number">3</span>)</span><br></pre></td></tr></table></figure></li>
+<li>14.查询阅读量大于20，或编号小于3的图书,  &amp;  |  ~<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(Q(bread__gt=<span class="number">20</span>) | Q(id__lt=<span class="number">3</span>))</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure></li>
+<li>15.查询编号不等于3的图书，使用Q对象实现<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">books = BookInfo.objects.filter(~Q(id=<span class="number">3</span>))</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="四、聚合查询"><a href="#四、聚合查询" class="headerlink" title="四、聚合查询"></a>四、聚合查询</h2><ul>
+<li><p>16.查询所有阅读量的总和</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bread_sum = BookInfo.objects.all().aggregate(Sum(<span class="string">&#x27;bread&#x27;</span>))</span><br><span class="line">print(bread_sum.get(<span class="string">&#x27;bread__sum&#x27;</span>))</span><br></pre></td></tr></table></figure></li>
+<li><p>17.查询最大的评论量</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 平均数</span></span><br><span class="line">bread_avg = BookInfo.objects.all().aggregate(Avg(<span class="string">&#x27;bread&#x27;</span>))</span><br><span class="line">print(bread_avg)</span><br><span class="line"><span class="comment"># 最小数</span></span><br><span class="line">bread_min = BookInfo.objects.all().aggregate(Min(<span class="string">&#x27;bread&#x27;</span>))</span><br><span class="line">print(bread_min)</span><br><span class="line"><span class="comment"># 最大数</span></span><br><span class="line">bread_max = BookInfo.objects.all().aggregate(Max(<span class="string">&#x27;bread&#x27;</span>))</span><br><span class="line">print(bread_max)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>18.查询所有图书，按照阅读量排序，升序【降序】</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(BookInfo.objects.all().order_by(<span class="string">&#x27;bread&#x27;</span>)[:<span class="number">3</span>])</span><br><span class="line">print(BookInfo.objects.all().order_by(<span class="string">&#x27;-bread&#x27;</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复杂的查询语句<br>books = BookInfo.objects.filter(Q(id__gt=3) | Q(bread__gte=20)).order_by(‘bcomment’)[:3]<br>print(books.query)</p>
+</li>
+</ul>
+
+    </div>
+
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2018-2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io"></a><a class="flink" href="https://github.com/sanjinhub/hexo-theme-geek"></a>
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="white">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>
