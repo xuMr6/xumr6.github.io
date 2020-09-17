@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Django 状态保持 Cookie 和 Session">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2020/06/12/Django%20%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81%20Cookie%20%E5%92%8C%20Session/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2020-06-12">
+  <meta property="og:article:modified_time" content="2020-09-13">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Django 状态保持 Cookie 和 Session
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-06-12T14:44:54.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2020-06-12</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/djangobook/" class="post-meta-link">djangobook</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.5k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="状态保持"><a href="#状态保持" class="headerlink" title="状态保持"></a>状态保持</h3><ul>
+<li><p>浏览器请求服务器是无状态的。</p>
+</li>
+<li><p>无状态：指一次用户请求时，浏览器、服务器无法知道之前这个用户做过什么，每次请求都是一次新的请求。</p>
+</li>
+<li><p>无状态原因：浏览器与服务器是使用Socket套接字进行通信的，服务器将请求结果返回给浏览器之后，会关闭当前的Socket连接，而且服务器也会在处理页面完毕之后销毁页面对象。</p>
+</li>
+<li><p>有时需要保持下来用户浏览的状态，比如用户是否登录过，浏览过哪些商品等</p>
+</li>
+<li><p>实现状态保持主要有两种方式：</p>
+<p>在客户端存储信息使用<code>Cookie</code><br>在服务器端存储信息使用<code>Session</code></p>
+</li>
+</ul>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>Cookie，有时也用其复数形式Cookies，指某些网站为了辨别用户身份、进行session跟踪而储存在用户本地终端上的数据（通常经过加密）。Cookie最早是网景公司的前雇员Lou Montulli在1993年3月的发明。Cookie是由服务器端生成，发送给User-Agent（一般是浏览器），浏览器会将Cookie的key/value保存到某个目录下的文本文件内，下次请求同一网站时就发送该Cookie给服务器（前提是浏览器设置为启用cookie）。Cookie名称和值可以由服务器端开发自己定义，这样服务器可以知道该用户是否是合法用户以及是否需要重新登录等。服务器可以利用Cookies包含信息的任意性来筛选并经常性维护这些信息，以判断在HTTP传输中的状态。Cookies最典型记住用户名。</p>
+<p>Cookie是存储在浏览器中的一段纯文本信息，建议不要存储敏感信息如密码，因为电脑上的浏览器可能被其它人使用。</p>
+<h4 id="Cookie的特点"><a href="#Cookie的特点" class="headerlink" title="Cookie的特点"></a>Cookie的特点</h4><ul>
+<li>Cookie以键值对的格式进行信息的存储。</li>
+<li>Cookie基于域名安全，不同域名的Cookie是不能互相访问的，如访问itcast.cn时向浏览器中写了Cookie信息，使用同一浏览器访问baidu.com时，无法访问到itcast.cn写的Cookie信息。</li>
+<li>当浏览器请求某网站时，会将浏览器存储的跟网站相关的所有Cookie信息提交给网站服务器。</li>
+</ul>
+<h4 id="1-设置Cookie"><a href="#1-设置Cookie" class="headerlink" title="1 设置Cookie"></a>1 设置Cookie</h4><p>可以通过<code>HttpResponse</code>对象中的<code>set_cookie</code>方法来设置cookie。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HttpResponse.set_cookie(cookie名, value=cookie值, max_age=cookie有效期)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>max_age</code>单位为秒，默认为<code>None</code> 。如果是临时cookie，可将max_age设置为None。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cookie</span>(<span class="params">request</span>):</span></span><br><span class="line">    response = HttpResponse(<span class="string">&#x27;ok&#x27;</span>)</span><br><span class="line">    response.set_cookie(<span class="string">&#x27;itcast1&#x27;</span>, <span class="string">&#x27;python1&#x27;</span>)  <span class="comment"># 临时cookie</span></span><br><span class="line">    response.set_cookie(<span class="string">&#x27;itcast2&#x27;</span>, <span class="string">&#x27;python2&#x27;</span>, max_age=<span class="number">3600</span>)  <span class="comment"># 有效期一小时</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-读取Cookie"><a href="#2-读取Cookie" class="headerlink" title="2 读取Cookie"></a>2 读取Cookie</h4><p>可以通过 <code>HttpResponse</code> 对象的 <code>COOKIES</code> 属性来读取本次请求携带的 <code>cookie</code> 值。<code>request.COOKIES为字典类型</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cookie</span>(<span class="params">request</span>):</span></span><br><span class="line">    cookie1 = request.COOKIES.get(<span class="string">&#x27;itcast1&#x27;</span>)</span><br><span class="line">    print(cookie1)</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">&#x27;OK&#x27;</span>)</span><br><span class="line"><span class="number">1234</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-删除Cookie"><a href="#3-删除Cookie" class="headerlink" title="3 删除Cookie"></a>3 删除Cookie</h4><p>可以通过 <code>HttpResponse</code> 对象中的delete_cookie方法来删除。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.delete_cookie(<span class="string">&#x27;itcast2&#x27;</span>)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><h4 id="1-启用Session"><a href="#1-启用Session" class="headerlink" title="1 启用Session"></a>1 启用Session</h4><p>Django项目默认启用Session。</p>
+<p>可以在settings.py文件中查看，如图所示</p>
+<p><img src="https://img-blog.csdnimg.cn/20200424201023791.png" alt="在这里插入图片描述"><br>如需禁用session，将上图中的session中间件注释掉即可。</p>
+<h4 id="2-存储方式"><a href="#2-存储方式" class="headerlink" title="2 存储方式"></a>2 存储方式</h4><p>在settings.py文件中，可以设置session数据的存储方式，可以保存在数据库、本地缓存等。</p>
+<h5 id="2-1-数据库"><a href="#2-1-数据库" class="headerlink" title="2.1 数据库"></a>2.1 数据库</h5><p>存储在数据库中，如下设置可以写，也可以不写，这是<strong>默认存储方式</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE=<span class="string">&#x27;django.contrib.sessions.backends.db&#x27;</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>如果存储在数据库中，需要在项INSTALLED_APPS中安装Session应用。<br><img src="https://img-blog.csdnimg.cn/20200424201114649.png" alt="在这里插入图片描述"></p>
+<p>数据库中的表如图所示</p>
+<p><img src="https://img-blog.csdnimg.cn/20200424201129576.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>表结构如下<br><img src="https://img-blog.csdnimg.cn/20200424201145337.png" alt="在这里插入图片描述"><br>由表结构可知，操作Session包括三个数据：键，值，过期时间。</p>
+<h5 id="2-2-本地缓存"><a href="#2-2-本地缓存" class="headerlink" title="2.2 本地缓存"></a>2.2 本地缓存</h5><p>存储在本机内存中，如果丢失则不能找回，比数据库的方式读写更快。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE=<span class="string">&#x27;django.contrib.sessions.backends.cache&#x27;</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-混合存储"><a href="#2-3-混合存储" class="headerlink" title="2.3 混合存储"></a>2.3 混合存储</h5><p>优先从本机内存中存取，如果没有则从数据库中存取。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE=<span class="string">&#x27;django.contrib.sessions.backends.cached_db&#x27;</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-4-Redis"><a href="#2-4-Redis" class="headerlink" title="2.4 Redis"></a>2.4 Redis</h5><p>在redis中保存session，需要引入第三方扩展，我们可以使用django-redis来解决。</p>
+<ul>
+<li><p>1） 安装扩展</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install django-redis</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2）配置</p>
+<p>在settings.py文件中做如下设置</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">&#x27;default&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;BACKEND&#x27;</span>: <span class="string">&#x27;django_redis.cache.RedisCache&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;LOCATION&#x27;</span>: <span class="string">&#x27;redis://127.0.0.1:6379/1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;OPTIONS&#x27;</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;CLIENT_CLASS&#x27;</span>: <span class="string">&#x27;django_redis.client.DefaultClient&#x27;</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">SESSION_ENGINE = <span class="string">&#x27;django.contrib.sessions.backends.cache&#x27;</span></span><br><span class="line">SESSION_CACHE_ALIAS = <span class="string">&#x27;default&#x27;</span></span><br><span class="line"><span class="number">1234567891011</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><p>如果redis的ip地址不是本地回环127.0.0.1，而是其他地址，访问Django时，可能出现Redis连接错误，如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200424201314867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>解决方法：</p>
+<p>修改redis的配置文件，添加特定ip地址。</p>
+<p>打开redis的配置文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/redis/redis.conf</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在如下配置项进行修改（如要添加10.211.55.5地址）</p>
+<p><img src="https://img-blog.csdnimg.cn/20200424201341157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>重新启动redis服务</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service redis-server restart</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-Session操作"><a href="#3-Session操作" class="headerlink" title="3 Session操作"></a>3 Session操作</h4><p>通过HttpRequest对象的session属性进行会话的读写操作。</p>
+<ul>
+<li>1） 以键值对的格式写session。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.session[<span class="string">&#x27;键&#x27;</span>]=值</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>2）根据键读取值。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.session.get(<span class="string">&#x27;键&#x27;</span>,默认值)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3）清除所有session，在存储中删除值部分。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.session.clear()</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>4）清除session数据，在存储中删除session的整条数据。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.session.flush()</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>5）删除session中的指定键及值，在存储中只删除某个键及对应的值。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">del</span> request.session[<span class="string">&#x27;键&#x27;</span>]</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>6）设置session的有效期</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request.session.set_expiry(value)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果value是一个整数，session将在value秒没有活动后过期。</li>
+<li>如果value为0，那么用户session的Cookie将在用户的浏览器关闭时过期。</li>
+<li>如果value为None，那么session有效期将采用系统默认值，<code>默认为两周</code>，可以通过在settings.py中设置<code>SESSION_COOKIE_AGE</code>来设置全局默认值。</li>
+</ul>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2020/06/12/Django%20%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81%20Cookie%20%E5%92%8C%20Session/">https://github.com/xuMr6/xumr6.github.io.git/2020/06/12/Django%20%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81%20Cookie%20%E5%92%8C%20Session/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2020/06/18/Django 类视图 和 中间件/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Django 类视图 和 中间件 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2020/06/04/Django HTTP Request对象 和 HTTP Response 对象/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Django HTTP Request对象 和 HTTP Response 对象 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81"><span class="toc-text">状态保持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cookie"><span class="toc-text">Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookie%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">Cookie的特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E8%AE%BE%E7%BD%AECookie"><span class="toc-text">1 设置Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AF%BB%E5%8F%96Cookie"><span class="toc-text">2 读取Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%A0%E9%99%A4Cookie"><span class="toc-text">3 删除Cookie</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session"><span class="toc-text">Session</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%90%AF%E7%94%A8Session"><span class="toc-text">1 启用Session</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">2 存储方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">2.1 数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="toc-text">2.2 本地缓存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-%E6%B7%B7%E5%90%88%E5%AD%98%E5%82%A8"><span class="toc-text">2.3 混合存储</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-Redis"><span class="toc-text">2.4 Redis</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Session%E6%93%8D%E4%BD%9C"><span class="toc-text">3 Session操作</span></a></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81"><span class="toc-text">状态保持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cookie"><span class="toc-text">Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookie%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">Cookie的特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E8%AE%BE%E7%BD%AECookie"><span class="toc-text">1 设置Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AF%BB%E5%8F%96Cookie"><span class="toc-text">2 读取Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%A0%E9%99%A4Cookie"><span class="toc-text">3 删除Cookie</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session"><span class="toc-text">Session</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%90%AF%E7%94%A8Session"><span class="toc-text">1 启用Session</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">2 存储方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">2.1 数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="toc-text">2.2 本地缓存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-%E6%B7%B7%E5%90%88%E5%AD%98%E5%82%A8"><span class="toc-text">2.3 混合存储</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-Redis"><span class="toc-text">2.4 Redis</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Session%E6%93%8D%E4%BD%9C"><span class="toc-text">3 Session操作</span></a></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81"><span class="toc-text">状态保持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cookie"><span class="toc-text">Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookie%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">Cookie的特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E8%AE%BE%E7%BD%AECookie"><span class="toc-text">1 设置Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AF%BB%E5%8F%96Cookie"><span class="toc-text">2 读取Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%A0%E9%99%A4Cookie"><span class="toc-text">3 删除Cookie</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session"><span class="toc-text">Session</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%90%AF%E7%94%A8Session"><span class="toc-text">1 启用Session</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">2 存储方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">2.1 数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="toc-text">2.2 本地缓存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-%E6%B7%B7%E5%90%88%E5%AD%98%E5%82%A8"><span class="toc-text">2.3 混合存储</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-Redis"><span class="toc-text">2.4 Redis</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Session%E6%93%8D%E4%BD%9C"><span class="toc-text">3 Session操作</span></a></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

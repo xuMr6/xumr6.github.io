@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="JWT使用">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/12/21/JWT%E4%BD%BF%E7%94%A8/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-12-21">
+  <meta property="og:article:modified_time" content="2020-09-07">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      JWT使用
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-12-20T21:55:09.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-12-21</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/jwt/" class="post-meta-link">jwt</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>666 words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h6 id="Json-Web-Token-JWT-是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准-JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。"><a href="#Json-Web-Token-JWT-是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准-JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。" class="headerlink" title="Json Web Token(JWT) 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准,JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。"></a>Json Web Token(JWT) 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准,JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</h6><hr>
+<h2 id="什么场景使用JWTPermalink"><a href="#什么场景使用JWTPermalink" class="headerlink" title="什么场景使用JWTPermalink"></a>什么场景使用JWTPermalink</h2><h6 id="在前后端分离情况下前端的每一次请求都会携带指定url地址和参数，-从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失-，-只需更换一些参数就能获取其他用户的数据-岂不是很不安全"><a href="#在前后端分离情况下前端的每一次请求都会携带指定url地址和参数，-从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失-，-只需更换一些参数就能获取其他用户的数据-岂不是很不安全" class="headerlink" title="在前后端分离情况下前端的每一次请求都会携带指定url地址和参数， 从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失 ， 只需更换一些参数就能获取其他用户的数据 岂不是很不安全"></a>在前后端分离情况下前端的每一次请求都会携带指定url地址和参数， 从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失 ， 只需更换一些参数就能获取其他用户的数据 岂不是很不安全</h6><h6 id="我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问"><a href="#我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问" class="headerlink" title="我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问"></a>我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问</h6><p><img src="/hugoblog/jwt.jpg"></p>
+<h5 id="生成jwt-Permalink-amp-使用jwt模块-jwt-encode-参数-秘钥-加密方式"><a href="#生成jwt-Permalink-amp-使用jwt模块-jwt-encode-参数-秘钥-加密方式" class="headerlink" title="生成jwt:Permalink&amp;使用jwt模块 jwt.encode(参数,秘钥,加密方式)"></a>生成jwt:Permalink&amp;使用jwt模块 jwt.encode(参数,秘钥,加密方式)</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="comment"># playload 载荷就是存放有效信息的地方。这个名字像是特指飞机上承载的货品，这些有效信息包含三个部分</span></span><br><span class="line">playload = &#123;</span><br><span class="line">    <span class="comment"># 创建一个过期时间</span></span><br><span class="line">    <span class="string">&#x27;exp&#x27;</span>: int((datetime.datetime.now() + datetime.timedelta(hours=<span class="number">4</span>)).timestamp()),</span><br><span class="line">    <span class="string">&#x27;data&#x27;</span>: &#123;<span class="string">&#x27;uid&#x27;</span>: user.id&#125;</span><br><span class="line">&#125;</span><br><span class="line">encode_jwt = jwt.encode(playload, <span class="string">&#x27;秘钥&#x27;</span>, algorithm=<span class="string">&#x27;HS256&#x27;</span>)</span><br><span class="line"><span class="comment">#加密后是二进制形式 要转码为str</span></span><br><span class="line">encode_str = str(encode_jwt, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="keyword">return</span> Response(&#123;<span class="string">&quot;code&quot;</span>: <span class="number">200</span>, <span class="string">&quot;msg&quot;</span>: <span class="string">&quot;登录成功&quot;</span>,<span class="string">&#x27;jwt&#x27;</span>:encode_str&#125;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h5 id="这样在登录的时候就将认证的jwt传递给前端并且有过期时间-当jwt过期的时候就重新登录-如何验证jwt"><a href="#这样在登录的时候就将认证的jwt传递给前端并且有过期时间-当jwt过期的时候就重新登录-如何验证jwt" class="headerlink" title="这样在登录的时候就将认证的jwt传递给前端并且有过期时间 当jwt过期的时候就重新登录   如何验证jwt:"></a>这样在登录的时候就将认证的jwt传递给前端并且有过期时间 当jwt过期的时候就重新登录   如何验证jwt:</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.utils.decorators <span class="keyword">import</span> method_decorator  <span class="comment"># 导入django自带的方法装饰器模块</span></span><br><span class="line"><span class="comment"># 定义权限检测装饰器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span>(<span class="params">func</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">warpper</span>(<span class="params">request,*args,**kwargs</span>):</span></span><br><span class="line">        <span class="comment"># 拦截获取参数</span></span><br><span class="line">        uid=request.GET.get(<span class="string">&#x27;uid&#x27;</span>,<span class="literal">None</span>)</span><br><span class="line">        myjwt=request.GET.get(<span class="string">&#x27;jwt&#x27;</span>,<span class="literal">None</span>)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 对jwt进行解码  algorithms=[&#x27;HS256&#x27;] 加密方式 HS256</span></span><br><span class="line">            <span class="comment"># 如果jwt过期会报错 就需要使用try</span></span><br><span class="line">            decode_jwt = jwt.decode(myjwt, <span class="string">&#x27;秘钥&#x27;</span>, algorithms=[<span class="string">&#x27;HS256&#x27;</span>])</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">return</span> Response(&#123;<span class="string">&#x27;code&#x27;</span>: <span class="number">401</span>, <span class="string">&#x27;msg&#x27;</span>: <span class="string">&#x27;您的秘钥已失效&#x27;</span>&#125;)</span><br><span class="line">		</span><br><span class="line">        <span class="comment"># 判断jwt内的参数是否被篡改</span></span><br><span class="line">        <span class="keyword">if</span> int(uid)!= int(decode_jwt[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;uid&#x27;</span>]):</span><br><span class="line">            <span class="keyword">return</span> Response(&#123;<span class="string">&#x27;code&#x27;</span>:<span class="number">401</span>,<span class="string">&#x27;msg&#x27;</span>:<span class="string">&#x27;您的秘钥无权限&#x27;</span>&#125;)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> func(request,*args,**kwargs)</span><br><span class="line">    <span class="keyword">return</span> warpper</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="创建一个装饰器-在需要验证的函数上方进行拦截验证"><a href="#创建一个装饰器-在需要验证的函数上方进行拦截验证" class="headerlink" title="创建一个装饰器 在需要验证的函数上方进行拦截验证"></a>创建一个装饰器 在需要验证的函数上方进行拦截验证</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当使用的是类方法需要这样注册装饰器</span></span><br><span class="line"><span class="meta">@method_decorator(my_decorator)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">slef,request</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/12/21/JWT%E4%BD%BF%E7%94%A8/">https://github.com/xuMr6/xumr6.github.io.git/2018/12/21/JWT%E4%BD%BF%E7%94%A8/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/12/26/Linux命令/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Linux 命令 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/12/18/json的转换/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">json的转换 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#Json-Web-Token-JWT-%E6%98%AF%E4%B8%BA%E4%BA%86%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E7%8E%AF%E5%A2%83%E9%97%B4%E4%BC%A0%E9%80%92%E5%A3%B0%E6%98%8E%E8%80%8C%E6%89%A7%E8%A1%8C%E7%9A%84%E4%B8%80%E7%A7%8D%E5%9F%BA%E4%BA%8EJSON%E7%9A%84%E5%BC%80%E6%94%BE%E6%A0%87%E5%87%86-JWT%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%80%E8%88%AC%E8%A2%AB%E7%94%A8%E6%9D%A5%E5%9C%A8%E8%BA%AB%E4%BB%BD%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E9%97%B4%E4%BC%A0%E9%80%92%E8%A2%AB%E8%AE%A4%E8%AF%81%E7%9A%84%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF%EF%BC%8C%E4%BB%A5%E4%BE%BF%E4%BA%8E%E4%BB%8E%E8%B5%84%E6%BA%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E8%B5%84%E6%BA%90%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%BA%9B%E9%A2%9D%E5%A4%96%E7%9A%84%E5%85%B6%E5%AE%83%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%89%80%E5%BF%85%E9%A1%BB%E7%9A%84%E5%A3%B0%E6%98%8E%E4%BF%A1%E6%81%AF%EF%BC%8C%E8%AF%A5token%E4%B9%9F%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%A2%AB%E7%94%A8%E4%BA%8E%E8%AE%A4%E8%AF%81%EF%BC%8C%E4%B9%9F%E5%8F%AF%E8%A2%AB%E5%8A%A0%E5%AF%86%E3%80%82"><span class="toc-text">Json Web Token(JWT) 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准,JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%BD%BF%E7%94%A8JWTPermalink"><span class="toc-text">什么场景使用JWTPermalink</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E6%83%85%E5%86%B5%E4%B8%8B%E5%89%8D%E7%AB%AF%E7%9A%84%E6%AF%8F%E4%B8%80%E6%AC%A1%E8%AF%B7%E6%B1%82%E9%83%BD%E4%BC%9A%E6%90%BA%E5%B8%A6%E6%8C%87%E5%AE%9Aurl%E5%9C%B0%E5%9D%80%E5%92%8C%E5%8F%82%E6%95%B0%EF%BC%8C-%E4%BB%8E%E8%80%8C%E5%BE%88%E5%8F%AF%E8%83%BD%E8%A2%AB%E4%B8%8D%E6%B3%95%E5%88%86%E5%AD%90%E6%A0%B9%E6%8D%AE%E6%8C%87%E5%AE%9A%E7%9A%84url%E6%9D%A5%E4%BB%BF%E7%85%A7%E5%89%8D%E7%AB%AF%E7%9B%B4%E6%8E%A5%E8%AF%B7%E6%B1%82%E5%90%8E%E7%AB%AF%EF%BC%8C%E9%80%A0%E6%88%90%E6%80%A7%E8%83%BD%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E5%A4%B1-%EF%BC%8C-%E5%8F%AA%E9%9C%80%E6%9B%B4%E6%8D%A2%E4%B8%80%E4%BA%9B%E5%8F%82%E6%95%B0%E5%B0%B1%E8%83%BD%E8%8E%B7%E5%8F%96%E5%85%B6%E4%BB%96%E7%94%A8%E6%88%B7%E7%9A%84%E6%95%B0%E6%8D%AE-%E5%B2%82%E4%B8%8D%E6%98%AF%E5%BE%88%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">在前后端分离情况下前端的每一次请求都会携带指定url地址和参数， 从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失 ， 只需更换一些参数就能获取其他用户的数据 岂不是很不安全</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%9C%A8%E8%AF%B7%E6%B1%82%E7%9A%84%E6%97%B6%E5%80%99%E5%8A%A0%E4%B8%80%E4%BA%9B%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%EF%BC%8C%E4%BF%9D%E8%AF%81%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8D%E8%83%BD%E8%A2%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%BF%E9%97%AE"><span class="toc-text">我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%94%9F%E6%88%90jwt-Permalink-amp-%E4%BD%BF%E7%94%A8jwt%E6%A8%A1%E5%9D%97-jwt-encode-%E5%8F%82%E6%95%B0-%E7%A7%98%E9%92%A5-%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F"><span class="toc-text">生成jwt:Permalink&amp;使用jwt模块 jwt.encode(参数,秘钥,加密方式)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%9C%A8%E7%99%BB%E5%BD%95%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E5%B0%86%E8%AE%A4%E8%AF%81%E7%9A%84jwt%E4%BC%A0%E9%80%92%E7%BB%99%E5%89%8D%E7%AB%AF%E5%B9%B6%E4%B8%94%E6%9C%89%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4-%E5%BD%93jwt%E8%BF%87%E6%9C%9F%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E9%87%8D%E6%96%B0%E7%99%BB%E5%BD%95-%E5%A6%82%E4%BD%95%E9%AA%8C%E8%AF%81jwt"><span class="toc-text">这样在登录的时候就将认证的jwt传递给前端并且有过期时间 当jwt过期的时候就重新登录   如何验证jwt:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%A3%85%E9%A5%B0%E5%99%A8-%E5%9C%A8%E9%9C%80%E8%A6%81%E9%AA%8C%E8%AF%81%E7%9A%84%E5%87%BD%E6%95%B0%E4%B8%8A%E6%96%B9%E8%BF%9B%E8%A1%8C%E6%8B%A6%E6%88%AA%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个装饰器 在需要验证的函数上方进行拦截验证</span></a>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#Json-Web-Token-JWT-%E6%98%AF%E4%B8%BA%E4%BA%86%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E7%8E%AF%E5%A2%83%E9%97%B4%E4%BC%A0%E9%80%92%E5%A3%B0%E6%98%8E%E8%80%8C%E6%89%A7%E8%A1%8C%E7%9A%84%E4%B8%80%E7%A7%8D%E5%9F%BA%E4%BA%8EJSON%E7%9A%84%E5%BC%80%E6%94%BE%E6%A0%87%E5%87%86-JWT%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%80%E8%88%AC%E8%A2%AB%E7%94%A8%E6%9D%A5%E5%9C%A8%E8%BA%AB%E4%BB%BD%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E9%97%B4%E4%BC%A0%E9%80%92%E8%A2%AB%E8%AE%A4%E8%AF%81%E7%9A%84%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF%EF%BC%8C%E4%BB%A5%E4%BE%BF%E4%BA%8E%E4%BB%8E%E8%B5%84%E6%BA%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E8%B5%84%E6%BA%90%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%BA%9B%E9%A2%9D%E5%A4%96%E7%9A%84%E5%85%B6%E5%AE%83%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%89%80%E5%BF%85%E9%A1%BB%E7%9A%84%E5%A3%B0%E6%98%8E%E4%BF%A1%E6%81%AF%EF%BC%8C%E8%AF%A5token%E4%B9%9F%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%A2%AB%E7%94%A8%E4%BA%8E%E8%AE%A4%E8%AF%81%EF%BC%8C%E4%B9%9F%E5%8F%AF%E8%A2%AB%E5%8A%A0%E5%AF%86%E3%80%82"><span class="toc-text">Json Web Token(JWT) 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准,JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%BD%BF%E7%94%A8JWTPermalink"><span class="toc-text">什么场景使用JWTPermalink</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E6%83%85%E5%86%B5%E4%B8%8B%E5%89%8D%E7%AB%AF%E7%9A%84%E6%AF%8F%E4%B8%80%E6%AC%A1%E8%AF%B7%E6%B1%82%E9%83%BD%E4%BC%9A%E6%90%BA%E5%B8%A6%E6%8C%87%E5%AE%9Aurl%E5%9C%B0%E5%9D%80%E5%92%8C%E5%8F%82%E6%95%B0%EF%BC%8C-%E4%BB%8E%E8%80%8C%E5%BE%88%E5%8F%AF%E8%83%BD%E8%A2%AB%E4%B8%8D%E6%B3%95%E5%88%86%E5%AD%90%E6%A0%B9%E6%8D%AE%E6%8C%87%E5%AE%9A%E7%9A%84url%E6%9D%A5%E4%BB%BF%E7%85%A7%E5%89%8D%E7%AB%AF%E7%9B%B4%E6%8E%A5%E8%AF%B7%E6%B1%82%E5%90%8E%E7%AB%AF%EF%BC%8C%E9%80%A0%E6%88%90%E6%80%A7%E8%83%BD%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E5%A4%B1-%EF%BC%8C-%E5%8F%AA%E9%9C%80%E6%9B%B4%E6%8D%A2%E4%B8%80%E4%BA%9B%E5%8F%82%E6%95%B0%E5%B0%B1%E8%83%BD%E8%8E%B7%E5%8F%96%E5%85%B6%E4%BB%96%E7%94%A8%E6%88%B7%E7%9A%84%E6%95%B0%E6%8D%AE-%E5%B2%82%E4%B8%8D%E6%98%AF%E5%BE%88%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">在前后端分离情况下前端的每一次请求都会携带指定url地址和参数， 从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失 ， 只需更换一些参数就能获取其他用户的数据 岂不是很不安全</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%9C%A8%E8%AF%B7%E6%B1%82%E7%9A%84%E6%97%B6%E5%80%99%E5%8A%A0%E4%B8%80%E4%BA%9B%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%EF%BC%8C%E4%BF%9D%E8%AF%81%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8D%E8%83%BD%E8%A2%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%BF%E9%97%AE"><span class="toc-text">我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%94%9F%E6%88%90jwt-Permalink-amp-%E4%BD%BF%E7%94%A8jwt%E6%A8%A1%E5%9D%97-jwt-encode-%E5%8F%82%E6%95%B0-%E7%A7%98%E9%92%A5-%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F"><span class="toc-text">生成jwt:Permalink&amp;使用jwt模块 jwt.encode(参数,秘钥,加密方式)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%9C%A8%E7%99%BB%E5%BD%95%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E5%B0%86%E8%AE%A4%E8%AF%81%E7%9A%84jwt%E4%BC%A0%E9%80%92%E7%BB%99%E5%89%8D%E7%AB%AF%E5%B9%B6%E4%B8%94%E6%9C%89%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4-%E5%BD%93jwt%E8%BF%87%E6%9C%9F%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E9%87%8D%E6%96%B0%E7%99%BB%E5%BD%95-%E5%A6%82%E4%BD%95%E9%AA%8C%E8%AF%81jwt"><span class="toc-text">这样在登录的时候就将认证的jwt传递给前端并且有过期时间 当jwt过期的时候就重新登录   如何验证jwt:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%A3%85%E9%A5%B0%E5%99%A8-%E5%9C%A8%E9%9C%80%E8%A6%81%E9%AA%8C%E8%AF%81%E7%9A%84%E5%87%BD%E6%95%B0%E4%B8%8A%E6%96%B9%E8%BF%9B%E8%A1%8C%E6%8B%A6%E6%88%AA%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个装饰器 在需要验证的函数上方进行拦截验证</span></a>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#Json-Web-Token-JWT-%E6%98%AF%E4%B8%BA%E4%BA%86%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E7%8E%AF%E5%A2%83%E9%97%B4%E4%BC%A0%E9%80%92%E5%A3%B0%E6%98%8E%E8%80%8C%E6%89%A7%E8%A1%8C%E7%9A%84%E4%B8%80%E7%A7%8D%E5%9F%BA%E4%BA%8EJSON%E7%9A%84%E5%BC%80%E6%94%BE%E6%A0%87%E5%87%86-JWT%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%80%E8%88%AC%E8%A2%AB%E7%94%A8%E6%9D%A5%E5%9C%A8%E8%BA%AB%E4%BB%BD%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E9%97%B4%E4%BC%A0%E9%80%92%E8%A2%AB%E8%AE%A4%E8%AF%81%E7%9A%84%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF%EF%BC%8C%E4%BB%A5%E4%BE%BF%E4%BA%8E%E4%BB%8E%E8%B5%84%E6%BA%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E8%B5%84%E6%BA%90%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%BA%9B%E9%A2%9D%E5%A4%96%E7%9A%84%E5%85%B6%E5%AE%83%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%89%80%E5%BF%85%E9%A1%BB%E7%9A%84%E5%A3%B0%E6%98%8E%E4%BF%A1%E6%81%AF%EF%BC%8C%E8%AF%A5token%E4%B9%9F%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%A2%AB%E7%94%A8%E4%BA%8E%E8%AE%A4%E8%AF%81%EF%BC%8C%E4%B9%9F%E5%8F%AF%E8%A2%AB%E5%8A%A0%E5%AF%86%E3%80%82"><span class="toc-text">Json Web Token(JWT) 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准,JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%BD%BF%E7%94%A8JWTPermalink"><span class="toc-text">什么场景使用JWTPermalink</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E6%83%85%E5%86%B5%E4%B8%8B%E5%89%8D%E7%AB%AF%E7%9A%84%E6%AF%8F%E4%B8%80%E6%AC%A1%E8%AF%B7%E6%B1%82%E9%83%BD%E4%BC%9A%E6%90%BA%E5%B8%A6%E6%8C%87%E5%AE%9Aurl%E5%9C%B0%E5%9D%80%E5%92%8C%E5%8F%82%E6%95%B0%EF%BC%8C-%E4%BB%8E%E8%80%8C%E5%BE%88%E5%8F%AF%E8%83%BD%E8%A2%AB%E4%B8%8D%E6%B3%95%E5%88%86%E5%AD%90%E6%A0%B9%E6%8D%AE%E6%8C%87%E5%AE%9A%E7%9A%84url%E6%9D%A5%E4%BB%BF%E7%85%A7%E5%89%8D%E7%AB%AF%E7%9B%B4%E6%8E%A5%E8%AF%B7%E6%B1%82%E5%90%8E%E7%AB%AF%EF%BC%8C%E9%80%A0%E6%88%90%E6%80%A7%E8%83%BD%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E5%A4%B1-%EF%BC%8C-%E5%8F%AA%E9%9C%80%E6%9B%B4%E6%8D%A2%E4%B8%80%E4%BA%9B%E5%8F%82%E6%95%B0%E5%B0%B1%E8%83%BD%E8%8E%B7%E5%8F%96%E5%85%B6%E4%BB%96%E7%94%A8%E6%88%B7%E7%9A%84%E6%95%B0%E6%8D%AE-%E5%B2%82%E4%B8%8D%E6%98%AF%E5%BE%88%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">在前后端分离情况下前端的每一次请求都会携带指定url地址和参数， 从而很可能被不法分子根据指定的url来仿照前端直接请求后端，造成性能与数据的流失 ， 只需更换一些参数就能获取其他用户的数据 岂不是很不安全</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%9C%A8%E8%AF%B7%E6%B1%82%E7%9A%84%E6%97%B6%E5%80%99%E5%8A%A0%E4%B8%80%E4%BA%9B%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%EF%BC%8C%E4%BF%9D%E8%AF%81%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8D%E8%83%BD%E8%A2%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%BF%E9%97%AE"><span class="toc-text">我们需要在请求的时候加一些身份验证，保证后端服务器不能被第三方访问</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%94%9F%E6%88%90jwt-Permalink-amp-%E4%BD%BF%E7%94%A8jwt%E6%A8%A1%E5%9D%97-jwt-encode-%E5%8F%82%E6%95%B0-%E7%A7%98%E9%92%A5-%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F"><span class="toc-text">生成jwt:Permalink&amp;使用jwt模块 jwt.encode(参数,秘钥,加密方式)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%9C%A8%E7%99%BB%E5%BD%95%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E5%B0%86%E8%AE%A4%E8%AF%81%E7%9A%84jwt%E4%BC%A0%E9%80%92%E7%BB%99%E5%89%8D%E7%AB%AF%E5%B9%B6%E4%B8%94%E6%9C%89%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4-%E5%BD%93jwt%E8%BF%87%E6%9C%9F%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E9%87%8D%E6%96%B0%E7%99%BB%E5%BD%95-%E5%A6%82%E4%BD%95%E9%AA%8C%E8%AF%81jwt"><span class="toc-text">这样在登录的时候就将认证的jwt传递给前端并且有过期时间 当jwt过期的时候就重新登录   如何验证jwt:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%A3%85%E9%A5%B0%E5%99%A8-%E5%9C%A8%E9%9C%80%E8%A6%81%E9%AA%8C%E8%AF%81%E7%9A%84%E5%87%BD%E6%95%B0%E4%B8%8A%E6%96%B9%E8%BF%9B%E8%A1%8C%E6%8B%A6%E6%88%AA%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个装饰器 在需要验证的函数上方进行拦截验证</span></a>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

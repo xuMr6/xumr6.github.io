@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Mysql 演示 脏读，不可重复读，幻读">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2020/01/12/Mysql%20%E6%BC%94%E7%A4%BA%20%E8%84%8F%E8%AF%BB%EF%BC%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%EF%BC%8C%E5%B9%BB%E8%AF%BB/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2020-01-12">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Mysql 演示 脏读，不可重复读，幻读
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-01-12T15:09:43.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2020-01-12</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/mysql/" class="post-meta-link">mysql</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>2.4k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <p>今天要演示的是 Mysql 事务隔离性的 隔离级别。<br>简单介绍一下 事务的四大特性，之前的博客也详细的写过：<a target="_blank" rel="noopener" href="http://localhost:4000/2020/01/05/%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%20%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%A7%E5%85%A8%20(Mysql%EF%BC%8CRedis%EF%BC%8CMongoDB)/">http://localhost:4000/2020/01/05/%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%20%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%A7%E5%85%A8%20(Mysql%EF%BC%8CRedis%EF%BC%8CMongoDB)/</a></p>
+<h4 id="InnoDB事务原理"><a href="#InnoDB事务原理" class="headerlink" title="InnoDB事务原理"></a>InnoDB事务原理</h4><ul>
+<li>事务（Transaction）是数据库区别于文件系统的重要特性之一，事务会把数据库从一种一致性状态转换为另一种一致性状态。</li>
+<li>在数据库提交时，可以确保要么所有修改都已保存，要么所有修改都不保存。</li>
+</ul>
+<h4 id="事务的（ACID）特征"><a href="#事务的（ACID）特征" class="headerlink" title="事务的（ACID）特征"></a>事务的（ACID）特征</h4><ul>
+<li>原子性(Atomicity)：整个事物的所有操作要么全部提交成功，要么全部失败回滚(不会出现部分执行的情况)。</li>
+<li>一致性(Consistency)：几个并行执行的事务，其执行结果必须与按某一顺序串行执行的结果相一致。</li>
+<li>隔离性(Isolation)：事务的执行不受其他事务的干扰，事务执行的中间结果对其他事务必须是透明的。</li>
+<li>持久性(Durability): 一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作。</li>
+</ul>
+<h5 id="事物隔离级别"><a href="#事物隔离级别" class="headerlink" title="事物隔离级别"></a>事物隔离级别</h5><ul>
+<li><p>未提交读: 脏读（READ UNCOMMITTED） 读未提交</p>
+</li>
+<li><p>提交读: 不可重复读（READ COMMITTED）</p>
+</li>
+<li><p>可重复读: 幻读（REPEATABLE READ）：<strong>这是MySQL的默认事务隔离级别</strong></p>
+</li>
+<li><p>可串行读（SERIALIZABLE） 序列化&amp;串行读</p>
+<p>在该隔离级别下，可以解决前面出现的脏读、不可重复读和幻读问题，但也会导致大量的超时和锁竞争现象，一般不推荐使用</p>
+</li>
+</ul>
+<p>√ 为会发生，×为不会发生</p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>read uncommitted（未提交读）</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>read committed（提交读）</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>repeatable read（可重复读）</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+</tr>
+<tr>
+<td>serializable （可串行化）</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">表格借鉴的Java识堂(https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_44685869&#x2F;article&#x2F;details&#x2F;104105291)</span><br></pre></td></tr></table></figure>
+
+<p>此文 用到的 MySQL 的一些命令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看 MySQL 版本</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">version</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 MySQL 隔离级别</span></span><br><span class="line"><span class="keyword">SELECT</span> @@tx_isolation</span><br><span class="line"></span><br><span class="line"><span class="comment"># MySQL在会话层面设置隔离级别</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">session</span> <span class="keyword">transaction</span> <span class="keyword">isolation</span> <span class="keyword">level</span> 隔离级别名字</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启事务</span></span><br><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交事务</span></span><br><span class="line"><span class="keyword">commit</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 回滚事务</span></span><br><span class="line"><span class="keyword">rollback</span></span><br><span class="line"><span class="number">1234567891011121314151617</span></span><br></pre></td></tr></table></figure>
+
+<p>创建 库、表、查看。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 demo01 数据库</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> demo01</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> demo01</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建测试表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test01(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">3</span>) <span class="keyword">not</span> <span class="literal">null</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">default</span> <span class="literal">null</span>,</span><br><span class="line">	price <span class="built_in">int</span>(<span class="number">7</span>) <span class="keyword">default</span> <span class="number">0</span>         <span class="comment"># 这里不许有逗号</span></span><br><span class="line">)<span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">4</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4;</span><br><span class="line">1234567891011</span><br></pre></td></tr></table></figure>
+
+<p>插入初始数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test01(<span class="keyword">name</span>,price) <span class="keyword">values</span>(<span class="string">&#x27;张三&#x27;</span>,<span class="number">100</span>),(<span class="string">&#x27;李四&#x27;</span>,<span class="number">0</span>);</span><br><span class="line">1</span><br><span class="line">一切ok 开始干活</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>表中的数据如下，设置隔离级别为未提交读<br><img src="https://img-blog.csdnimg.cn/20200309222854412.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端A（Tab A）</th>
+<th>客户端B（Tab B）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>set session transaction isolation level read uncommitted; start transaction;（开启事务） update test01 set price = price + 100 where id = 1; select * from test01 where id = 1; 设置为未提交读，给张三账号+100，输出为200</td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>set session transaction isolation level read uncommitted; start transaction; select * from test01 where id = 1; 查询余额输出为200</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>rollback</td>
+<td></td>
+</tr>
+<tr>
+<td>T4</td>
+<td>commit</td>
+<td></td>
+</tr>
+<tr>
+<td>T5</td>
+<td></td>
+<td>select * from test01 where id = 1; 查询余额输出为100</td>
+</tr>
+</tbody></table>
+<p>脏读就是指当一个事务正在访问数据，并且对数据进行了修改，而这种修改还没有提交到数据库中，这时，另外一个事务也访问这个数据，然后使用了这个数据。</p>
+<p>再举一个严重的例子，证明一下危害<br>表中的数据如下<br><img src="https://img-blog.csdnimg.cn/20200309222854412.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端A（Tab A）</th>
+<th>客户端B（Tab B）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>set session transaction isolation level read uncommitted; start transaction; update test01 set price = price - 100 where id = 1; update test01 set price = price + 100 where id = 2;</td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>set session transaction isolation level read uncommitted; start transaction; select price from test01 where id = 2; update test01 set price = price - 100 where id = 2; 更新语句被阻塞</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>rollback</td>
+<td></td>
+</tr>
+<tr>
+<td>T4</td>
+<td></td>
+<td>commit</td>
+</tr>
+</tbody></table>
+<p>执行完成，数据库中的数据如下<br><img src="https://img-blog.csdnimg.cn/20200309224709503.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>1给2转100</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>2的余额够100元，购买100元的东西，更新语句被阻塞</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>1回滚，1的余额变成100，2的余额变成0</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>2成功扣款，余额0-100=-100</td>
+</tr>
+</tbody></table>
+<p>现在好了，银行无缘无故损失100元。</p>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>表中的数据如下，设置隔离级别为提交读</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309222854412.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端A（Tab A）</th>
+<th>客户端B（Tab B）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>set session transaction isolation level read committed; start transaction; select * from test01 where id = 2; 查询余额输出为0</td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>set session transaction isolation level read committed; start transaction; update test01 set price = price + 100 where id = 2; select * from test01 where id = 2; commit; 查询余额输出100</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>select * from test01 where id = 2; commit; 查询余额输出100</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>不可重复读是指在事务1内，读取了一个数据，事务1还没有结束时，事务2也访问了这个数据，修改了这个数据，并提交。紧接着，事务1又读这个数据。由于事务2的修改，那么事务1两次读到的的数据可能是不一样的，因此称为是不可重复读。</p>
+<p>当然你可以在T2时间段客户端B修改完id=2的账户余额但没有commit的时候，在客户端A查询id=2的账户余额，发现账户余额为0，可以证明提交读这个隔离级别不会发生脏读。</p>
+<h3 id="可重复读级别"><a href="#可重复读级别" class="headerlink" title="可重复读级别"></a>可重复读级别</h3><p>看一下可重复读是个什么过程？<br>表中的数据如下，设置隔离级别为可重复读<br><img src="https://img-blog.csdnimg.cn/20200309222854412.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端A（Tab A）</th>
+<th>客户端B（Tab B）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>set session transaction isolation level repeatable read; start transaction; select * from test01 where id = 2; 查询余额输出为0</td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>set session transaction isolation level repeatable read; start transaction; update test01 where set price = price + 100 where id = 2; select * from test01 where where id = 2; commit; 查询余额输出100</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>select * from test01 where where id = 2; commit; 查询余额输出0</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>当我们将当前会话的隔离级别设置为可重复读的时候，当前会话可以重复读，就是每次读取的结果集都相同，而不管其他事务有没有提交。</p>
+<p>但是在可重复读的隔离级别上，会产生幻读的问题。</p>
+<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>设置隔离级别为可重复读</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309233027370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>所谓幻读，指的是当某个事务在读取某个范围内的记录时，另外一个事务又在该范围内插入了新的记录，当之前的事务再次读取该范围的记录时，会产生幻行。InnoDB存储引擎通过多版本并发控制（MVCC）解决了幻读的问题。</p>
+<p>用大白话解释一下，就是事务1查询id&lt;10的记录时，返回了2条记录，接着事务2插入了一条id为3的记录，并提交。接着事务1查询id&lt;10的记录时，返回了3条记录，说好的可重复读呢？结果却多了一条数据。</p>
+<p>演示如何解决的幻读，表中的数据如下<br><img src="https://img-blog.csdnimg.cn/20200309222854412.png" alt="在这里插入图片描述"><br>MySQL通过 MVCC 解决了这种情况下的幻读<br>MVCC 在我理解 就是类似于乐观锁</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端A（Tab A）</th>
+<th>客户端B（Tab B）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>set session transaction isolation level repeatable read; start transaction; select count(*) from test01 where id &lt;= 10; 输出2</td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>set session transaction isolation level repeatable read; start transaction; insert into test01 (id, name, price) values (3, “王五”, 0); select count(*) from test01 where id &lt;= 10; commit; 输出3</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>select count(*) from test01 where id &lt;= 10; commit; 输出2</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>这种情况下的幻读被解决了，我再举一个例子</p>
+<p>表中的数据如下</p>
+<p><img src="https://img-blog.csdnimg.cn/20200309222854412.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端A（Tab A）</th>
+<th>客户端B（Tab B）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>set session transaction isolation level repeatable read; start transaction; select count(*) from account where id = 3; 输出为0</td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>set session transaction isolation level repeatable read; start transaction; insert into account (id, name, balance) values (3, “王五”, 0); commit;</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>insert into account (id, name, balance) values (3, “王五”, 0); 主键重复，插入失败</td>
+<td></td>
+</tr>
+<tr>
+<td>T4</td>
+<td>select count(*) from account where id = 3; 输出为0</td>
+<td></td>
+</tr>
+<tr>
+<td>T5</td>
+<td>rollback;</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>select 某记录是否存在，不存在，准备插入此记录，但执行 insert 时发现此记录已存在，无法插入，这个就有问题了。</p>
+<p>很多人容易搞混不可重复读和幻读，确实这两者有些相似。但不可重复读重点在于update和delete，而幻读的重点在于insert。</p>
+<p>总的来说幻读就是事务A对数据进行操作，事务B还是可以用insert插入数据的，因为使用的是行锁，这样导致的各种奇葩问题就是幻读，表现形式很多，就不列举了。</p>
+<p>当隔离级别设置为可串行化，强制事务串行执行，避免了前面说的幻读的问题。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zzti_erlie/article/details/88080822">参考原址：https://blog.csdn.net/zzti_erlie/article/details/88080822</a></p>
+<hr>
+<p>数据库使用锁是为了支持更好的并发，提供数据的完整性和一致性。<br>InnoDB是一个支持行锁的存储引擎，锁的类型有：</p>
+<ul>
+<li>共享锁（S）</li>
+<li>排他锁（X）</li>
+<li>意向共享（IS）</li>
+<li>意向排他（IX）</li>
+</ul>
+<p>为了提供更好的并发，InnoDB提供了非锁定读：不需要等待访问行上的锁释放，读取行的一个快照。该方法是通过InnoDB的一个特性：MVCC来实现的。</p>
+<h4 id="InnoDB有三种行锁的算法："><a href="#InnoDB有三种行锁的算法：" class="headerlink" title="InnoDB有三种行锁的算法："></a>InnoDB有三种行锁的算法：</h4><ol>
+<li>Record Lock：单个行记录上的锁。</li>
+<li>Gap Lock：间隙锁，锁定一个范围，但不包括记录本身。GAP锁的目的，是为了防止同一事务的两次当前读，出现幻读的情况。</li>
+<li>Next-Key Lock：1+2，锁定一个范围，并且锁定记录本身。对于行的查询，都是采用该方法，主要目的是解决幻读的问题。</li>
+</ol>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2020/01/12/Mysql%20%E6%BC%94%E7%A4%BA%20%E8%84%8F%E8%AF%BB%EF%BC%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%EF%BC%8C%E5%B9%BB%E8%AF%BB/">https://github.com/xuMr6/xumr6.github.io.git/2020/01/12/Mysql%20%E6%BC%94%E7%A4%BA%20%E8%84%8F%E8%AF%BB%EF%BC%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%EF%BC%8C%E5%B9%BB%E8%AF%BB/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2020/01/25/Django 项目的创建，模型的使用/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Django 项目的创建，模型的使用 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2020/01/05/常用数据库 知识点大全 (Mysql，Redis，MongoDB)/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">常用数据库 知识点大全 (Mysql，Redis，MongoDB) </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">InnoDB事务原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%EF%BC%88ACID%EF%BC%89%E7%89%B9%E5%BE%81"><span class="toc-text">事务的（ACID）特征</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事物隔离级别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%8F%E8%AF%BB"><span class="toc-text">脏读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="toc-text">不可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">可重复读级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%BB%E8%AF%BB"><span class="toc-text">幻读</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E6%9C%89%E4%B8%89%E7%A7%8D%E8%A1%8C%E9%94%81%E7%9A%84%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="toc-text">InnoDB有三种行锁的算法：</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">InnoDB事务原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%EF%BC%88ACID%EF%BC%89%E7%89%B9%E5%BE%81"><span class="toc-text">事务的（ACID）特征</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事物隔离级别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%8F%E8%AF%BB"><span class="toc-text">脏读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="toc-text">不可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">可重复读级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%BB%E8%AF%BB"><span class="toc-text">幻读</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E6%9C%89%E4%B8%89%E7%A7%8D%E8%A1%8C%E9%94%81%E7%9A%84%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="toc-text">InnoDB有三种行锁的算法：</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">InnoDB事务原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%EF%BC%88ACID%EF%BC%89%E7%89%B9%E5%BE%81"><span class="toc-text">事务的（ACID）特征</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事物隔离级别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%8F%E8%AF%BB"><span class="toc-text">脏读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="toc-text">不可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">可重复读级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%BB%E8%AF%BB"><span class="toc-text">幻读</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E6%9C%89%E4%B8%89%E7%A7%8D%E8%A1%8C%E9%94%81%E7%9A%84%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="toc-text">InnoDB有三种行锁的算法：</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Selenium &amp; PhantomJS">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2019/07/01/Selenium%20&amp;%20PhantomJS/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2019-07-01">
+  <meta property="og:article:modified_time" content="2020-09-04">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Selenium & PhantomJS
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-07-01T03:03:22.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2019-07-01</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/爬虫/" class="post-meta-link">爬虫</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h2 id="1-selenium介绍"><a href="#1-selenium介绍" class="headerlink" title="1.selenium介绍"></a>1.selenium介绍</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍:"></a>介绍:</h3><p>1.selenium是一个web自动化测试用的框架. 程序员可以通过代码实现对浏览器的控制, 比如打开网页, 点击网页中的元素, 实现鼠标滚动等操作.<br>2.它支持多款浏览器, 如谷歌浏览器, 火狐浏览器等等, 当然也支持无头浏览器.</p>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的:"></a>目的:</h3><p>在爬取数据的过程中, 经常遇到动态数据加载, 一般动态数据加载有两种, 一种通过ajax请求加载数据, 另一种通过js代码加载动态数据. selenium可以模拟人操作真实浏览器, 获取加载完成的页面数据<br>ajax:<br>    url有规律且未加密, 直接构建url连接请求<br>    url加密过无法破解规律 –&gt; selenium<br>js动态数据加载 –&gt;  selenium</p>
+<hr>
+<h2 id="2-selenium安装"><a href="#2-selenium安装" class="headerlink" title="2.selenium安装"></a>2.selenium安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install selenium</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">三要素: 浏览器, 驱动程序, selenium框架</span><br><span class="line"></span><br><span class="line">浏览器: 推荐谷歌浏览器, 标准稳定版本</span><br><span class="line">驱动程序:http:&#x2F;&#x2F;chromedriver.storage.googleapis.com&#x2F;index.html</span><br><span class="line"></span><br><span class="line"># 测试:</span><br><span class="line">from selenium import webdriver</span><br><span class="line">browser &#x3D; webdriver.Chrome(&#39;.&#x2F;webdriver&#39;)   # 将驱动放在脚本所在的文件夹</span><br><span class="line">browser.get(&#39;www.baidu.com&#39;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-selenium常用操作"><a href="#3-selenium常用操作" class="headerlink" title="3.selenium常用操作"></a>3.selenium常用操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># 实例化浏览器对象:</span><br><span class="line">from selenium import webdriver</span><br><span class="line">browser &#x3D; webdriver.Chrome(&#39;driverpath&#39;)</span><br><span class="line"></span><br><span class="line"># 发送get请求:</span><br><span class="line">browser.get(&#39;https:&#x2F;&#x2F;www.baidu.com&#39;)</span><br><span class="line"></span><br><span class="line"># 获取页面元素:</span><br><span class="line">find_element_by_id:根据元素的id</span><br><span class="line">find_element_by_name:根据元素的name</span><br><span class="line">find_element_by_xpath:根据xpath表达式</span><br><span class="line">find_element_by_class_name:根据class的值</span><br><span class="line">find_element_by_css_selector:根据css选择器</span><br><span class="line"></span><br><span class="line"># 节点交互操作:</span><br><span class="line">click(): 点击</span><br><span class="line">send_keys(): 输入内容</span><br><span class="line">clear(): 清空操作</span><br><span class="line">execute_script(js): 执行指定的js代码</span><br><span class="line"></span><br><span class="line"># JS代码: window.scrollTo(0, document.body.scrollHeight)可以模拟鼠标滚动一屏高度</span><br><span class="line">quit(): 退出</span><br><span class="line"></span><br><span class="line"># 获取网页源码:</span><br><span class="line">browser.page_source  ---&gt;  str类型</span><br><span class="line"></span><br><span class="line"># frame</span><br><span class="line">switch_to.frame(&#39;frameid&#39;) </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-qq空间模拟登陆"><a href="#4-qq空间模拟登陆" class="headerlink" title="4.qq空间模拟登陆"></a>4.qq空间模拟登陆</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line"># 实例化浏览器对象</span><br><span class="line">browser &#x3D; webdriver.Chrome(&#39;.&#x2F;chromedriver.exe&#39;)</span><br><span class="line"></span><br><span class="line"># 打开qq空间登陆页面</span><br><span class="line">browser.get(&#39;https:&#x2F;&#x2F;qzone.qq.com&#x2F;&#39;)</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 转至frame子页面</span><br><span class="line">browser.switch_to.frame(&#39;login_frame&#39;)</span><br><span class="line"></span><br><span class="line"># 获取密码登陆选项并点击</span><br><span class="line">a_tag &#x3D; browser.find_element_by_id(&#39;switcher_plogin&#39;)</span><br><span class="line">a_tag.click()</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 获取账号输入框并输入账号</span><br><span class="line">browser.find_element_by_id(&#39;u&#39;).clear()</span><br><span class="line">user &#x3D; browser.find_element_by_id(&#39;u&#39;)</span><br><span class="line">user.send_keys(&#39;3338003899&#39;)</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 获取密码输入框并输入密码</span><br><span class="line">browser.find_element_by_id(&#39;p&#39;).clear()</span><br><span class="line">pwd &#x3D; browser.find_element_by_id(&#39;p&#39;)</span><br><span class="line">pwd.send_keys(&#39;qq123456&#39;)</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 获取登陆按钮并单击</span><br><span class="line">button &#x3D; browser.find_element_by_id(&#39;login_button&#39;)</span><br><span class="line">button.click()</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="5-PhantomJS浏览器使用"><a href="#5-PhantomJS浏览器使用" class="headerlink" title="5.PhantomJS浏览器使用"></a>5.PhantomJS浏览器使用</h2><h3 id="PhantomJS下载及配置环境变量"><a href="#PhantomJS下载及配置环境变量" class="headerlink" title="PhantomJS下载及配置环境变量"></a>PhantomJS下载及配置环境变量</h3><pre><code>- 下载, 直接解压
+- 将解压文件的bin目录添加至环境变量</code></pre>
+<hr>
+<h3 id="PhantomJS无界面浏览器"><a href="#PhantomJS无界面浏览器" class="headerlink" title="PhantomJS无界面浏览器"></a>PhantomJS无界面浏览器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">browser &#x3D; webdriver.PhantomJS()</span><br><span class="line">browser.get(&#39;https:&#x2F;&#x2F;www.baidu.com&#39;)</span><br><span class="line">with open(&#39;baidu_phantomjs.html&#39;, &#39;w&#39;, encoding&#x3D;&quot;utf-8&quot;) as f:</span><br><span class="line">    f.write(browser.page_source)</span><br></pre></td></tr></table></figure>
+<h3 id="谷歌无头浏览器"><a href="#谷歌无头浏览器" class="headerlink" title="谷歌无头浏览器"></a>谷歌无头浏览器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.chrome.options import Options</span><br><span class="line"></span><br><span class="line">chrome_options &#x3D; Options()</span><br><span class="line">chrome_options.add_argument(&#39;--headless&#39;)</span><br><span class="line">chrome_options.add_argument(&#39;--disable-gpu&#39;)</span><br><span class="line">browser &#x3D; webdriver.Chrome(chrome_options&#x3D;chrome_options)</span><br><span class="line">browser.get(&quot;https:&#x2F;&#x2F;www.baidu.com&quot;)</span><br><span class="line">print(browser.page_source)</span><br><span class="line">with open(&#39;baidu_headerless.html&#39;, &#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">    f.write(browser.page_source)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="6-图片懒加载"><a href="#6-图片懒加载" class="headerlink" title="6..图片懒加载"></a>6..图片懒加载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line">from urllib import request</span><br><span class="line">import urllib</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;sc.chinaz.com&#x2F;tupian&#x2F;index.html&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &quot;USer-Agent&quot;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">res.encoding &#x3D; &#39;utf-8&#39;</span><br><span class="line"># print(res.text)</span><br><span class="line">tree &#x3D; etree.HTML(res.text)</span><br><span class="line"></span><br><span class="line">src_list &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[contains(@class,&quot;box&quot;)]&#x2F;div&#x2F;a&#x2F;img&#x2F;@src2&#39;)</span><br><span class="line">for url_img in src_list:</span><br><span class="line">    request.urlretrieve(url_img,&#39;%s.jpg&#39;%src_list.index(url_img))</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Chrome(&#39;.&#x2F;chromedriver.exe&#39;)</span><br><span class="line">browser.get(&#39;http:&#x2F;&#x2F;image.baidu.com&#x2F;&#39;)</span><br><span class="line">search &#x3D; browser.find_element_by_id(&#39;kw&#39;)</span><br><span class="line">search.send_keys(&#39;安琪拉&#39;)</span><br><span class="line">button &#x3D; browser.find_element_by_class_name(&#39;s_search&#39;)</span><br><span class="line">button.click()</span><br><span class="line">for i in range(3):</span><br><span class="line">    browser.execute_script(&#39;window.scrollTo(0, document.body.scrollHeight)&#39;)</span><br><span class="line">    time.sleep(5)</span><br><span class="line"></span><br><span class="line">text &#x3D; browser.page_source</span><br><span class="line">with open(&#39;baidu_pic.html&#39;, &#39;w&#39;, encoding&#x3D;&quot;utf-8&quot;) as f:</span><br><span class="line">    f.write(text)</span><br><span class="line"></span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">soup &#x3D; BeautifulSoup(open(&#39;.&#x2F;baidu_pic.html&#39;, &#39;r&#39;, encoding&#x3D;&#39;utf-8&#39;), &#39;lxml&#39;)</span><br><span class="line">li_list &#x3D; soup.select(&#39;.imgpage ul li&#39;)</span><br><span class="line">for url_img in li_list:</span><br><span class="line">    url_img &#x3D; url_img[&#39;data-objurl&#39;]</span><br><span class="line">    print(url_img)</span><br></pre></td></tr></table></figure>
+<hr>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2019/07/01/Selenium%20&amp;%20PhantomJS/">https://github.com/xuMr6/xumr6.github.io.git/2019/07/01/Selenium%20&amp;%20PhantomJS/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2019/07/13/Vue国际化/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Vue国际化 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2019/06/22/Scrapy框架（2）/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Scrapy框架（2） </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-selenium%E4%BB%8B%E7%BB%8D"><span class="toc-text">1.selenium介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-text">介绍:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-text">目的:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-selenium%E5%AE%89%E8%A3%85"><span class="toc-text">2.selenium安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-selenium%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">3.selenium常用操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-qq%E7%A9%BA%E9%97%B4%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86"><span class="toc-text">4.qq空间模拟登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-PhantomJS%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BD%BF%E7%94%A8"><span class="toc-text">5.PhantomJS浏览器使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PhantomJS%E4%B8%8B%E8%BD%BD%E5%8F%8A%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">PhantomJS下载及配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PhantomJS%E6%97%A0%E7%95%8C%E9%9D%A2%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-text">PhantomJS无界面浏览器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%B7%E6%AD%8C%E6%97%A0%E5%A4%B4%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-text">谷歌无头浏览器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="toc-text">6..图片懒加载</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-selenium%E4%BB%8B%E7%BB%8D"><span class="toc-text">1.selenium介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-text">介绍:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-text">目的:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-selenium%E5%AE%89%E8%A3%85"><span class="toc-text">2.selenium安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-selenium%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">3.selenium常用操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-qq%E7%A9%BA%E9%97%B4%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86"><span class="toc-text">4.qq空间模拟登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-PhantomJS%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BD%BF%E7%94%A8"><span class="toc-text">5.PhantomJS浏览器使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PhantomJS%E4%B8%8B%E8%BD%BD%E5%8F%8A%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">PhantomJS下载及配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PhantomJS%E6%97%A0%E7%95%8C%E9%9D%A2%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-text">PhantomJS无界面浏览器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%B7%E6%AD%8C%E6%97%A0%E5%A4%B4%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-text">谷歌无头浏览器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="toc-text">6..图片懒加载</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-selenium%E4%BB%8B%E7%BB%8D"><span class="toc-text">1.selenium介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-text">介绍:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-text">目的:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-selenium%E5%AE%89%E8%A3%85"><span class="toc-text">2.selenium安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-selenium%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">3.selenium常用操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-qq%E7%A9%BA%E9%97%B4%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86"><span class="toc-text">4.qq空间模拟登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-PhantomJS%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BD%BF%E7%94%A8"><span class="toc-text">5.PhantomJS浏览器使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PhantomJS%E4%B8%8B%E8%BD%BD%E5%8F%8A%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">PhantomJS下载及配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PhantomJS%E6%97%A0%E7%95%8C%E9%9D%A2%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-text">PhantomJS无界面浏览器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%B7%E6%AD%8C%E6%97%A0%E5%A4%B4%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-text">谷歌无头浏览器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="toc-text">6..图片懒加载</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

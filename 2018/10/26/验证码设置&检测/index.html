@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="验证码设置&amp;检测">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/10/26/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AE%BE%E7%BD%AE&amp;%E6%A3%80%E6%B5%8B/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-10-26">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      验证码设置&检测
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-10-26T00:12:30.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-10-26</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/django/" class="post-meta-link">django</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.2k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="django设置验证码"><a href="#django设置验证码" class="headerlink" title="django设置验证码"></a>django设置验证码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入图片库</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#绘画库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> ImageDraw</span><br><span class="line"><span class="comment">#字体库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> ImageFont</span><br><span class="line"><span class="comment">#图片库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="comment">#随机库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="comment">#文件流</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#导包</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="comment">#定义ip和端口号</span></span><br><span class="line"></span><br><span class="line">host = <span class="string">&#x27;localhost&#x27;</span></span><br><span class="line">port = <span class="number">6379</span></span><br><span class="line"><span class="comment">#建立连接</span></span><br><span class="line"></span><br><span class="line">r = redis.Redis(host=host,port=port)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#自定义图片验证码</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCode</span>(<span class="params">View</span>):</span></span><br><span class="line">    <span class="comment">#定义rgb随机颜色获取</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_random_color</span>(<span class="params">self</span>):</span></span><br><span class="line">        R = random.randrange(<span class="number">255</span>)</span><br><span class="line">        G = random.randrange(<span class="number">255</span>)</span><br><span class="line">        B = random.randrange(<span class="number">255</span>)</span><br><span class="line">        <span class="keyword">return</span> (R,G,B)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="comment">#定义画布</span></span><br><span class="line"></span><br><span class="line">        img_size = (<span class="number">120</span>,<span class="number">50</span>)<span class="comment">#宽120px，高50px</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#定义图片对象</span></span><br><span class="line"></span><br><span class="line">        image = Image.new(<span class="string">&#x27;RGB&#x27;</span>,img_size,<span class="string">&#x27;white&#x27;</span>)<span class="comment">#RGB的颜色模式 #画布 #背景颜色为白色</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#定义画笔</span></span><br><span class="line"></span><br><span class="line">        draw = ImageDraw.Draw(image,<span class="string">&#x27;RGB&#x27;</span>)  <span class="comment">#图片对象  #参数mode：RGB颜色模式</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#画笔内容</span></span><br><span class="line"></span><br><span class="line">        source = <span class="string">&#x27;0123456789abcdefghijklmnopqrstuvwxyz&#x27;</span><span class="comment">#内容为数字，字母，特殊符号，增加安全性</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#接收容器</span></span><br><span class="line"></span><br><span class="line">        code_str = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="comment">#定义字体，在本地路径下,size字体大小</span></span><br><span class="line"></span><br><span class="line">        myfont = ImageFont.truetype(font=<span class="string">&#x27;C:\\Windows\\Fonts\\Arial.ttf&#x27;</span>,size=<span class="number">25</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">            <span class="comment">#获取字母颜色</span></span><br><span class="line"></span><br><span class="line">            text_color = self.get_random_color()</span><br><span class="line">            <span class="comment">#获取随机下标</span></span><br><span class="line"></span><br><span class="line">            tmp_num = random.randrange(len(source))</span><br><span class="line">            <span class="comment">#随机验证码内容</span></span><br><span class="line"></span><br><span class="line">            random_str = source[tmp_num]</span><br><span class="line">            <span class="comment">#装入容器</span></span><br><span class="line"></span><br><span class="line">            code_str += random_str</span><br><span class="line">            <span class="comment">#绘制验证码</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 参数(横坐标，纵坐标20),#验证码内容#验证码颜色#字体</span></span><br><span class="line"></span><br><span class="line">            draw.text((<span class="number">10</span>+<span class="number">30</span>*i,<span class="number">10</span>),random_str,text_color,font=myfont)</span><br><span class="line">        <span class="comment">#获取缓冲区</span></span><br><span class="line"></span><br><span class="line">        buf = io.BytesIO()</span><br><span class="line">        <span class="comment">#将临时图片保存到缓冲区</span></span><br><span class="line"></span><br><span class="line">        image.save(buf,<span class="string">&#x27;png&#x27;</span>)</span><br><span class="line">        <span class="comment">#保存随机验证码</span></span><br><span class="line"></span><br><span class="line">        r.set(<span class="string">&#x27;code&#x27;</span>,code_str)</span><br><span class="line">        <span class="comment">#保存session到数据库中的django_session</span></span><br><span class="line"></span><br><span class="line">        print(<span class="string">&#x27;222&#x27;</span>,r.get(<span class="string">&#x27;code&#x27;</span>))</span><br><span class="line">        <span class="comment"># request.session[&#x27;code&#x27;] = code_str</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#返回获取缓冲区的图片</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(buf.getvalue(),<span class="string">&#x27;image/png&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="vue展示验证码"><a href="#vue展示验证码" class="headerlink" title="vue展示验证码"></a>vue展示验证码</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;!-- 图片验证码 --&gt;</span><br><span class="line">    &lt;img :src=&quot;src&quot; alt=&quot;点击刷新&quot; @click=&quot;img_code&quot; class=&quot;imgcode&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">	  src:<span class="string">&#x27;http://127.0.0.1:8000/code/&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods:&#123;</span><br><span class="line">    //刷新验证码</span><br><span class="line">	img_code()&#123;</span><br><span class="line">		//给图片网址加一个随机参数，可以点击刷新验证码</span><br><span class="line">		var lsrc = <span class="string">&#x27;http://127.0.0.1:8000/code/&#x27;</span>+<span class="string">&#x27;?&#x27;</span>+Math.random()</span><br><span class="line">		this.src = lsrc</span><br><span class="line"></span><br><span class="line">		//var num = Math.ceil(Math.random()*<span class="number">10</span>)</span><br><span class="line">		// this.src = this.src + <span class="string">&#x27;?num=&#x27;</span>+num</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">.imgcode &#123;</span><br><span class="line">    /* 给图片点击鼠标更换小手样式 */</span><br><span class="line">	cursor: pointer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Api检测验证码-百度AI"><a href="#Api检测验证码-百度AI" class="headerlink" title="Api检测验证码(百度AI)"></a>Api检测验证码(百度AI)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1.创建百度账号或者登陆百度账号</span><br><span class="line">2.选择总览--&gt;人工智能--&gt;文字识别--&gt;创建一个应用</span><br><span class="line">3.输入应用名,选择不需要文字识别包名--&gt;输入描述--&gt;点击创建(会有API Key和Secret Key)</span><br><span class="line">4.在左边目录中点击技术文档--&gt;点击API文档，立即使用</span><br><span class="line">5.选择通用文字识别--&gt;通用文字识别(高精度版)--&gt;点击Access token获取</span><br><span class="line">6.获取Access token：</span><br><span class="line">    1.向授权服务地址https:&#x2F;&#x2F;aip.baidubce.com&#x2F;oauth&#x2F;2.0&#x2F;token发送请求（推荐使用POST),并在URL中带上以下参数</span><br><span class="line">        grant_type： 必须参数，固定为client_credentials；</span><br><span class="line">        client_id： 必须参数，应用的API Key；</span><br><span class="line">        client_secret： 必须参数，应用的Secret Key；</span><br><span class="line">    2.url &#x3D; https:&#x2F;&#x2F;aip.baidubce.com&#x2F;oauth&#x2F;2.0&#x2F;token?</span><br><span class="line">      grant_type&#x3D;client_credentials&amp;client_id&#x3D;百度云应用的API Key&amp;client_secret&#x3D;百度云应用的Secret Key</span><br><span class="line">    3.使用json()获取：</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;refresh_token&quot;: &quot;25.b55fe1d287227ca97aab219bb249b8ab.315360000.1798284651.282335-8574074&quot;,</span><br><span class="line">        &quot;expires_in&quot;: 2592000,  # Access Token的有效期(秒为单位，一般为1个月)</span><br><span class="line">        &quot;scope&quot;: &quot;public wise_adapt&quot;,</span><br><span class="line">        &quot;session_key&quot;: &quot;9mzdDZXu3dENdFZQurfg0Vz8slgSgvvOAUebNFzyzcpQ5EnbxbF+hfG9DQkpUVQdh4p6HbQcAiz5RmuBAja1JJGgIdJI&quot;,</span><br><span class="line">        &quot;access_token&quot;: &quot;24.6c5e1ff107f0e8bcef8c46d3424a0e78.2592000.1485516651.282335-8574074&quot;,  #要获取的Access Token</span><br><span class="line">        &quot;session_secret&quot;: &quot;dfac94a3489fe9fca7c3221cbf7525ff&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    4.关于报错信息：</span><br><span class="line">      &#123;</span><br><span class="line">        error： 错误码；关于错误码的详细信息请参考下方鉴权认证错误码。</span><br><span class="line">        error_description： 错误描述信息，帮助理解和解决发生的错误。</span><br><span class="line">      &#125;</span><br><span class="line">      &#123;</span><br><span class="line">        error(错误码)     error_description(错误描述信息)	  解释</span><br><span class="line">        invalid_client	 unknown client id	              API Key不正确</span><br><span class="line">        invalid_client	 Client authentication failed	    Secret Key不正确</span><br><span class="line">      &#125;</span><br><span class="line">7.访问url：&#39;https:&#x2F;&#x2F;aip.baidubce.com&#x2F;rest&#x2F;2.0&#x2F;ocr&#x2F;v1&#x2F;accurate_basic?access_token&#x3D;&#39; + access_token</span><br><span class="line">8.HTTP方法：POST</span><br><span class="line">9.Header参数：&#123;&#39;Content-Type&#39;:&#39;application&#x2F;x-www-form-urlencoded&#39;&#125;</span><br><span class="line">10.body必要参数：image   说明：ase64编码后进行urlencode</span><br><span class="line">11.返回结果：&#123;</span><br><span class="line">              log_id：唯一的log id，用于问题定位,</span><br><span class="line">              words_result:	识别结果数组,</span><br><span class="line">              words_result_num:	识别结果数，表示words_result的元素个数,</span><br><span class="line">              words：识别结果字符串,</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h6 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"></span><br><span class="line"><span class="comment">#访问url</span></span><br><span class="line"></span><br><span class="line">res = requests.post(<span class="string">&#x27;https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&amp;client_id=jHUoq7NLRtijZz4RaVUHxnZC&amp;client_secret=jqBWDRAkrWlB3mKzjkGYRoTxW8fgpW5m&#x27;</span>)</span><br><span class="line"><span class="comment">#获取access_token</span></span><br><span class="line"></span><br><span class="line">access_token = res.json()[<span class="string">&#x27;access_token&#x27;</span>]</span><br><span class="line">print(access_token)</span><br><span class="line"><span class="comment">#开始智能识图</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#接口地址，访问ulr</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=&#x27;</span>+access_token</span><br><span class="line"><span class="comment">#定义请求头</span></span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>:<span class="string">&#x27;application/x-www-form-urlencoded&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#操作图片</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#读取图片</span></span><br><span class="line"></span><br><span class="line">myimg = open(<span class="string">&#x27;../code.png&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>)</span><br><span class="line">img_temp = myimg.read()</span><br><span class="line">myimg.close()</span><br><span class="line"><span class="comment">#对图片进行base64编码</span></span><br><span class="line"></span><br><span class="line">temp_data = &#123;</span><br><span class="line">    <span class="string">&#x27;image&#x27;</span>:base64.b64encode(img_temp)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#对图片地址进行urlencode操作</span></span><br><span class="line"></span><br><span class="line">temp_data = urllib.parse.urlencode(temp_data)</span><br><span class="line"><span class="comment">#发起post请求</span></span><br><span class="line"></span><br><span class="line">res = requests.post(url=url,headers=headers,data=temp_data)</span><br><span class="line">res_list = res.json()</span><br><span class="line">print(res_list)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> res_list[<span class="string">&#x27;words_result&#x27;</span>]:</span><br><span class="line">    code = i[<span class="string">&#x27;words&#x27;</span>].replace(<span class="string">&#x27; &#x27;</span>,<span class="string">&quot;&quot;</span>)</span><br><span class="line">    print(code)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/10/26/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AE%BE%E7%BD%AE&amp;%E6%A3%80%E6%B5%8B/">https://github.com/xuMr6/xumr6.github.io.git/2018/10/26/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AE%BE%E7%BD%AE&amp;%E6%A3%80%E6%B5%8B/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/11/20/一次完整的HTTP请求过程/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">一次完整的HTTP请求过程 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/10/23/序列化底层/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">序列化底层 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#django%E8%AE%BE%E7%BD%AE%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">django设置验证码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue%E5%B1%95%E7%A4%BA%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">vue展示验证码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Api%E6%A3%80%E6%B5%8B%E9%AA%8C%E8%AF%81%E7%A0%81-%E7%99%BE%E5%BA%A6AI"><span class="toc-text">Api检测验证码(百度AI)</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-text">代码</span></a></li></ol></li></ol></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#django%E8%AE%BE%E7%BD%AE%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">django设置验证码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue%E5%B1%95%E7%A4%BA%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">vue展示验证码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Api%E6%A3%80%E6%B5%8B%E9%AA%8C%E8%AF%81%E7%A0%81-%E7%99%BE%E5%BA%A6AI"><span class="toc-text">Api检测验证码(百度AI)</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-text">代码</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#django%E8%AE%BE%E7%BD%AE%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">django设置验证码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue%E5%B1%95%E7%A4%BA%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">vue展示验证码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Api%E6%A3%80%E6%B5%8B%E9%AA%8C%E8%AF%81%E7%A0%81-%E7%99%BE%E5%BA%A6AI"><span class="toc-text">Api检测验证码(百度AI)</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-text">代码</span></a></li></ol></li></ol></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

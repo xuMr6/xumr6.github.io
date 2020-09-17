@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="MD基本语法">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2019/01/07/MD%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2019-01-07">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      MD基本语法
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-01-07T12:01:21.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2019-01-07</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/python/" class="post-meta-link">python</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.5k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h2 id="md是什么"><a href="#md是什么" class="headerlink" title="md是什么"></a>md是什么</h2><h6 id="md即markdown文件的基本常用编写语法-是一种快速标记、快速排版语言"><a href="#md即markdown文件的基本常用编写语法-是一种快速标记、快速排版语言" class="headerlink" title=".md即markdown文件的基本常用编写语法,是一种快速标记、快速排版语言"></a>.md即markdown文件的基本常用编写语法,是一种快速标记、快速排版语言</h6><hr>
+<h2 id="1-基本符号：-gt"><a href="#1-基本符号：-gt" class="headerlink" title="1.基本符号：* - + &gt;"></a>1.基本符号：* - + &gt;</h2><h6 id="基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。"><a href="#基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。" class="headerlink" title="基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。"></a>基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。</h6><hr>
+<h2 id="2-标题"><a href="#2-标题" class="headerlink" title="2.标题"></a>2.标题</h2><h6 id="前面带-号，后面带文字，分别表示h1-h6-只到h6，而且h1下面会有一条横线-–-gt-相当于标签闭合"><a href="#前面带-号，后面带文字，分别表示h1-h6-只到h6，而且h1下面会有一条横线-–-gt-相当于标签闭合" class="headerlink" title="前面带#号，后面带文字，分别表示h1-h6,只到h6，而且h1下面会有一条横线  –&gt; 相当于标签闭合"></a>前面带#号，后面带文字，分别表示h1-h6,只到h6，而且h1下面会有一条横线  –&gt; 相当于标签闭合</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line"><span class="comment">### 三级标题</span></span><br><span class="line"><span class="comment">#### 四级标题</span></span><br><span class="line"><span class="comment">##### 五级标题</span></span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一级标题 #</span></span><br><span class="line"><span class="comment">## 二级标题 ##</span></span><br><span class="line"><span class="comment">### 三级标题 ###</span></span><br><span class="line"><span class="comment">#### 四级标题 ####</span></span><br><span class="line"><span class="comment">##### 五级标题 #####</span></span><br><span class="line"><span class="comment">###### 六级标题 #####</span></span><br></pre></td></tr></table></figure>
+<h6 id="效果图："><a href="#效果图：" class="headerlink" title="效果图："></a>效果图：</h6><p><img src="/hugoblog/md.png" alt="md"></p>
+<hr>
+<h2 id="3-列表"><a href="#3-列表" class="headerlink" title="3.列表"></a>3.列表</h2><ul>
+<li>无序列表<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//形式一</span><br><span class="line">+ a</span><br><span class="line">+ b</span><br><span class="line">+ c</span><br><span class="line"></span><br><span class="line">//形式二</span><br><span class="line">- d</span><br><span class="line">- e</span><br><span class="line">- f</span><br><span class="line"></span><br><span class="line">//形式三</span><br><span class="line">* g</span><br><span class="line">* h</span><br><span class="line">* i</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h6 id="以上三种形式，效果其实都是一样的："><a href="#以上三种形式，效果其实都是一样的：" class="headerlink" title="以上三种形式，效果其实都是一样的："></a>以上三种形式，效果其实都是一样的：</h6><p><img src="/hugoblog/%E6%97%A0%E5%BA%8F%E5%88%97%E8%A1%A8.png" alt="无序列表"></p>
+<hr>
+<ul>
+<li>有序列表<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//正常形式</span><br><span class="line"><span class="number">1.</span> abc</span><br><span class="line"><span class="number">2.</span> bcd</span><br><span class="line"><span class="number">3.</span> cde</span><br><span class="line">//错序效果</span><br><span class="line"><span class="number">2.</span> fgh</span><br><span class="line"><span class="number">3.</span> ghi</span><br><span class="line"><span class="number">5.</span> hij</span><br></pre></td></tr></table></figure>
+<h6 id="效果图：-1"><a href="#效果图：-1" class="headerlink" title="效果图："></a>效果图：</h6><img src="/hugoblog/%E6%9C%89%E5%BA%8F%E5%88%97%E8%A1%A8.png" alt="有序列表"></li>
+</ul>
+<hr>
+<h6 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如图,数字后面的点只能是英文的点，有序列表的序号是根据第一行列表的数字顺序来的，</span><br><span class="line">错序列表的序号本来是序号是乱的， 但是还是显示 2 3 5</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>嵌套列表<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//无序列表嵌套</span><br><span class="line">+ <span class="number">123</span></span><br><span class="line">    + abc</span><br><span class="line">    + bcd</span><br><span class="line">    + cde</span><br><span class="line">+ <span class="number">465</span></span><br><span class="line">+ <span class="number">789</span></span><br><span class="line">//有序列表嵌套</span><br><span class="line"><span class="number">1.</span> abcd</span><br><span class="line">    <span class="number">1.</span> abcde</span><br><span class="line">    <span class="number">2.</span> abcde</span><br><span class="line">    <span class="number">3.</span> abcde</span><br><span class="line"><span class="number">2.</span> bcde</span><br><span class="line"><span class="number">3.</span> cdef</span><br></pre></td></tr></table></figure>
+<h6 id="效果图：-2"><a href="#效果图：-2" class="headerlink" title="效果图："></a>效果图：</h6><img src="/hugoblog/%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8.png" alt="嵌套列表"></li>
+</ul>
+<h6 id="列表可以嵌套，使用时在嵌套列表前按-tab-或-空格-来缩进-去控制列表的层数"><a href="#列表可以嵌套，使用时在嵌套列表前按-tab-或-空格-来缩进-去控制列表的层数" class="headerlink" title="列表可以嵌套，使用时在嵌套列表前按 tab 或 空格 来缩进,去控制列表的层数"></a>列表可以嵌套，使用时在嵌套列表前按 tab 或 空格 来缩进,去控制列表的层数</h6><hr>
+<h2 id="4-引用说明区块"><a href="#4-引用说明区块" class="headerlink" title="4.引用说明区块"></a>4.引用说明区块</h2><h6 id="对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。"><a href="#对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。" class="headerlink" title="对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。"></a>对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。</h6><ul>
+<li>正常形式<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; 引用内容、说明内容。在语句前面加一个 &gt; ，注意是英文的那个右尖括号，注意空格，引用因为是一个区块，理论上是应该什么内容都可以放，比如说：标题，列表，引用等等。</span><br></pre></td></tr></table></figure>
+<h6 id="效果图：-3"><a href="#效果图：-3" class="headerlink" title="效果图："></a>效果图：</h6><img src="/hugoblog/%E5%BC%95%E7%94%A8%E8%AF%B4%E6%98%8E.png" alt="引用说明"></li>
+</ul>
+<hr>
+<ul>
+<li>嵌套区块<h6 id="这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号"><a href="#这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号" class="headerlink" title="这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号"></a>这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; 一级引用</span><br><span class="line">&gt;&gt; 二级引用</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>三级引用</span><br><span class="line">&gt;&gt;&gt;&gt; 四级引用</span><br><span class="line">&gt;&gt;&gt;&gt;&gt; 五级引用</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt; 六级引用</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h6 id="效果图：-4"><a href="#效果图：-4" class="headerlink" title="效果图："></a>效果图：</h6><p><img src="/hugoblog/%E5%B5%8C%E5%A5%97%E5%BC%95%E7%94%A8.png" alt="嵌套引用"></p>
+<hr>
+<h2 id="5-代码块"><a href="#5-代码块" class="headerlink" title="5.代码块"></a>5.代码块</h2><h6 id="在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。"><a href="#在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。" class="headerlink" title="在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。"></a>在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。</h6><hr>
+<ul>
+<li>少量代码，单行使用，直接用`包裹起来就行了<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">` shaoliangdaima,danhangshiyong `</span><br></pre></td></tr></table></figure>
+<h6 id="效果图：-5"><a href="#效果图：-5" class="headerlink" title="效果图："></a>效果图：</h6><img src="/hugoblog/%E4%BB%A3%E7%A0%81%E5%8D%95%E8%A1%8C.png" alt="代码单行"></li>
+</ul>
+<hr>
+<ul>
+<li>大量代码，需要多行使用，用```包裹起来<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">    daliangdaima,xuyaoduohangshiyong</span><br><span class="line">    daliangdaima,xuyaoduohangshiyong</span><br><span class="line">    daliangdaima,xuyaoduohangshiyong</span><br><span class="line">    daliangdaima,xuyaoduohangshiyong</span><br><span class="line">    daliangdaima,xuyaoduohangshiyong</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">###### 效果图：</span><br><span class="line">![多行代码](&#x2F;hugoblog&#x2F;多行代码.png)</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 6.链接</span><br><span class="line">- 行内式</span><br><span class="line">###### 链接的文字放在[]中，链接地址放在随后的()中，链接也可以带title属性，链接地址后面空一格，然后用引号引起来</span><br><span class="line">&#96;&#96;&#96;python</span><br><span class="line">[简书](https:&#x2F;&#x2F;www.jianshu.com &quot;创作你的创作&quot;),</span><br><span class="line">是一个创作社区,任何人均可以在其上进行创作。用户在简书上面可以方便的创作自己的作品,互相交流。 </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>参数式<h6 id="链接的文字放在-中，链接地址放在随后的-后，链接地址后面空一格，然后用引号引起来"><a href="#链接的文字放在-中，链接地址放在随后的-后，链接地址后面空一格，然后用引号引起来" class="headerlink" title="链接的文字放在[]中，链接地址放在随后的:后，链接地址后面空一格，然后用引号引起来"></a>链接的文字放在[]中，链接地址放在随后的:后，链接地址后面空一格，然后用引号引起来</h6></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[简书]: https://www.jianshu.com <span class="string">&quot;创作你的创作&quot;</span></span><br><span class="line">[简书]是一个创作社区,任何人均可以在其上进行创作。用户在简书上面可以方便的创作自己的作品,互相交流。</span><br><span class="line">//参数定义的其他写法</span><br><span class="line">[简书]: https://www.jianshu.com <span class="string">&#x27;创作你的创作&#x27;</span></span><br><span class="line">[简书]: https://www.jianshu.com (创作你的创作)</span><br><span class="line">[简书]: &lt;https://www.jianshu.com&gt; <span class="string">&quot;创作你的创作&quot;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h6 id="以上两种方式其效果图都是一样的，如下："><a href="#以上两种方式其效果图都是一样的，如下：" class="headerlink" title="以上两种方式其效果图都是一样的，如下："></a>以上两种方式其效果图都是一样的，如下：</h6><p><img src="/hugoblog/%E9%93%BE%E6%8E%A5.png" alt="链接"></p>
+<hr>
+<h2 id="7-图片"><a href="#7-图片" class="headerlink" title="7.图片"></a>7.图片</h2><ul>
+<li>行内式<h6 id="和链接的形式差不多，图片的名字放在-中，图片地址放在随后的-中，title属性（图片地址后面空一格，然后用引号引起来）-注意的是-前要加上"><a href="#和链接的形式差不多，图片的名字放在-中，图片地址放在随后的-中，title属性（图片地址后面空一格，然后用引号引起来）-注意的是-前要加上" class="headerlink" title="和链接的形式差不多，图片的名字放在[]中，图片地址放在随后的()中，title属性（图片地址后面空一格，然后用引号引起来）,注意的是[]前要加上!"></a>和链接的形式差不多，图片的名字放在[]中，图片地址放在随后的()中，title属性（图片地址后面空一格，然后用引号引起来）,注意的是[]前要加上!</h6></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![my-logo.png](https://upload-images.jianshu.io/upload_images/13623636-6d878e3d3ef63825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 &quot;my-logo&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数式<h6 id="图片的文字放在-中，图片地址放在随后的-后，title属性（图片地址后面空一格，然后用引号引起来）-注意引用图片的时候在-前要加上"><a href="#图片的文字放在-中，图片地址放在随后的-后，title属性（图片地址后面空一格，然后用引号引起来）-注意引用图片的时候在-前要加上" class="headerlink" title="图片的文字放在[]中，图片地址放在随后的:后，title属性（图片地址后面空一格，然后用引号引起来）,注意引用图片的时候在[]前要加上!"></a>图片的文字放在[]中，图片地址放在随后的:后，title属性（图片地址后面空一格，然后用引号引起来）,注意引用图片的时候在[]前要加上!</h6></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[my-logo.png]: https://upload-images.jianshu.io/upload_images/13623636-6d878e3d3ef63825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 &quot;my-logo&quot;</span><br><span class="line"></span><br><span class="line">![my-logo.png]</span><br><span class="line"></span><br><span class="line">//参数定义的其他写法</span><br><span class="line">[my-logo.png]: https://upload-images.jianshu.io/upload_images/13623636-6d878e3d3ef63825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 &#x27;my-logo&#x27;</span><br><span class="line"></span><br><span class="line">[my-logo.png]: https://upload-images.jianshu.io/upload_images/13623636-6d878e3d3ef63825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 (my-logo)</span><br><span class="line"></span><br><span class="line">[my-logo.png]: &lt;https://upload-images.jianshu.io/upload_images/13623636-6d878e3d3ef63825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&gt; &quot;my-logo&quot;</span><br></pre></td></tr></table></figure>
+
+<h6 id="以上两种方式其效果图都是一样的，如下：-1"><a href="#以上两种方式其效果图都是一样的，如下：-1" class="headerlink" title="以上两种方式其效果图都是一样的，如下："></a>以上两种方式其效果图都是一样的，如下：</h6><p><img src="/hugoblog/%E5%8F%82%E6%95%B0%E5%BC%8F.png" alt="图片"></p>
+<hr>
+<h2 id="8-分割线"><a href="#8-分割线" class="headerlink" title="8.分割线"></a>8.分割线</h2><h6 id="分割线可以由-（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以"><a href="#分割线可以由-（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以" class="headerlink" title="分割线可以由* - _（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以"></a>分割线可以由* - _（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- - -</span><br><span class="line">------</span><br><span class="line">***</span><br><span class="line">* * *</span><br><span class="line">******</span><br><span class="line">___</span><br><span class="line">_ _ _</span><br><span class="line">______</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="/hugoblog/%E5%88%86%E5%89%B2%E7%BA%BF.png" alt="分割线"></p>
+<hr>
+<h2 id="9-其他"><a href="#9-其他" class="headerlink" title="9.其他"></a>9.其他</h2><ul>
+<li>强调字体<h6 id="一个星号或者是一个下划线包起来，会转换为倾斜，如果是2个，会转换为加粗"><a href="#一个星号或者是一个下划线包起来，会转换为倾斜，如果是2个，会转换为加粗" class="headerlink" title="一个星号或者是一个下划线包起来，会转换为倾斜，如果是2个，会转换为加粗"></a>一个星号或者是一个下划线包起来，会转换为<em>倾斜，如果是2个，会转换为<strong>加粗</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">*md*    </span><br><span class="line">**md**</span><br><span class="line">_md_   </span><br><span class="line"> __md__</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h6 id="效果图：-6"><a href="#效果图：-6" class="headerlink" title="效果图："></a>效果图：</h6><p><img src="/hugoblog/%E5%BC%BA%E8%B0%83%E5%AD%97%E4%BD%93.png" alt="强调字体"></p>
+<hr>
+<ul>
+<li>转义<h6 id="基本上和js转义一样-加需要转义的字符"><a href="#基本上和js转义一样-加需要转义的字符" class="headerlink" title="基本上和js转义一样,\加需要转义的字符"></a>基本上和js转义一样,\加需要转义的字符</h6></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">\\</span><br><span class="line">\*</span><br><span class="line">\+</span><br><span class="line">\-</span><br><span class="line">\`</span><br><span class="line">\_</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除线<h6 id="用-把需要显示删除线的字符包裹起来"><a href="#用-把需要显示删除线的字符包裹起来" class="headerlink" title="用~~把需要显示删除线的字符包裹起来"></a>用~~把需要显示删除线的字符包裹起来</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">~~删除~~</span><br></pre></td></tr></table></figure>
+<h6 id="效果图：-7"><a href="#效果图：-7" class="headerlink" title="效果图："></a>效果图：</h6><img src="/hugoblog/%E5%88%A0%E9%99%A4.png" alt="删除"></li>
+</ul>
+<hr>
+<h2 id="10-表格"><a href="#10-表格" class="headerlink" title="10.表格"></a>10.表格</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//例子一</span><br><span class="line">|<span class="number">123</span>|<span class="number">234</span>|<span class="number">345</span>|</span><br><span class="line">|:-|:-:|-:|</span><br><span class="line">|abc|bcd|cde|</span><br><span class="line">|abc|bcd|cde|</span><br><span class="line">|abc|bcd|cde|</span><br><span class="line">//例子二</span><br><span class="line">|<span class="number">123</span>|<span class="number">234</span>|<span class="number">345</span>|</span><br><span class="line">|:---|:---:|---:|</span><br><span class="line">|abc|bcd|cde|</span><br><span class="line">|abc|bcd|cde|</span><br><span class="line">|abc|bcd|cde|</span><br><span class="line">//例子三</span><br><span class="line"><span class="number">123</span>|<span class="number">234</span>|<span class="number">345</span></span><br><span class="line">:-|:-:|-:</span><br><span class="line">abc|bcd|cde</span><br><span class="line">abc|bcd|cde</span><br><span class="line">abc|bcd|cde</span><br></pre></td></tr></table></figure>
+<h6 id="上面三个例子的效果一样，由此可得："><a href="#上面三个例子的效果一样，由此可得：" class="headerlink" title="上面三个例子的效果一样，由此可得："></a>上面三个例子的效果一样，由此可得：</h6><ol>
+<li>表格的格式不一定要对的非常起，但是为了良好的变成风格，尽量对齐是最好的</li>
+<li>分割线后面的冒号表示对齐方式，写在左边表示左对齐，右边为右对齐，两边都写表示居中</li>
+</ol>
+<h6 id="效果图：-8"><a href="#效果图：-8" class="headerlink" title="效果图："></a>效果图：</h6><p><img src="/hugoblog/%E8%A1%A8%E6%A0%BC.png" alt="表格"></p>
+<hr>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2019/01/07/MD%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">https://github.com/xuMr6/xumr6.github.io.git/2019/01/07/MD%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2019/01/12/MySQL 优化/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">MySQL 优化 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/12/31/md5加密原理/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">md5加密原理 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#md%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">md是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#md%E5%8D%B3markdown%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B8%B8%E7%94%A8%E7%BC%96%E5%86%99%E8%AF%AD%E6%B3%95-%E6%98%AF%E4%B8%80%E7%A7%8D%E5%BF%AB%E9%80%9F%E6%A0%87%E8%AE%B0%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E7%89%88%E8%AF%AD%E8%A8%80"><span class="toc-text">.md即markdown文件的基本常用编写语法,是一种快速标记、快速排版语言</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%EF%BC%9A-gt"><span class="toc-text">1.基本符号：* - + &gt;</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%B8%8A%E6%89%80%E6%9C%89%E7%9A%84markdown%E6%A0%87%E8%AE%B0%E9%83%BD%E6%98%AF%E5%9F%BA%E4%BA%8E%E8%BF%99%E5%9B%9B%E4%B8%AA%E7%AC%A6%E5%8F%B7%E6%88%96%E7%BB%84%E5%90%88%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%BB%A5%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%E5%BC%80%E5%A4%B4%E7%9A%84%E6%A0%87%E8%AE%B0%EF%BC%8C%E6%B3%A8%E6%84%8F%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%E5%90%8E%E6%9C%89%E4%B8%80%E4%B8%AA%E7%94%A8%E4%BA%8E%E5%88%86%E5%89%B2%E6%A0%87%E8%AE%B0%E7%AC%A6%E5%92%8C%E5%86%85%E5%AE%B9%E7%9A%84%E7%A9%BA%E6%A0%BC%E3%80%82"><span class="toc-text">基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A0%87%E9%A2%98"><span class="toc-text">2.标题</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%89%8D%E9%9D%A2%E5%B8%A6-%E5%8F%B7%EF%BC%8C%E5%90%8E%E9%9D%A2%E5%B8%A6%E6%96%87%E5%AD%97%EF%BC%8C%E5%88%86%E5%88%AB%E8%A1%A8%E7%A4%BAh1-h6-%E5%8F%AA%E5%88%B0h6%EF%BC%8C%E8%80%8C%E4%B8%94h1%E4%B8%8B%E9%9D%A2%E4%BC%9A%E6%9C%89%E4%B8%80%E6%9D%A1%E6%A8%AA%E7%BA%BF-%E2%80%93-gt-%E7%9B%B8%E5%BD%93%E4%BA%8E%E6%A0%87%E7%AD%BE%E9%97%AD%E5%90%88"><span class="toc-text">前面带#号，后面带文字，分别表示h1-h6,只到h6，而且h1下面会有一条横线  –&gt; 相当于标签闭合</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%97%E8%A1%A8"><span class="toc-text">3.列表</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%89%E7%A7%8D%E5%BD%A2%E5%BC%8F%EF%BC%8C%E6%95%88%E6%9E%9C%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%9A"><span class="toc-text">以上三种形式，效果其实都是一样的：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-1"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="toc-text">注意：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-2"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%8F%AF%E4%BB%A5%E5%B5%8C%E5%A5%97%EF%BC%8C%E4%BD%BF%E7%94%A8%E6%97%B6%E5%9C%A8%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E5%89%8D%E6%8C%89-tab-%E6%88%96-%E7%A9%BA%E6%A0%BC-%E6%9D%A5%E7%BC%A9%E8%BF%9B-%E5%8E%BB%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%82%E6%95%B0"><span class="toc-text">列表可以嵌套，使用时在嵌套列表前按 tab 或 空格 来缩进,去控制列表的层数</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%BC%95%E7%94%A8%E8%AF%B4%E6%98%8E%E5%8C%BA%E5%9D%97"><span class="toc-text">4.引用说明区块</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AF%B9%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E5%81%9A%E7%9A%84%E5%86%85%E5%AE%B9%E5%81%9A%E4%B8%80%E4%BA%9B%E8%AF%B4%E6%98%8E%E6%88%96%E8%80%85%E5%BC%95%E7%94%A8%E6%9F%90%E6%9F%90%E7%9A%84%E8%AF%9D%E7%AD%89%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%94%A8%E8%BF%99%E4%B8%AA%E8%AF%AD%E6%B3%95%E3%80%82"><span class="toc-text">对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-3"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E6%88%91%E5%8F%AA%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E6%88%91%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%B8%AA%E4%BA%BA%E8%AE%A4%E4%B8%BA%E6%AF%94%E8%BE%83%E8%A7%84%E8%8C%83%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8C%E5%B0%B1%E6%98%AF%E7%BB%99%E5%8C%BA%E5%9D%97%E7%9A%84%E4%B8%8B%E4%B8%80%E7%BA%A7%E5%8C%BA%E5%9D%97%E5%A4%9A%E5%8A%A0%E4%B8%80%E4%B8%AA%E5%8F%B3%E5%B0%96%E6%8B%AC%E5%8F%B7"><span class="toc-text">这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-4"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-text">5.代码块</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%8F%91%E5%B8%83%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0%E4%BC%9A%E6%B6%89%E5%8F%8A%E5%B1%95%E7%A4%BA%E4%BB%A3%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%8C%E8%BF%99%E6%97%B6%E5%80%99%E4%BB%A3%E7%A0%81%E5%9D%97%E5%B0%B1%E6%98%BE%E5%BE%97%E5%B0%A4%E4%B8%BA%E9%87%8D%E8%A6%81%E3%80%82"><span class="toc-text">在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-5"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E7%9A%84%E6%96%87%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E5%90%8E%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5"><span class="toc-text">链接的文字放在[]中，链接地址放在随后的:后，链接地址后面空一格，然后用引号引起来</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%85%B6%E6%95%88%E6%9E%9C%E5%9B%BE%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%8C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">以上两种方式其效果图都是一样的，如下：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%9B%BE%E7%89%87"><span class="toc-text">7.图片</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%92%8C%E9%93%BE%E6%8E%A5%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%B7%AE%E4%B8%8D%E5%A4%9A%EF%BC%8C%E5%9B%BE%E7%89%87%E7%9A%84%E5%90%8D%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E4%B8%AD%EF%BC%8Ctitle%E5%B1%9E%E6%80%A7%EF%BC%88%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5%EF%BC%89-%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF-%E5%89%8D%E8%A6%81%E5%8A%A0%E4%B8%8A"><span class="toc-text">和链接的形式差不多，图片的名字放在[]中，图片地址放在随后的()中，title属性（图片地址后面空一格，然后用引号引起来）,注意的是[]前要加上!</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E7%9A%84%E6%96%87%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E5%90%8E%EF%BC%8Ctitle%E5%B1%9E%E6%80%A7%EF%BC%88%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5%EF%BC%89-%E6%B3%A8%E6%84%8F%E5%BC%95%E7%94%A8%E5%9B%BE%E7%89%87%E7%9A%84%E6%97%B6%E5%80%99%E5%9C%A8-%E5%89%8D%E8%A6%81%E5%8A%A0%E4%B8%8A"><span class="toc-text">图片的文字放在[]中，图片地址放在随后的:后，title属性（图片地址后面空一格，然后用引号引起来）,注意引用图片的时候在[]前要加上!</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%85%B6%E6%95%88%E6%9E%9C%E5%9B%BE%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%8C%E5%A6%82%E4%B8%8B%EF%BC%9A-1"><span class="toc-text">以上两种方式其效果图都是一样的，如下：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%88%86%E5%89%B2%E7%BA%BF"><span class="toc-text">8.分割线</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E7%BA%BF%E5%8F%AF%E4%BB%A5%E7%94%B1-%EF%BC%88%E6%98%9F%E5%8F%B7%EF%BC%8C%E5%87%8F%E5%8F%B7%EF%BC%8C%E5%BA%95%E7%BA%BF%EF%BC%89%E8%BF%993%E4%B8%AA%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%87%B3%E5%B0%913%E4%B8%AA%E7%AC%A6%E5%8F%B7%E8%A1%A8%E7%A4%BA%EF%BC%8C%E6%B3%A8%E6%84%8F%E8%87%B3%E5%B0%91%E8%A6%813%E4%B8%AA%EF%BC%8C%E4%B8%94%E4%B8%8D%E9%9C%80%E8%A6%81%E8%BF%9E%E7%BB%AD%EF%BC%8C%E6%9C%89%E7%A9%BA%E6%A0%BC%E4%B9%9F%E5%8F%AF%E4%BB%A5"><span class="toc-text">分割线可以由* - _（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%85%B6%E4%BB%96"><span class="toc-text">9.其他</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E6%98%9F%E5%8F%B7%E6%88%96%E8%80%85%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%8B%E5%88%92%E7%BA%BF%E5%8C%85%E8%B5%B7%E6%9D%A5%EF%BC%8C%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%80%BE%E6%96%9C%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%98%AF2%E4%B8%AA%EF%BC%8C%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%8A%A0%E7%B2%97"><span class="toc-text">一个星号或者是一个下划线包起来，会转换为倾斜，如果是2个，会转换为加粗</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-6"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%B8%8A%E5%92%8Cjs%E8%BD%AC%E4%B9%89%E4%B8%80%E6%A0%B7-%E5%8A%A0%E9%9C%80%E8%A6%81%E8%BD%AC%E4%B9%89%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-text">基本上和js转义一样,\加需要转义的字符</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%94%A8-%E6%8A%8A%E9%9C%80%E8%A6%81%E6%98%BE%E7%A4%BA%E5%88%A0%E9%99%A4%E7%BA%BF%E7%9A%84%E5%AD%97%E7%AC%A6%E5%8C%85%E8%A3%B9%E8%B5%B7%E6%9D%A5"><span class="toc-text">用~~把需要显示删除线的字符包裹起来</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-7"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E8%A1%A8%E6%A0%BC"><span class="toc-text">10.表格</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%8A%E9%9D%A2%E4%B8%89%E4%B8%AA%E4%BE%8B%E5%AD%90%E7%9A%84%E6%95%88%E6%9E%9C%E4%B8%80%E6%A0%B7%EF%BC%8C%E7%94%B1%E6%AD%A4%E5%8F%AF%E5%BE%97%EF%BC%9A"><span class="toc-text">上面三个例子的效果一样，由此可得：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-8"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#md%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">md是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#md%E5%8D%B3markdown%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B8%B8%E7%94%A8%E7%BC%96%E5%86%99%E8%AF%AD%E6%B3%95-%E6%98%AF%E4%B8%80%E7%A7%8D%E5%BF%AB%E9%80%9F%E6%A0%87%E8%AE%B0%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E7%89%88%E8%AF%AD%E8%A8%80"><span class="toc-text">.md即markdown文件的基本常用编写语法,是一种快速标记、快速排版语言</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%EF%BC%9A-gt"><span class="toc-text">1.基本符号：* - + &gt;</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%B8%8A%E6%89%80%E6%9C%89%E7%9A%84markdown%E6%A0%87%E8%AE%B0%E9%83%BD%E6%98%AF%E5%9F%BA%E4%BA%8E%E8%BF%99%E5%9B%9B%E4%B8%AA%E7%AC%A6%E5%8F%B7%E6%88%96%E7%BB%84%E5%90%88%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%BB%A5%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%E5%BC%80%E5%A4%B4%E7%9A%84%E6%A0%87%E8%AE%B0%EF%BC%8C%E6%B3%A8%E6%84%8F%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%E5%90%8E%E6%9C%89%E4%B8%80%E4%B8%AA%E7%94%A8%E4%BA%8E%E5%88%86%E5%89%B2%E6%A0%87%E8%AE%B0%E7%AC%A6%E5%92%8C%E5%86%85%E5%AE%B9%E7%9A%84%E7%A9%BA%E6%A0%BC%E3%80%82"><span class="toc-text">基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A0%87%E9%A2%98"><span class="toc-text">2.标题</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%89%8D%E9%9D%A2%E5%B8%A6-%E5%8F%B7%EF%BC%8C%E5%90%8E%E9%9D%A2%E5%B8%A6%E6%96%87%E5%AD%97%EF%BC%8C%E5%88%86%E5%88%AB%E8%A1%A8%E7%A4%BAh1-h6-%E5%8F%AA%E5%88%B0h6%EF%BC%8C%E8%80%8C%E4%B8%94h1%E4%B8%8B%E9%9D%A2%E4%BC%9A%E6%9C%89%E4%B8%80%E6%9D%A1%E6%A8%AA%E7%BA%BF-%E2%80%93-gt-%E7%9B%B8%E5%BD%93%E4%BA%8E%E6%A0%87%E7%AD%BE%E9%97%AD%E5%90%88"><span class="toc-text">前面带#号，后面带文字，分别表示h1-h6,只到h6，而且h1下面会有一条横线  –&gt; 相当于标签闭合</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%97%E8%A1%A8"><span class="toc-text">3.列表</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%89%E7%A7%8D%E5%BD%A2%E5%BC%8F%EF%BC%8C%E6%95%88%E6%9E%9C%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%9A"><span class="toc-text">以上三种形式，效果其实都是一样的：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-1"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="toc-text">注意：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-2"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%8F%AF%E4%BB%A5%E5%B5%8C%E5%A5%97%EF%BC%8C%E4%BD%BF%E7%94%A8%E6%97%B6%E5%9C%A8%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E5%89%8D%E6%8C%89-tab-%E6%88%96-%E7%A9%BA%E6%A0%BC-%E6%9D%A5%E7%BC%A9%E8%BF%9B-%E5%8E%BB%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%82%E6%95%B0"><span class="toc-text">列表可以嵌套，使用时在嵌套列表前按 tab 或 空格 来缩进,去控制列表的层数</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%BC%95%E7%94%A8%E8%AF%B4%E6%98%8E%E5%8C%BA%E5%9D%97"><span class="toc-text">4.引用说明区块</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AF%B9%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E5%81%9A%E7%9A%84%E5%86%85%E5%AE%B9%E5%81%9A%E4%B8%80%E4%BA%9B%E8%AF%B4%E6%98%8E%E6%88%96%E8%80%85%E5%BC%95%E7%94%A8%E6%9F%90%E6%9F%90%E7%9A%84%E8%AF%9D%E7%AD%89%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%94%A8%E8%BF%99%E4%B8%AA%E8%AF%AD%E6%B3%95%E3%80%82"><span class="toc-text">对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-3"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E6%88%91%E5%8F%AA%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E6%88%91%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%B8%AA%E4%BA%BA%E8%AE%A4%E4%B8%BA%E6%AF%94%E8%BE%83%E8%A7%84%E8%8C%83%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8C%E5%B0%B1%E6%98%AF%E7%BB%99%E5%8C%BA%E5%9D%97%E7%9A%84%E4%B8%8B%E4%B8%80%E7%BA%A7%E5%8C%BA%E5%9D%97%E5%A4%9A%E5%8A%A0%E4%B8%80%E4%B8%AA%E5%8F%B3%E5%B0%96%E6%8B%AC%E5%8F%B7"><span class="toc-text">这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-4"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-text">5.代码块</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%8F%91%E5%B8%83%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0%E4%BC%9A%E6%B6%89%E5%8F%8A%E5%B1%95%E7%A4%BA%E4%BB%A3%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%8C%E8%BF%99%E6%97%B6%E5%80%99%E4%BB%A3%E7%A0%81%E5%9D%97%E5%B0%B1%E6%98%BE%E5%BE%97%E5%B0%A4%E4%B8%BA%E9%87%8D%E8%A6%81%E3%80%82"><span class="toc-text">在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-5"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E7%9A%84%E6%96%87%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E5%90%8E%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5"><span class="toc-text">链接的文字放在[]中，链接地址放在随后的:后，链接地址后面空一格，然后用引号引起来</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%85%B6%E6%95%88%E6%9E%9C%E5%9B%BE%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%8C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">以上两种方式其效果图都是一样的，如下：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%9B%BE%E7%89%87"><span class="toc-text">7.图片</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%92%8C%E9%93%BE%E6%8E%A5%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%B7%AE%E4%B8%8D%E5%A4%9A%EF%BC%8C%E5%9B%BE%E7%89%87%E7%9A%84%E5%90%8D%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E4%B8%AD%EF%BC%8Ctitle%E5%B1%9E%E6%80%A7%EF%BC%88%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5%EF%BC%89-%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF-%E5%89%8D%E8%A6%81%E5%8A%A0%E4%B8%8A"><span class="toc-text">和链接的形式差不多，图片的名字放在[]中，图片地址放在随后的()中，title属性（图片地址后面空一格，然后用引号引起来）,注意的是[]前要加上!</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E7%9A%84%E6%96%87%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E5%90%8E%EF%BC%8Ctitle%E5%B1%9E%E6%80%A7%EF%BC%88%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5%EF%BC%89-%E6%B3%A8%E6%84%8F%E5%BC%95%E7%94%A8%E5%9B%BE%E7%89%87%E7%9A%84%E6%97%B6%E5%80%99%E5%9C%A8-%E5%89%8D%E8%A6%81%E5%8A%A0%E4%B8%8A"><span class="toc-text">图片的文字放在[]中，图片地址放在随后的:后，title属性（图片地址后面空一格，然后用引号引起来）,注意引用图片的时候在[]前要加上!</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%85%B6%E6%95%88%E6%9E%9C%E5%9B%BE%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%8C%E5%A6%82%E4%B8%8B%EF%BC%9A-1"><span class="toc-text">以上两种方式其效果图都是一样的，如下：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%88%86%E5%89%B2%E7%BA%BF"><span class="toc-text">8.分割线</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E7%BA%BF%E5%8F%AF%E4%BB%A5%E7%94%B1-%EF%BC%88%E6%98%9F%E5%8F%B7%EF%BC%8C%E5%87%8F%E5%8F%B7%EF%BC%8C%E5%BA%95%E7%BA%BF%EF%BC%89%E8%BF%993%E4%B8%AA%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%87%B3%E5%B0%913%E4%B8%AA%E7%AC%A6%E5%8F%B7%E8%A1%A8%E7%A4%BA%EF%BC%8C%E6%B3%A8%E6%84%8F%E8%87%B3%E5%B0%91%E8%A6%813%E4%B8%AA%EF%BC%8C%E4%B8%94%E4%B8%8D%E9%9C%80%E8%A6%81%E8%BF%9E%E7%BB%AD%EF%BC%8C%E6%9C%89%E7%A9%BA%E6%A0%BC%E4%B9%9F%E5%8F%AF%E4%BB%A5"><span class="toc-text">分割线可以由* - _（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%85%B6%E4%BB%96"><span class="toc-text">9.其他</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E6%98%9F%E5%8F%B7%E6%88%96%E8%80%85%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%8B%E5%88%92%E7%BA%BF%E5%8C%85%E8%B5%B7%E6%9D%A5%EF%BC%8C%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%80%BE%E6%96%9C%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%98%AF2%E4%B8%AA%EF%BC%8C%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%8A%A0%E7%B2%97"><span class="toc-text">一个星号或者是一个下划线包起来，会转换为倾斜，如果是2个，会转换为加粗</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-6"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%B8%8A%E5%92%8Cjs%E8%BD%AC%E4%B9%89%E4%B8%80%E6%A0%B7-%E5%8A%A0%E9%9C%80%E8%A6%81%E8%BD%AC%E4%B9%89%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-text">基本上和js转义一样,\加需要转义的字符</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%94%A8-%E6%8A%8A%E9%9C%80%E8%A6%81%E6%98%BE%E7%A4%BA%E5%88%A0%E9%99%A4%E7%BA%BF%E7%9A%84%E5%AD%97%E7%AC%A6%E5%8C%85%E8%A3%B9%E8%B5%B7%E6%9D%A5"><span class="toc-text">用~~把需要显示删除线的字符包裹起来</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-7"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E8%A1%A8%E6%A0%BC"><span class="toc-text">10.表格</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%8A%E9%9D%A2%E4%B8%89%E4%B8%AA%E4%BE%8B%E5%AD%90%E7%9A%84%E6%95%88%E6%9E%9C%E4%B8%80%E6%A0%B7%EF%BC%8C%E7%94%B1%E6%AD%A4%E5%8F%AF%E5%BE%97%EF%BC%9A"><span class="toc-text">上面三个例子的效果一样，由此可得：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-8"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#md%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">md是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#md%E5%8D%B3markdown%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B8%B8%E7%94%A8%E7%BC%96%E5%86%99%E8%AF%AD%E6%B3%95-%E6%98%AF%E4%B8%80%E7%A7%8D%E5%BF%AB%E9%80%9F%E6%A0%87%E8%AE%B0%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E7%89%88%E8%AF%AD%E8%A8%80"><span class="toc-text">.md即markdown文件的基本常用编写语法,是一种快速标记、快速排版语言</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%EF%BC%9A-gt"><span class="toc-text">1.基本符号：* - + &gt;</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%B8%8A%E6%89%80%E6%9C%89%E7%9A%84markdown%E6%A0%87%E8%AE%B0%E9%83%BD%E6%98%AF%E5%9F%BA%E4%BA%8E%E8%BF%99%E5%9B%9B%E4%B8%AA%E7%AC%A6%E5%8F%B7%E6%88%96%E7%BB%84%E5%90%88%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%BB%A5%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%E5%BC%80%E5%A4%B4%E7%9A%84%E6%A0%87%E8%AE%B0%EF%BC%8C%E6%B3%A8%E6%84%8F%E5%9F%BA%E6%9C%AC%E7%AC%A6%E5%8F%B7%E5%90%8E%E6%9C%89%E4%B8%80%E4%B8%AA%E7%94%A8%E4%BA%8E%E5%88%86%E5%89%B2%E6%A0%87%E8%AE%B0%E7%AC%A6%E5%92%8C%E5%86%85%E5%AE%B9%E7%9A%84%E7%A9%BA%E6%A0%BC%E3%80%82"><span class="toc-text">基本上所有的markdown标记都是基于这四个符号或组合，需要注意的是，如果以基本符号开头的标记，注意基本符号后有一个用于分割标记符和内容的空格。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A0%87%E9%A2%98"><span class="toc-text">2.标题</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%89%8D%E9%9D%A2%E5%B8%A6-%E5%8F%B7%EF%BC%8C%E5%90%8E%E9%9D%A2%E5%B8%A6%E6%96%87%E5%AD%97%EF%BC%8C%E5%88%86%E5%88%AB%E8%A1%A8%E7%A4%BAh1-h6-%E5%8F%AA%E5%88%B0h6%EF%BC%8C%E8%80%8C%E4%B8%94h1%E4%B8%8B%E9%9D%A2%E4%BC%9A%E6%9C%89%E4%B8%80%E6%9D%A1%E6%A8%AA%E7%BA%BF-%E2%80%93-gt-%E7%9B%B8%E5%BD%93%E4%BA%8E%E6%A0%87%E7%AD%BE%E9%97%AD%E5%90%88"><span class="toc-text">前面带#号，后面带文字，分别表示h1-h6,只到h6，而且h1下面会有一条横线  –&gt; 相当于标签闭合</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%97%E8%A1%A8"><span class="toc-text">3.列表</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%89%E7%A7%8D%E5%BD%A2%E5%BC%8F%EF%BC%8C%E6%95%88%E6%9E%9C%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%9A"><span class="toc-text">以上三种形式，效果其实都是一样的：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-1"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="toc-text">注意：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-2"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%8F%AF%E4%BB%A5%E5%B5%8C%E5%A5%97%EF%BC%8C%E4%BD%BF%E7%94%A8%E6%97%B6%E5%9C%A8%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E5%89%8D%E6%8C%89-tab-%E6%88%96-%E7%A9%BA%E6%A0%BC-%E6%9D%A5%E7%BC%A9%E8%BF%9B-%E5%8E%BB%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%82%E6%95%B0"><span class="toc-text">列表可以嵌套，使用时在嵌套列表前按 tab 或 空格 来缩进,去控制列表的层数</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%BC%95%E7%94%A8%E8%AF%B4%E6%98%8E%E5%8C%BA%E5%9D%97"><span class="toc-text">4.引用说明区块</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AF%B9%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E5%81%9A%E7%9A%84%E5%86%85%E5%AE%B9%E5%81%9A%E4%B8%80%E4%BA%9B%E8%AF%B4%E6%98%8E%E6%88%96%E8%80%85%E5%BC%95%E7%94%A8%E6%9F%90%E6%9F%90%E7%9A%84%E8%AF%9D%E7%AD%89%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%94%A8%E8%BF%99%E4%B8%AA%E8%AF%AD%E6%B3%95%E3%80%82"><span class="toc-text">对某个部分做的内容做一些说明或者引用某某的话等，可以用这个语法。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-3"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E6%88%91%E5%8F%AA%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E6%88%91%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%B8%AA%E4%BA%BA%E8%AE%A4%E4%B8%BA%E6%AF%94%E8%BE%83%E8%A7%84%E8%8C%83%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8C%E5%B0%B1%E6%98%AF%E7%BB%99%E5%8C%BA%E5%9D%97%E7%9A%84%E4%B8%8B%E4%B8%80%E7%BA%A7%E5%8C%BA%E5%9D%97%E5%A4%9A%E5%8A%A0%E4%B8%80%E4%B8%AA%E5%8F%B3%E5%B0%96%E6%8B%AC%E5%8F%B7"><span class="toc-text">这里我只介绍一下我常用的方法，也是个人认为比较规范的一种方法，就是给区块的下一级区块多加一个右尖括号</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-4"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-text">5.代码块</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%8F%91%E5%B8%83%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0%E4%BC%9A%E6%B6%89%E5%8F%8A%E5%B1%95%E7%A4%BA%E4%BB%A3%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%8C%E8%BF%99%E6%97%B6%E5%80%99%E4%BB%A3%E7%A0%81%E5%9D%97%E5%B0%B1%E6%98%BE%E5%BE%97%E5%B0%A4%E4%B8%BA%E9%87%8D%E8%A6%81%E3%80%82"><span class="toc-text">在发布一些技术文章会涉及展示代码的问题，这时候代码块就显得尤为重要。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-5"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E7%9A%84%E6%96%87%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E5%90%8E%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5"><span class="toc-text">链接的文字放在[]中，链接地址放在随后的:后，链接地址后面空一格，然后用引号引起来</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%85%B6%E6%95%88%E6%9E%9C%E5%9B%BE%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%8C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">以上两种方式其效果图都是一样的，如下：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%9B%BE%E7%89%87"><span class="toc-text">7.图片</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%92%8C%E9%93%BE%E6%8E%A5%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%B7%AE%E4%B8%8D%E5%A4%9A%EF%BC%8C%E5%9B%BE%E7%89%87%E7%9A%84%E5%90%8D%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E4%B8%AD%EF%BC%8Ctitle%E5%B1%9E%E6%80%A7%EF%BC%88%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5%EF%BC%89-%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF-%E5%89%8D%E8%A6%81%E5%8A%A0%E4%B8%8A"><span class="toc-text">和链接的形式差不多，图片的名字放在[]中，图片地址放在随后的()中，title属性（图片地址后面空一格，然后用引号引起来）,注意的是[]前要加上!</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E7%9A%84%E6%96%87%E5%AD%97%E6%94%BE%E5%9C%A8-%E4%B8%AD%EF%BC%8C%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E6%94%BE%E5%9C%A8%E9%9A%8F%E5%90%8E%E7%9A%84-%E5%90%8E%EF%BC%8Ctitle%E5%B1%9E%E6%80%A7%EF%BC%88%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E5%90%8E%E9%9D%A2%E7%A9%BA%E4%B8%80%E6%A0%BC%EF%BC%8C%E7%84%B6%E5%90%8E%E7%94%A8%E5%BC%95%E5%8F%B7%E5%BC%95%E8%B5%B7%E6%9D%A5%EF%BC%89-%E6%B3%A8%E6%84%8F%E5%BC%95%E7%94%A8%E5%9B%BE%E7%89%87%E7%9A%84%E6%97%B6%E5%80%99%E5%9C%A8-%E5%89%8D%E8%A6%81%E5%8A%A0%E4%B8%8A"><span class="toc-text">图片的文字放在[]中，图片地址放在随后的:后，title属性（图片地址后面空一格，然后用引号引起来）,注意引用图片的时候在[]前要加上!</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%85%B6%E6%95%88%E6%9E%9C%E5%9B%BE%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%8C%E5%A6%82%E4%B8%8B%EF%BC%9A-1"><span class="toc-text">以上两种方式其效果图都是一样的，如下：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%88%86%E5%89%B2%E7%BA%BF"><span class="toc-text">8.分割线</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E7%BA%BF%E5%8F%AF%E4%BB%A5%E7%94%B1-%EF%BC%88%E6%98%9F%E5%8F%B7%EF%BC%8C%E5%87%8F%E5%8F%B7%EF%BC%8C%E5%BA%95%E7%BA%BF%EF%BC%89%E8%BF%993%E4%B8%AA%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%87%B3%E5%B0%913%E4%B8%AA%E7%AC%A6%E5%8F%B7%E8%A1%A8%E7%A4%BA%EF%BC%8C%E6%B3%A8%E6%84%8F%E8%87%B3%E5%B0%91%E8%A6%813%E4%B8%AA%EF%BC%8C%E4%B8%94%E4%B8%8D%E9%9C%80%E8%A6%81%E8%BF%9E%E7%BB%AD%EF%BC%8C%E6%9C%89%E7%A9%BA%E6%A0%BC%E4%B9%9F%E5%8F%AF%E4%BB%A5"><span class="toc-text">分割线可以由* - _（星号，减号，底线）这3个符号的至少3个符号表示，注意至少要3个，且不需要连续，有空格也可以</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%85%B6%E4%BB%96"><span class="toc-text">9.其他</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E6%98%9F%E5%8F%B7%E6%88%96%E8%80%85%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%8B%E5%88%92%E7%BA%BF%E5%8C%85%E8%B5%B7%E6%9D%A5%EF%BC%8C%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%80%BE%E6%96%9C%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%98%AF2%E4%B8%AA%EF%BC%8C%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%8A%A0%E7%B2%97"><span class="toc-text">一个星号或者是一个下划线包起来，会转换为倾斜，如果是2个，会转换为加粗</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-6"><span class="toc-text">效果图：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%B8%8A%E5%92%8Cjs%E8%BD%AC%E4%B9%89%E4%B8%80%E6%A0%B7-%E5%8A%A0%E9%9C%80%E8%A6%81%E8%BD%AC%E4%B9%89%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-text">基本上和js转义一样,\加需要转义的字符</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%94%A8-%E6%8A%8A%E9%9C%80%E8%A6%81%E6%98%BE%E7%A4%BA%E5%88%A0%E9%99%A4%E7%BA%BF%E7%9A%84%E5%AD%97%E7%AC%A6%E5%8C%85%E8%A3%B9%E8%B5%B7%E6%9D%A5"><span class="toc-text">用~~把需要显示删除线的字符包裹起来</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-7"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E8%A1%A8%E6%A0%BC"><span class="toc-text">10.表格</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%8A%E9%9D%A2%E4%B8%89%E4%B8%AA%E4%BE%8B%E5%AD%90%E7%9A%84%E6%95%88%E6%9E%9C%E4%B8%80%E6%A0%B7%EF%BC%8C%E7%94%B1%E6%AD%A4%E5%8F%AF%E5%BE%97%EF%BC%9A"><span class="toc-text">上面三个例子的效果一样，由此可得：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE%EF%BC%9A-8"><span class="toc-text">效果图：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

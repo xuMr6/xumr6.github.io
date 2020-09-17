@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Django 类视图 和 中间件">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2020/06/18/Django%20%E7%B1%BB%E8%A7%86%E5%9B%BE%20%E5%92%8C%20%E4%B8%AD%E9%97%B4%E4%BB%B6/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2020-06-18">
+  <meta property="og:article:modified_time" content="2020-09-13">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Django 类视图 和 中间件
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-06-18T12:09:49.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2020-06-18</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/djangobook/" class="post-meta-link">djangobook</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.9k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="类视图"><a href="#类视图" class="headerlink" title="类视图"></a>类视图</h3><p>思考：一个视图，是否可以处理两种逻辑？比如get和post请求逻辑。</p>
+<h4 id="如何在一个视图中处理get和post请求"><a href="#如何在一个视图中处理get和post请求" class="headerlink" title="如何在一个视图中处理get和post请求"></a>如何在一个视图中处理get和post请求</h4><p><img src="https://img-blog.csdnimg.cn/20200424201651517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="注册视图处理get和post请求"><a href="#注册视图处理get和post请求" class="headerlink" title="注册视图处理get和post请求"></a>注册视图处理get和post请求</h4><p>以函数的方式定义的视图称为 <strong>函数视图</strong>，函数视图便于理解。但是遇到一个视图对应的路径提供了多种不同HTTP请求方式的支持时，便需要在一个函数中编写不同的业务逻辑，代码可读性与复用性都不佳。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理注册&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取请求方法，判断是GET/POST请求</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;GET&#x27;</span>:</span><br><span class="line">        <span class="comment"># 处理GET请求，返回注册页面</span></span><br><span class="line">        <span class="keyword">return</span> render(request, <span class="string">&#x27;register.html&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 处理POST请求，实现注册逻辑</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&#x27;这里实现注册逻辑&#x27;</span>)</span><br><span class="line"><span class="number">12345678910</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="类视图使用"><a href="#类视图使用" class="headerlink" title="类视图使用"></a>类视图使用</h3><p>在Django中也可以使用类来定义一个视图，称为类视图。</p>
+<p>使用类视图可以将视图对应的不同请求方式以类中的不同方法来区别定义。如下所示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> View</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RegisterView</span>(<span class="params">View</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;类视图：处理注册&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, request</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;处理GET请求，返回注册页面&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> render(request, <span class="string">&#x27;register.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self, request</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;处理POST请求，实现注册逻辑&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&#x27;这里实现注册逻辑&#x27;</span>)</span><br><span class="line"><span class="number">123456789101112</span></span><br></pre></td></tr></table></figure>
+
+<p>类视图的好处：</p>
+<ul>
+<li><strong>代码可读性好</strong></li>
+<li><strong>类视图相对于函数视图有更高的复用性</strong> ， 如果其他地方需要用到某个类视图的某个特定逻辑，直接继承该类视图即可</li>
+</ul>
+<p>定义类视图需要继承自Django提供的父类 <strong>View</strong>，可使用 <code>from django.views.generic import View</code> 或者<code>from django.views.generic.base import View</code> 导入，定义方式如上所示。</p>
+<p>配置路由时，使用类视图的 <code>as_view()</code> 方法来添加。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    <span class="comment"># 视图函数：注册</span></span><br><span class="line">    <span class="comment"># url(r&#x27;^register/$&#x27;, views.register, name=&#x27;register&#x27;),</span></span><br><span class="line">    <span class="comment"># 类视图：注册</span></span><br><span class="line">    url(<span class="string">r&#x27;^register/$&#x27;</span>, views.RegisterView.as_view(), name=<span class="string">&#x27;register&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"><span class="number">123456</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="类视图原理"><a href="#类视图原理" class="headerlink" title="类视图原理"></a>类视图原理</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@classonlymethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">as_view</span>(<span class="params">cls, **initkwargs</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Main entry point for a request-response process.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        ...省略代码...</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">view</span>(<span class="params">request, *args, **kwargs</span>):</span></span><br><span class="line">            self = cls(**initkwargs)</span><br><span class="line">            <span class="keyword">if</span> hasattr(self, <span class="string">&#x27;get&#x27;</span>) <span class="keyword">and</span> <span class="keyword">not</span> hasattr(self, <span class="string">&#x27;head&#x27;</span>):</span><br><span class="line">                self.head = self.get</span><br><span class="line">            self.request = request</span><br><span class="line">            self.args = args</span><br><span class="line">            self.kwargs = kwargs</span><br><span class="line">            <span class="comment"># 调用dispatch方法，按照不同请求方式调用不同请求方法</span></span><br><span class="line">            <span class="keyword">return</span> self.dispatch(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">        ...省略代码...</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 返回真正的函数视图</span></span><br><span class="line">        <span class="keyword">return</span> view</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dispatch</span>(<span class="params">self, request, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="comment"># Try to dispatch to the right method; if a method doesn&#x27;t exist,</span></span><br><span class="line">        <span class="comment"># defer to the error handler. Also defer to the error handler if the</span></span><br><span class="line">        <span class="comment"># request method isn&#x27;t on the approved list.</span></span><br><span class="line">        <span class="keyword">if</span> request.method.lower() <span class="keyword">in</span> self.http_method_names:</span><br><span class="line">            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            handler = self.http_method_not_allowed</span><br><span class="line">        <span class="keyword">return</span> handler(request, *args, **kwargs)</span><br><span class="line"><span class="number">1234567891011121314151617181920212223242526272829303132</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="类视图使用装饰器"><a href="#类视图使用装饰器" class="headerlink" title="类视图使用装饰器"></a>类视图使用装饰器</h3><p>为类视图添加装饰器，可以使用三种方法。</p>
+<p>为了理解方便，我们先来定义一个为 <strong>函数视图准备的装饰器</strong>（在设计装饰器时基本都以函数视图作为考虑的被装饰对象），及一个要被装饰的类视图。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login_require</span>(<span class="params">func_view</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">request，*args,**kwargs</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="literal">False</span>:</span><br><span class="line">            <span class="keyword">return</span> func_view(request,*args,**kwargs)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> HttpResponse(<span class="string">&quot;您没有登陆&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CenterView</span>(<span class="params">View</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"><span class="number">1234567891011121314151617</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-1-在URL配置中装饰"><a href="#4-1-在URL配置中装饰" class="headerlink" title="4.1 在URL配置中装饰"></a>4.1 在URL配置中装饰</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> book.views <span class="keyword">import</span> login_require</span><br><span class="line">urlpatterns = [</span><br><span class="line"></span><br><span class="line">    url(<span class="string">r&#x27;^center/$&#x27;</span>,login_require(CenterView.as_view()),name=<span class="string">&#x27;center&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<p>此种方式最简单，但因装饰行为被放置到了url配置中，单看视图的时候无法知道此视图还被添加了装饰器，不利于代码的完整性，不建议使用。</p>
+<p><strong>此种方式会为类视图中的所有请求方法都加上装饰器行为</strong>（因为是在视图入口处，分发请求方式前）。</p>
+<h4 id="4-2-在类视图中装饰"><a href="#4-2-在类视图中装饰" class="headerlink" title="4.2 在类视图中装饰"></a>4.2 在类视图中装饰</h4><p>在类视图中使用为函数视图准备的装饰器时，不能直接添加装饰器，需要使用 <code>method_decorator</code> 将其转换为适用于类视图的装饰器。</p>
+<p><strong>methoddecorator装饰器还支持使用name参数指明被装饰的方法</strong>。method_decorator</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@method_decorator(login_require,name=&#x27;dispatch&#x27;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CenterView</span>(<span class="params">View</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"><span class="number">12345678</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-3-构造Mixin扩展类"><a href="#4-3-构造Mixin扩展类" class="headerlink" title="4.3 构造Mixin扩展类"></a>4.3 构造Mixin扩展类</h4><p>使用面向对象多继承的特性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginRequireMixin</span>(<span class="params">object</span>):</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">as_view</span>(<span class="params">cls,**kwargs</span>):</span></span><br><span class="line">        view = super().as_view(**kwargs)</span><br><span class="line">        view = login_require(view)</span><br><span class="line">        <span class="keyword">return</span> view</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CenterView</span>(<span class="params">LoginRequireMixin,View</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self,request</span>):</span></span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"><span class="number">1234567891011121314</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用Mixin扩展类，也会为类视图的所有请求方法都添加装饰行为。</strong></p>
+<h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><p>Django中的中间件是一个轻量级、底层的插件系统，可以介入Django的请求和响应处理过程，修改Django的输入或输出。中间件的设计为开发者提供了一种无侵入式的开发方式，增强了Django框架的健壮性。</p>
+<p>我们可以使用中间件，在Django处理视图的不同阶段对输入或输出进行干预。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/1.11/topics/http/middleware/">中间件文档： https://docs.djangoproject.com/en/1.11/topics/http/middleware/</a></p>
+<h4 id="1-中间件的定义方法"><a href="#1-中间件的定义方法" class="headerlink" title="1 中间件的定义方法"></a>1 中间件的定义方法</h4><p>定义一个中间件工厂函数，然后返回一个可以被调用的中间件。</p>
+<p>中间件工厂函数需要接收一个可以调用的get_response对象。</p>
+<p>返回的中间件也是一个可以被调用的对象，并且像视图一样需要接收一个request对象参数，返回一个response对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">simple_middleware</span>(<span class="params">get_response</span>):</span></span><br><span class="line">    <span class="comment"># 此处编写的代码仅在Django第一次配置和初始化的时候执行一次。</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request</span>):</span></span><br><span class="line">        <span class="comment"># 此处编写的代码会在每个请求处理视图前被调用。</span></span><br><span class="line"></span><br><span class="line">        response = get_response(request)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 此处编写的代码会在每个请求处理视图之后被调用。</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> middleware</span><br><span class="line"><span class="number">12345678910111213</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>例如，在book应用中新建一个middleware.py文件，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_middleware</span>(<span class="params">get_response</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;init 被调用&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request</span>):</span></span><br><span class="line">        print(<span class="string">&#x27;before request 被调用&#x27;</span>)</span><br><span class="line">        response = get_response(request)</span><br><span class="line">        print(<span class="string">&#x27;after response 被调用&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    <span class="keyword">return</span> middleware</span><br><span class="line"><span class="number">12345678</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>定义好中间件后，需要在settings.py 文件中添加注册中间件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">MIDDLEWARE = [</span><br><span class="line">    <span class="string">&#x27;django.middleware.security.SecurityMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.contrib.sessions.middleware.SessionMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.middleware.common.CommonMiddleware&#x27;</span>,</span><br><span class="line">    <span class="comment"># &#x27;django.middleware.csrf.CsrfViewMiddleware&#x27;,</span></span><br><span class="line">    <span class="string">&#x27;django.contrib.auth.middleware.AuthenticationMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.contrib.messages.middleware.MessageMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.middleware.clickjacking.XFrameOptionsMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;book.middleware.my_middleware&#x27;</span>,  <span class="comment"># 添加中间件</span></span><br><span class="line">]</span><br><span class="line"><span class="number">12345678910</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>定义一个视图进行测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;view 视图被调用&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">&#x27;OK&#x27;</span>)</span><br><span class="line"><span class="number">123</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>执行结果<br><img src="https://img-blog.csdnimg.cn/20200425122753290.png" alt="在这里插入图片描述"><br>注意：Django运行在调试模式下，中间件init部分有可能被调用两次。</p>
+<h4 id="2-多个中间件的执行顺序"><a href="#2-多个中间件的执行顺序" class="headerlink" title="2 多个中间件的执行顺序"></a>2 多个中间件的执行顺序</h4><ul>
+<li>在请求视图被处理前，中间件由上至下依次执行</li>
+<li>在请求视图被处理后，中间件由下至上依次执行</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200425122825653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>示例：</p>
+<p>定义两个中间件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_middleware</span>(<span class="params">get_response</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;init 被调用&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request</span>):</span></span><br><span class="line">        print(<span class="string">&#x27;before request 被调用&#x27;</span>)</span><br><span class="line">        response = get_response(request)</span><br><span class="line">        print(<span class="string">&#x27;after response 被调用&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    <span class="keyword">return</span> middleware</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_middleware2</span>(<span class="params">get_response</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;init2 被调用&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request</span>):</span></span><br><span class="line">        print(<span class="string">&#x27;before request 2 被调用&#x27;</span>)</span><br><span class="line">        response = get_response(request)</span><br><span class="line">        print(<span class="string">&#x27;after response 2 被调用&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    <span class="keyword">return</span> middleware</span><br><span class="line"><span class="number">1234567891011121314151617</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注册添加两个中间件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">MIDDLEWARE = [</span><br><span class="line">    <span class="string">&#x27;django.middleware.security.SecurityMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.contrib.sessions.middleware.SessionMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.middleware.common.CommonMiddleware&#x27;</span>,</span><br><span class="line">    <span class="comment"># &#x27;django.middleware.csrf.CsrfViewMiddleware&#x27;,</span></span><br><span class="line">    <span class="string">&#x27;django.contrib.auth.middleware.AuthenticationMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.contrib.messages.middleware.MessageMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;django.middleware.clickjacking.XFrameOptionsMiddleware&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;users.middleware.my_middleware&#x27;</span>,  <span class="comment"># 添加</span></span><br><span class="line">    <span class="string">&#x27;users.middleware.my_middleware2&#x27;</span>,  <span class="comment"># 添加</span></span><br><span class="line">]</span><br><span class="line"><span class="number">1234567891011</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">init2 被调用</span><br><span class="line">init 被调用</span><br><span class="line">before request 被调用</span><br><span class="line">before request <span class="number">2</span> 被调用</span><br><span class="line">view 视图被调用</span><br><span class="line">after response <span class="number">2</span> 被调用</span><br><span class="line">after response 被调用</span><br><span class="line"><span class="number">1234567</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="django中间件的5个方法"><a href="#django中间件的5个方法" class="headerlink" title="django中间件的5个方法"></a>django中间件的5个方法</h4><ol>
+<li>process_request : 请求进来时,权限认证 。</li>
+<li>process_view : 路由匹配之后,能够得到视图函数</li>
+<li>process_exception : 异常时执行</li>
+<li>process_template_responseprocess : 模板渲染时执行</li>
+<li>process_response : 请求有响应时执行</li>
+</ol>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2020/06/18/Django%20%E7%B1%BB%E8%A7%86%E5%9B%BE%20%E5%92%8C%20%E4%B8%AD%E9%97%B4%E4%BB%B6/">https://github.com/xuMr6/xumr6.github.io.git/2020/06/18/Django%20%E7%B1%BB%E8%A7%86%E5%9B%BE%20%E5%92%8C%20%E4%B8%AD%E9%97%B4%E4%BB%B6/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2020/06/29/Django 模板 进阶/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Django 模板 进阶 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2020/06/12/Django 状态保持 Cookie 和 Session/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Django 状态保持 Cookie 和 Session </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE"><span class="toc-text">类视图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E8%A7%86%E5%9B%BE%E4%B8%AD%E5%A4%84%E7%90%86get%E5%92%8Cpost%E8%AF%B7%E6%B1%82"><span class="toc-text">如何在一个视图中处理get和post请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%A7%86%E5%9B%BE%E5%A4%84%E7%90%86get%E5%92%8Cpost%E8%AF%B7%E6%B1%82"><span class="toc-text">注册视图处理get和post请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%BD%BF%E7%94%A8"><span class="toc-text">类视图使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E5%8E%9F%E7%90%86"><span class="toc-text">类视图原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%BD%BF%E7%94%A8%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">类视图使用装饰器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E5%9C%A8URL%E9%85%8D%E7%BD%AE%E4%B8%AD%E8%A3%85%E9%A5%B0"><span class="toc-text">4.1 在URL配置中装饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E5%9C%A8%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%B8%AD%E8%A3%85%E9%A5%B0"><span class="toc-text">4.2 在类视图中装饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E6%9E%84%E9%80%A0Mixin%E6%89%A9%E5%B1%95%E7%B1%BB"><span class="toc-text">4.3 构造Mixin扩展类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95"><span class="toc-text">1 中间件的定义方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%A4%9A%E4%B8%AA%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-text">2 多个中间件的执行顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#django%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%845%E4%B8%AA%E6%96%B9%E6%B3%95"><span class="toc-text">django中间件的5个方法</span></a></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE"><span class="toc-text">类视图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E8%A7%86%E5%9B%BE%E4%B8%AD%E5%A4%84%E7%90%86get%E5%92%8Cpost%E8%AF%B7%E6%B1%82"><span class="toc-text">如何在一个视图中处理get和post请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%A7%86%E5%9B%BE%E5%A4%84%E7%90%86get%E5%92%8Cpost%E8%AF%B7%E6%B1%82"><span class="toc-text">注册视图处理get和post请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%BD%BF%E7%94%A8"><span class="toc-text">类视图使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E5%8E%9F%E7%90%86"><span class="toc-text">类视图原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%BD%BF%E7%94%A8%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">类视图使用装饰器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E5%9C%A8URL%E9%85%8D%E7%BD%AE%E4%B8%AD%E8%A3%85%E9%A5%B0"><span class="toc-text">4.1 在URL配置中装饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E5%9C%A8%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%B8%AD%E8%A3%85%E9%A5%B0"><span class="toc-text">4.2 在类视图中装饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E6%9E%84%E9%80%A0Mixin%E6%89%A9%E5%B1%95%E7%B1%BB"><span class="toc-text">4.3 构造Mixin扩展类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95"><span class="toc-text">1 中间件的定义方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%A4%9A%E4%B8%AA%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-text">2 多个中间件的执行顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#django%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%845%E4%B8%AA%E6%96%B9%E6%B3%95"><span class="toc-text">django中间件的5个方法</span></a></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE"><span class="toc-text">类视图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E8%A7%86%E5%9B%BE%E4%B8%AD%E5%A4%84%E7%90%86get%E5%92%8Cpost%E8%AF%B7%E6%B1%82"><span class="toc-text">如何在一个视图中处理get和post请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%A7%86%E5%9B%BE%E5%A4%84%E7%90%86get%E5%92%8Cpost%E8%AF%B7%E6%B1%82"><span class="toc-text">注册视图处理get和post请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%BD%BF%E7%94%A8"><span class="toc-text">类视图使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E5%8E%9F%E7%90%86"><span class="toc-text">类视图原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%BD%BF%E7%94%A8%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">类视图使用装饰器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E5%9C%A8URL%E9%85%8D%E7%BD%AE%E4%B8%AD%E8%A3%85%E9%A5%B0"><span class="toc-text">4.1 在URL配置中装饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E5%9C%A8%E7%B1%BB%E8%A7%86%E5%9B%BE%E4%B8%AD%E8%A3%85%E9%A5%B0"><span class="toc-text">4.2 在类视图中装饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E6%9E%84%E9%80%A0Mixin%E6%89%A9%E5%B1%95%E7%B1%BB"><span class="toc-text">4.3 构造Mixin扩展类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95"><span class="toc-text">1 中间件的定义方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%A4%9A%E4%B8%AA%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-text">2 多个中间件的执行顺序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#django%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%845%E4%B8%AA%E6%96%B9%E6%B3%95"><span class="toc-text">django中间件的5个方法</span></a></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

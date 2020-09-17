@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Python常见基础算法题">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2019/03/01/Python%E5%B8%B8%E8%A7%81%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%E9%A2%98/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2019-03-01">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Python常见基础算法题
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-03-01T14:10:10.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2019-03-01</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/python/" class="post-meta-link">python</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.5k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="1-判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数"><a href="#1-判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数" class="headerlink" title="1.判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数."></a>1.判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数.</h3><p>示例 1:<br>输入: 121<br>输出: true</p>
+<p>示例 2:<br>输入: -121<br>输出: false<br>解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。</p>
+<p>示例 3:<br>输入: 10<br>输出: false<br>解释: 从右向左读, 为 01 。因此它不是一个回文数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_num</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    判断传递的参数是否是回文数</span></span><br><span class="line"><span class="string">    :param num: 传递的参数</span></span><br><span class="line"><span class="string">    :return: 是回文数返回True 不是则false</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    num1 = str(num)</span><br><span class="line">    <span class="keyword">if</span> num1[::<span class="number">-1</span>] == num1:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(is_num(<span class="number">121</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-分别用生成器和迭代器生成斐波那契"><a href="#2-分别用生成器和迭代器生成斐波那契" class="headerlink" title="2.分别用生成器和迭代器生成斐波那契"></a>2.分别用生成器和迭代器生成斐波那契</h3><p>示例 1:</p>
+<p>输出: 1  1   2   3   5  8  13   </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 迭代器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FibIterator</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,n</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;实例属性的初始花和赋值&quot;&quot;&quot;</span></span><br><span class="line">        self.n = n      <span class="comment">#  数列长度</span></span><br><span class="line">        self.current = <span class="number">0</span>    <span class="comment">#  设置两个初始值</span></span><br><span class="line">        self.num1 = <span class="number">0</span></span><br><span class="line">        self.num2 = <span class="number">1</span>   <span class="comment">#  初始下标</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;返回迭代器对象的下一位置数据&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 能拿到数据的情况</span></span><br><span class="line">        <span class="keyword">if</span> self.current &lt; self.n:</span><br><span class="line">            num = self.num1</span><br><span class="line">            self.num1,self.num2 = self.num2,self.num1+self.num2</span><br><span class="line">            self.current+=<span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> num</span><br><span class="line">        <span class="comment"># 拿不到数据的情况</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span>  StopIteration    <span class="comment">#主动抛出异常</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    fib = FibIterator(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> fib:</span><br><span class="line">        print(num)</span><br><span class="line"></span><br><span class="line"> <span class="comment"># 生成器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span>(<span class="params">n</span>):</span> <span class="comment"># 创建一个函数</span></span><br><span class="line">    num1,num2 = <span class="number">1</span>,<span class="number">1</span></span><br><span class="line">    current = <span class="number">1</span>    <span class="comment"># 初始值</span></span><br><span class="line">    <span class="keyword">while</span> current &lt;= n:    <span class="comment"># i小于等于n，n次数 循环的控制条件</span></span><br><span class="line">        <span class="keyword">yield</span> num1    <span class="comment"># 返回a的值，但不结束函数</span></span><br><span class="line">        num1,num2 = num2 , num1 + num2</span><br><span class="line">        current += <span class="number">1</span>     <span class="comment"># 步长值</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> fib(<span class="number">10</span>):    <span class="comment"># 以for循环来获取yield每次的值</span></span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-字符串相乘：给定两个以字符串形式表示的非负整数-num1-和-num2，返回-num1-和-num2-的乘积，它们的乘积也表示为字符串形式"><a href="#3-字符串相乘：给定两个以字符串形式表示的非负整数-num1-和-num2，返回-num1-和-num2-的乘积，它们的乘积也表示为字符串形式" class="headerlink" title="3.字符串相乘：给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式"></a>3.字符串相乘：给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式</h3><p>示例 :<br>输入: num1 = “123”, num2 = “456”<br>输出: “56088”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Func</span>(<span class="params">num1,num2</span>):</span></span><br><span class="line">    alist1 = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    alist2 = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> num1:</span><br><span class="line">        <span class="keyword">if</span> i.isdigit():</span><br><span class="line">           alist1 += i</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> num2:</span><br><span class="line">        <span class="keyword">if</span>  j.isdigit():</span><br><span class="line">            alist2 += j</span><br><span class="line">    str1=str(int(alist1) * int(alist2 ))</span><br><span class="line">    <span class="keyword">return</span> str1</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(Func(<span class="string">&#x27;11qq&#x27;</span>,<span class="string">&#x27;zz99xx&#x27;</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-实现一个算法来实现反转字符数组的功能-反转的要求如下：将字符数组的字符进行反转-例如-‘b’-‘-‘-‘a’-‘r’-变成-‘r’-‘a’-‘-‘-‘b’-将字符数组替换为反转后的数组。"><a href="#4-实现一个算法来实现反转字符数组的功能-反转的要求如下：将字符数组的字符进行反转-例如-‘b’-‘-‘-‘a’-‘r’-变成-‘r’-‘a’-‘-‘-‘b’-将字符数组替换为反转后的数组。" class="headerlink" title="4.实现一个算法来实现反转字符数组的功能,反转的要求如下：将字符数组的字符进行反转,例如 [‘b’, ‘ ‘, ‘a’, ‘r’],变成 [‘r’, ‘a’, ‘ ‘, ‘b’] , 将字符数组替换为反转后的数组。"></a>4.实现一个算法来实现反转字符数组的功能,反转的要求如下：将字符数组的字符进行反转,例如 [‘b’, ‘ ‘, ‘a’, ‘r’],变成 [‘r’, ‘a’, ‘ ‘, ‘b’] , 将字符数组替换为反转后的数组。</h3><h5 id="解题思路："><a href="#解题思路：" class="headerlink" title="解题思路："></a>解题思路：</h5><p>常规的解法是创建一个相同长度的新数组，<br>然后把第一个数组中的元素，按倒序放入新数组中。<br>但更简单的方法是：利用 Python 交换变量的特性，<br>不需要新建数组，直接在原数组里即可完成</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reverse</span>(<span class="params">self, chars</span>):</span></span><br><span class="line">    <span class="keyword">if</span> chars:</span><br><span class="line">        size = len(chars)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(size // <span class="number">2</span>):</span><br><span class="line">            chars[i], chars[size - <span class="number">1</span> - i] = chars[size - <span class="number">1</span> - i], chars[i]</span><br><span class="line">        <span class="keyword">return</span> chars</span><br><span class="line">print(reverse(<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;a&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="5-栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表"><a href="#5-栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表" class="headerlink" title="5.栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表,"></a>5.栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表,</h3><p>特点：先进后出   后进先出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stack</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;初始化&quot;&quot;&quot;</span></span><br><span class="line">        self.stack = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">push</span>(<span class="params">self,item</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;push(item)添加一个新的元素item到栈顶&quot;&quot;&quot;</span></span><br><span class="line">        self.stack.append(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pop</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;pop()弹出栈顶元素&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> self.stack == []:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.stack.pop()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">peek</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;peek()返回栈顶元素&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> self.stack == []:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self.stack[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;is_empty()判断栈是否为空&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> self.stack == []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">size</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;size()返回栈的元素个数&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> len(self.stack)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    stack = Stack()</span><br><span class="line">    stack.push(<span class="number">1</span>)</span><br><span class="line">    stack.pop()</span><br><span class="line">    print(stack.peek())</span><br><span class="line">    print(stack.isEmpty())</span><br><span class="line">    print(stack.size())</span><br></pre></td></tr></table></figure>
+<h3 id="6-队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。"><a href="#6-队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。" class="headerlink" title="6.队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。"></a>6.队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。</h3><p>特点：先进先出   后进后出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queue</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;实例属性的初始化和赋值创建一个空的队列&quot;&quot;&quot;</span></span><br><span class="line">        self.queue = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">enqueue</span>(<span class="params">self,item</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;往队列中添加一个item元素&quot;&quot;&quot;</span></span><br><span class="line">        self.queue.append(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">is_empty</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;判断一个队列是否为空&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> self.queue==[]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dequeue</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;从队列头部删除一个元素&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> self.queue==[]:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span>  self.queue.pop(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">size</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;返回队列大小&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span>  len(self.queue)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    q=Queue()</span><br><span class="line">    q.enqueue(<span class="number">1</span>)</span><br><span class="line">    q.enqueue(<span class="number">2</span>)</span><br><span class="line">    q.enqueue(<span class="number">3</span>)</span><br><span class="line">    q.enqueue(<span class="number">4</span>)</span><br><span class="line">    q.enqueue(<span class="number">5</span>)</span><br><span class="line">    print(q.is_empty())</span><br><span class="line">    print(<span class="string">&quot;长度为：&quot;</span>,q.size())</span><br><span class="line">    print(q.dequeue())</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-去掉空格"><a href="#7-去掉空格" class="headerlink" title="7.去掉空格"></a>7.去掉空格</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_num</span>(<span class="params">par_str</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    :param par_str: 字符串</span></span><br><span class="line"><span class="string">    :return: num</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    par_list = par_str.split(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line"></span><br><span class="line">    print([i <span class="keyword">for</span> i <span class="keyword">in</span> par_list <span class="keyword">if</span> i])</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> par_list:</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;&quot;</span> <span class="keyword">in</span> par_list:</span><br><span class="line">            par_list.remove(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    print(par_list)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    get_num(<span class="string">&#x27;hello, python   hello ,   world&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="8-两数之和"><a href="#8-两数之和" class="headerlink" title="8.两数之和"></a>8.两数之和</h3><p> 方法1：<br> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">def</span> <span class="title">get_num_index</span>(<span class="params">llist,target</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        :param target: 俩个下标值的和</span></span><br><span class="line"><span class="string">        :param llist: 查看下标所用的列表</span></span><br><span class="line"><span class="string">        :return: 返回符合条件的两个下标值</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        y = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> x,val <span class="keyword">in</span> enumerate(llist):</span><br><span class="line">            y += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> llist[x] +llist[y]==target:</span><br><span class="line">                <span class="keyword">return</span> (x,y)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(get_num_index([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],<span class="number">7</span>))</span><br></pre></td></tr></table></figure></p>
+<p>方法2：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_num_index</span>(<span class="params">llist, target</span>):</span></span><br><span class="line">            <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">            :param target: 给定值</span></span><br><span class="line"><span class="string">            :param llist: 查看条件列表</span></span><br><span class="line"><span class="string">            :return: 返回符合条件的下标值</span></span><br><span class="line"><span class="string">            &#x27;&#x27;&#x27;</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> llist:</span><br><span class="line">                y = target - i</span><br><span class="line">                <span class="keyword">if</span> y != <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">if</span> y <span class="keyword">in</span> llist:</span><br><span class="line">                        <span class="keyword">if</span> llist.index(i) == llist.index(y):</span><br><span class="line">                            <span class="keyword">break</span></span><br><span class="line">                        <span class="comment"># if llist.index(i) &lt;= llist.index(y):</span></span><br><span class="line">                        <span class="keyword">return</span> llist.index(y), llist.index(i)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">return</span> llist.index(i)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(get_num_index([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>,<span class="number">13</span>],<span class="number">13</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="9-比较：取值第三个大的数"><a href="#9-比较：取值第三个大的数" class="headerlink" title="9.比较：取值第三个大的数"></a>9.比较：取值第三个大的数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">if</span> len(num)&gt;=<span class="number">3</span>:</span><br><span class="line">        alist=[]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> sorted(num):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                alist.index(i)</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                alist.append(i)</span><br><span class="line">        <span class="keyword">return</span> alist[<span class="number">-3</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num=[<span class="number">8</span>,<span class="number">7</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">8</span>]</span><br><span class="line">    print(func(num))</span><br></pre></td></tr></table></figure>
+<h3 id="10-反转字符数组"><a href="#10-反转字符数组" class="headerlink" title="10.反转字符数组"></a>10.反转字符数组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 反转字符串</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reverseString</span>(<span class="params">s</span>):</span></span><br><span class="line">    s[<span class="number">0</span>::] = s[::<span class="number">-1</span>]</span><br><span class="line">    print(s)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    reverseString([<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;r&#x27;</span>])</span><br></pre></td></tr></table></figure>
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2019/03/01/Python%E5%B8%B8%E8%A7%81%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%E9%A2%98/">https://github.com/xuMr6/xumr6.github.io.git/2019/03/01/Python%E5%B8%B8%E8%A7%81%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%E9%A2%98/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2019/03/28/python基础数据类型的操作/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">python基础数据类型的操作 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2019/02/23/nginx简介/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">nginx简介 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0%E6%98%AF%E5%90%A6%E6%98%AF%E5%9B%9E%E6%96%87%E6%95%B0%E3%80%82%E5%9B%9E%E6%96%87%E6%95%B0%E6%98%AF%E6%8C%87%E6%AD%A3%E5%BA%8F%EF%BC%88%E4%BB%8E%E5%B7%A6%E5%90%91%E5%8F%B3%EF%BC%89%E5%92%8C%E5%80%92%E5%BA%8F%EF%BC%88%E4%BB%8E%E5%8F%B3%E5%90%91%E5%B7%A6%EF%BC%89%E8%AF%BB%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%E6%95%B4%E6%95%B0"><span class="toc-text">1.判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E5%88%AB%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%94%9F%E6%88%90%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91"><span class="toc-text">2.分别用生成器和迭代器生成斐波那契</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98%EF%BC%9A%E7%BB%99%E5%AE%9A%E4%B8%A4%E4%B8%AA%E4%BB%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E8%A1%A8%E7%A4%BA%E7%9A%84%E9%9D%9E%E8%B4%9F%E6%95%B4%E6%95%B0-num1-%E5%92%8C-num2%EF%BC%8C%E8%BF%94%E5%9B%9E-num1-%E5%92%8C-num2-%E7%9A%84%E4%B9%98%E7%A7%AF%EF%BC%8C%E5%AE%83%E4%BB%AC%E7%9A%84%E4%B9%98%E7%A7%AF%E4%B9%9F%E8%A1%A8%E7%A4%BA%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F"><span class="toc-text">3.字符串相乘：给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%97%E6%B3%95%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E7%9A%84%E5%8A%9F%E8%83%BD-%E5%8F%8D%E8%BD%AC%E7%9A%84%E8%A6%81%E6%B1%82%E5%A6%82%E4%B8%8B%EF%BC%9A%E5%B0%86%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%97%E7%AC%A6%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%BD%AC-%E4%BE%8B%E5%A6%82-%E2%80%98b%E2%80%99-%E2%80%98-%E2%80%98-%E2%80%98a%E2%80%99-%E2%80%98r%E2%80%99-%E5%8F%98%E6%88%90-%E2%80%98r%E2%80%99-%E2%80%98a%E2%80%99-%E2%80%98-%E2%80%98-%E2%80%98b%E2%80%99-%E5%B0%86%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%8F%8D%E8%BD%AC%E5%90%8E%E7%9A%84%E6%95%B0%E7%BB%84%E3%80%82"><span class="toc-text">4.实现一个算法来实现反转字符数组的功能,反转的要求如下：将字符数组的字符进行反转,例如 [‘b’, ‘ ‘, ‘a’, ‘r’],变成 [‘r’, ‘a’, ‘ ‘, ‘b’] , 将字符数组替换为反转后的数组。</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="toc-text">解题思路：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%A0%88%EF%BC%9A%E4%B9%9F%E7%A7%B0%E4%B8%8B%E5%8E%8B%E6%A0%88%EF%BC%8C%E5%A0%86%E6%A0%88%EF%BC%8C%E6%98%AF%E4%BB%85%E5%85%81%E8%AE%B8%E5%9C%A8%E8%A1%A8%E5%B0%BE%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A1%A8"><span class="toc-text">5.栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表,</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%98%9F%E5%88%97%EF%BC%9A%E6%98%AF%E5%8F%AA%E5%85%81%E8%AE%B8%E5%9C%A8%E4%B8%80%E7%AB%AF%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C%EF%BC%8C%E8%80%8C%E5%9C%A8%E5%8F%A6%E4%B8%80%E7%AB%AF%E8%BF%9B%E8%A1%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A1%A8%E3%80%82"><span class="toc-text">6.队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%8E%BB%E6%8E%89%E7%A9%BA%E6%A0%BC"><span class="toc-text">7.去掉空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="toc-text">8.两数之和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E6%AF%94%E8%BE%83%EF%BC%9A%E5%8F%96%E5%80%BC%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%A4%A7%E7%9A%84%E6%95%B0"><span class="toc-text">9.比较：取值第三个大的数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84"><span class="toc-text">10.反转字符数组</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0%E6%98%AF%E5%90%A6%E6%98%AF%E5%9B%9E%E6%96%87%E6%95%B0%E3%80%82%E5%9B%9E%E6%96%87%E6%95%B0%E6%98%AF%E6%8C%87%E6%AD%A3%E5%BA%8F%EF%BC%88%E4%BB%8E%E5%B7%A6%E5%90%91%E5%8F%B3%EF%BC%89%E5%92%8C%E5%80%92%E5%BA%8F%EF%BC%88%E4%BB%8E%E5%8F%B3%E5%90%91%E5%B7%A6%EF%BC%89%E8%AF%BB%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%E6%95%B4%E6%95%B0"><span class="toc-text">1.判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E5%88%AB%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%94%9F%E6%88%90%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91"><span class="toc-text">2.分别用生成器和迭代器生成斐波那契</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98%EF%BC%9A%E7%BB%99%E5%AE%9A%E4%B8%A4%E4%B8%AA%E4%BB%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E8%A1%A8%E7%A4%BA%E7%9A%84%E9%9D%9E%E8%B4%9F%E6%95%B4%E6%95%B0-num1-%E5%92%8C-num2%EF%BC%8C%E8%BF%94%E5%9B%9E-num1-%E5%92%8C-num2-%E7%9A%84%E4%B9%98%E7%A7%AF%EF%BC%8C%E5%AE%83%E4%BB%AC%E7%9A%84%E4%B9%98%E7%A7%AF%E4%B9%9F%E8%A1%A8%E7%A4%BA%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F"><span class="toc-text">3.字符串相乘：给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%97%E6%B3%95%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E7%9A%84%E5%8A%9F%E8%83%BD-%E5%8F%8D%E8%BD%AC%E7%9A%84%E8%A6%81%E6%B1%82%E5%A6%82%E4%B8%8B%EF%BC%9A%E5%B0%86%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%97%E7%AC%A6%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%BD%AC-%E4%BE%8B%E5%A6%82-%E2%80%98b%E2%80%99-%E2%80%98-%E2%80%98-%E2%80%98a%E2%80%99-%E2%80%98r%E2%80%99-%E5%8F%98%E6%88%90-%E2%80%98r%E2%80%99-%E2%80%98a%E2%80%99-%E2%80%98-%E2%80%98-%E2%80%98b%E2%80%99-%E5%B0%86%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%8F%8D%E8%BD%AC%E5%90%8E%E7%9A%84%E6%95%B0%E7%BB%84%E3%80%82"><span class="toc-text">4.实现一个算法来实现反转字符数组的功能,反转的要求如下：将字符数组的字符进行反转,例如 [‘b’, ‘ ‘, ‘a’, ‘r’],变成 [‘r’, ‘a’, ‘ ‘, ‘b’] , 将字符数组替换为反转后的数组。</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="toc-text">解题思路：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%A0%88%EF%BC%9A%E4%B9%9F%E7%A7%B0%E4%B8%8B%E5%8E%8B%E6%A0%88%EF%BC%8C%E5%A0%86%E6%A0%88%EF%BC%8C%E6%98%AF%E4%BB%85%E5%85%81%E8%AE%B8%E5%9C%A8%E8%A1%A8%E5%B0%BE%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A1%A8"><span class="toc-text">5.栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表,</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%98%9F%E5%88%97%EF%BC%9A%E6%98%AF%E5%8F%AA%E5%85%81%E8%AE%B8%E5%9C%A8%E4%B8%80%E7%AB%AF%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C%EF%BC%8C%E8%80%8C%E5%9C%A8%E5%8F%A6%E4%B8%80%E7%AB%AF%E8%BF%9B%E8%A1%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A1%A8%E3%80%82"><span class="toc-text">6.队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%8E%BB%E6%8E%89%E7%A9%BA%E6%A0%BC"><span class="toc-text">7.去掉空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="toc-text">8.两数之和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E6%AF%94%E8%BE%83%EF%BC%9A%E5%8F%96%E5%80%BC%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%A4%A7%E7%9A%84%E6%95%B0"><span class="toc-text">9.比较：取值第三个大的数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84"><span class="toc-text">10.反转字符数组</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0%E6%98%AF%E5%90%A6%E6%98%AF%E5%9B%9E%E6%96%87%E6%95%B0%E3%80%82%E5%9B%9E%E6%96%87%E6%95%B0%E6%98%AF%E6%8C%87%E6%AD%A3%E5%BA%8F%EF%BC%88%E4%BB%8E%E5%B7%A6%E5%90%91%E5%8F%B3%EF%BC%89%E5%92%8C%E5%80%92%E5%BA%8F%EF%BC%88%E4%BB%8E%E5%8F%B3%E5%90%91%E5%B7%A6%EF%BC%89%E8%AF%BB%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%E6%95%B4%E6%95%B0"><span class="toc-text">1.判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E5%88%AB%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%94%9F%E6%88%90%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91"><span class="toc-text">2.分别用生成器和迭代器生成斐波那契</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98%EF%BC%9A%E7%BB%99%E5%AE%9A%E4%B8%A4%E4%B8%AA%E4%BB%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E8%A1%A8%E7%A4%BA%E7%9A%84%E9%9D%9E%E8%B4%9F%E6%95%B4%E6%95%B0-num1-%E5%92%8C-num2%EF%BC%8C%E8%BF%94%E5%9B%9E-num1-%E5%92%8C-num2-%E7%9A%84%E4%B9%98%E7%A7%AF%EF%BC%8C%E5%AE%83%E4%BB%AC%E7%9A%84%E4%B9%98%E7%A7%AF%E4%B9%9F%E8%A1%A8%E7%A4%BA%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F"><span class="toc-text">3.字符串相乘：给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%97%E6%B3%95%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E7%9A%84%E5%8A%9F%E8%83%BD-%E5%8F%8D%E8%BD%AC%E7%9A%84%E8%A6%81%E6%B1%82%E5%A6%82%E4%B8%8B%EF%BC%9A%E5%B0%86%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%97%E7%AC%A6%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%BD%AC-%E4%BE%8B%E5%A6%82-%E2%80%98b%E2%80%99-%E2%80%98-%E2%80%98-%E2%80%98a%E2%80%99-%E2%80%98r%E2%80%99-%E5%8F%98%E6%88%90-%E2%80%98r%E2%80%99-%E2%80%98a%E2%80%99-%E2%80%98-%E2%80%98-%E2%80%98b%E2%80%99-%E5%B0%86%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%8F%8D%E8%BD%AC%E5%90%8E%E7%9A%84%E6%95%B0%E7%BB%84%E3%80%82"><span class="toc-text">4.实现一个算法来实现反转字符数组的功能,反转的要求如下：将字符数组的字符进行反转,例如 [‘b’, ‘ ‘, ‘a’, ‘r’],变成 [‘r’, ‘a’, ‘ ‘, ‘b’] , 将字符数组替换为反转后的数组。</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="toc-text">解题思路：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%A0%88%EF%BC%9A%E4%B9%9F%E7%A7%B0%E4%B8%8B%E5%8E%8B%E6%A0%88%EF%BC%8C%E5%A0%86%E6%A0%88%EF%BC%8C%E6%98%AF%E4%BB%85%E5%85%81%E8%AE%B8%E5%9C%A8%E8%A1%A8%E5%B0%BE%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A1%A8"><span class="toc-text">5.栈：也称下压栈，堆栈，是仅允许在表尾进行插入和删除操作的线性表,</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%98%9F%E5%88%97%EF%BC%9A%E6%98%AF%E5%8F%AA%E5%85%81%E8%AE%B8%E5%9C%A8%E4%B8%80%E7%AB%AF%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C%EF%BC%8C%E8%80%8C%E5%9C%A8%E5%8F%A6%E4%B8%80%E7%AB%AF%E8%BF%9B%E8%A1%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E6%80%A7%E8%A1%A8%E3%80%82"><span class="toc-text">6.队列：是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%8E%BB%E6%8E%89%E7%A9%BA%E6%A0%BC"><span class="toc-text">7.去掉空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="toc-text">8.两数之和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E6%AF%94%E8%BE%83%EF%BC%9A%E5%8F%96%E5%80%BC%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%A4%A7%E7%9A%84%E6%95%B0"><span class="toc-text">9.比较：取值第三个大的数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84"><span class="toc-text">10.反转字符数组</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

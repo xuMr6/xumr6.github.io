@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="HTTP与HTTPS">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/12/12/HTTP%E4%B8%8EHTTPS/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-12-12">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      HTTP与HTTPS
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-12-12T04:10:38.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-12-12</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/django/" class="post-meta-link">django</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>3.6k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cucnVub29iLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAxOC8wOS9IVFRQLXZzLUhUVFBTLnBuZw?x-oss-process=image/format,png"></p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p><strong>HTTP</strong>（HyperText Transfer Protocol：超文本传输协议）是一种用于分布式、协作式和超媒体信息系统的应用层协议。 简单来说就是一种发布和接收 HTML 页面的方法，被用于在 Web 浏览器和网站服务器之间传递信息。</p>
+<p>HTTP 默认工作在 TCP 协议 80 端口，用户访问网站 http:// 打头的都是标准 HTTP 服务。</p>
+<p>HTTP 协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此，HTTP协议不适合传输一些敏感信息，比如：信用卡号、密码等支付信息。</p>
+<p><strong>HTTPS</strong>（Hypertext Transfer Protocol Secure：超文本传输安全协议）是一种透过计算机网络进行安全通信的传输协议。HTTPS 经由 HTTP 进行通信，但利用 SSL/TLS 来加密数据包。HTTPS 开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。</p>
+<p><strong><em>HTTPS 默认工作在 TCP 协议443端口，它的工作流程一般如以下方式：</em></strong></p>
+<ol>
+<li>TCP 三次同步握手</li>
+<li>客户端验证服务器数字证书</li>
+<li>DH 算法协商对称加密算法的密钥、hash 算法的密钥</li>
+<li>SSL 安全加密隧道协商完成</li>
+<li>网页以加密的方式传输，用协商的对称加密算法和密钥加密，保证数据机密性；用协商的hash算法进行数据完整性保护，保证数据不被篡改。<h1 id="HTTP-与-HTTPS-区别"><a href="#HTTP-与-HTTPS-区别" class="headerlink" title="HTTP 与 HTTPS 区别"></a>HTTP 与 HTTPS 区别</h1></li>
+</ol>
+<ul>
+<li>HTTP <strong>明文传输</strong>，数据都是未加密的，安全性较差，HTTPS（SSL+HTTP） 数据传输过程是<strong>加密</strong>的，安全性较好。<br>使用 HTTPS 协议需要到 <strong>CA（Certificate Authority，数字证书认证机构） 申请证书</strong>，一般免费证书较少，因而需要一定费用。证书颁发机构如：Symantec、Comodo、GoDaddy 和 GlobalSign 等。</li>
+<li>HTTP 页面响应速度比 HTTPS 快，主要是因为 HTTP 使用 TCP 三次握手建立连接，客户端和服务器需要交换 3 个包，而 HTTPS除了 TCP 的三个包，还要加上 ssl 握手需要的 9 个包，所以一共是 12 个包。</li>
+<li>HTTP 和 HTTPS 使用的是完全不同的连接方式，用的端口也不一样，前者是 <strong>80</strong>，后者是 <strong>443</strong>。</li>
+<li>HTTPS 其实就是建构在 SSL/TLS 之上的 HTTP 协议，所以，要比较 HTTPS 比 HTTP 要更耗费服务器资源。</li>
+<li><h1 id="TCP-三次握手"><a href="#TCP-三次握手" class="headerlink" title="TCP 三次握手"></a>TCP 三次握手</h1></li>
+</ul>
+<p><strong>在TCP/IP协议中，TCP协议通过三次握手建立一个可靠的连接</strong><br><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cucnVub29iLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAxOC8wOS8wNTIzNDIzMy1lZWQ2ZGRjYmE5M2M0MmJlODg0N2U5OGQ2ZGE2MjgwMi5qcGc?x-oss-process=image/format,png"></p>
+<ul>
+<li><strong>第一次握手</strong>：客户端尝试连接服务器，向服务器发送 syn 包（同步序列编号Synchronize Sequence Numbers），syn=j，客户端进入 SYN_SEND 状态等待服务器确认</li>
+<li><strong>第二次握手</strong>：服务器接收客户端syn包并确认（ack=j+1），同时向客户端发送一个 SYN包（syn=k），即 SYN+ACK 包，此时服务器进入 SYN_RECV 状态</li>
+<li><strong>第三次握手</strong>：第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=k+1），此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手<br><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cucnVub29iLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAxOC8wOS9kZmZkZmYucG5n?x-oss-process=image/format,png"><h1 id="客户端在使用HTTPS方式与Web服务器通信时的步骤"><a href="#客户端在使用HTTPS方式与Web服务器通信时的步骤" class="headerlink" title="客户端在使用HTTPS方式与Web服务器通信时的步骤"></a>客户端在使用HTTPS方式与Web服务器通信时的步骤</h1></li>
+</ul>
+<p><strong>1. 客户使用https的URL访问Web服务器，要求与Web服务器建立SSL连接。<br>2. Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。<br>3. 客户端的浏览器与Web服务器开始协商SSL/TLS连接的安全等级，也就是信息加密的等级。<br>4. 客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。<br>5. Web服务器利用自己的私钥解密出会话密钥。<br>6. Web服务器利用会话密钥加密与客户端之间的通信。</strong></p>
+<p><img src="https://img-blog.csdn.net/20180920154005922?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NjQyMDM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"></p>
+<p><img src="https://img-blog.csdn.net/20180920154006193?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NjQyMDM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"></p>
+<p> <strong>尽管HTTPS并非绝对安全，掌握根证书的机构、掌握加密算法的组织同样可以进行中间人形式的攻击，但HTTPS仍是现行架构下最安全的解决方案，但他大幅增加了中间人攻击的成本</strong></p>
+<h1 id="CA证书的申请及其使用过程"><a href="#CA证书的申请及其使用过程" class="headerlink" title="CA证书的申请及其使用过程"></a>CA证书的申请及其使用过程</h1><p>上面客户端使用HTTPS与服务器通信中使用到了CA认证，这里可能大家会问为什么不直接使用非对称加密的形式直接进行，首先这里先介绍下非对称加密。</p>
+<p>非对称加密：客户端和服务端均拥有一个公有密匙和一个私有密匙。公有密匙可以对外暴露，而私有密匙只有自己可见。</p>
+<p>使用公有密匙加密的消息，只有对应的私有密匙才能解开。反过来，使用私有密匙加密的消息，只有公有密匙才能解开。这样客户端在发送消息前，先用服务器的公匙对消息进行加密，服务器收到后再用自己的私匙进行解密。<br>重做：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190426151155832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NjQyMDM2,size_16,color_FFFFFF,t_70"></p>
+<h2 id="非对称加密的优点："><a href="#非对称加密的优点：" class="headerlink" title="非对称加密的优点："></a>非对称加密的优点：</h2><p>非对称加密采用公有密匙和私有密匙的方式，解决了http中消息保密性问题，而且使得私有密匙泄露的风险降低。</p>
+<p>因为公匙加密的消息只有对应的私匙才能解开，所以较大程度上保证了消息的来源性以及消息的准确性和完整性。</p>
+<h2 id="非对称加密的缺点："><a href="#非对称加密的缺点：" class="headerlink" title="非对称加密的缺点："></a>非对称加密的缺点：</h2><p>非对称加密时需要使用到接收方的公匙对消息进行加密，但是公匙不是保密的，任何人都可以拿到，中间人也可以。那么中间人可以做两件事，第一件是中间人可以在客户端与服务器交换公匙的时候，将客户端的公匙替换成自己的。这样服务器拿到的公匙将不是客户端的，而是中间人的。服务器也无法判断公匙来源的正确性。第二件是中间人可以不替换公匙，但是他可以截获客户端发来的消息，然后篡改，然后用服务器的公匙加密再发往服务器，服务器将收到错误的消息。</p>
+<p>非对称加密的性能相对对称加密来说会慢上几倍甚至几百倍，比较消耗系统资源。正是因为如此，https将两种加密结合了起来。</p>
+<p>为了应对上面非对称加密带来的问题，我们就引入了<strong>数字证书与数字签名</strong></p>
+<p>故CA认证介入我们的HTTPS连接的过程如下：</p>
+<p>1、服务器拥有自己的私钥与公钥</p>
+<p>2、服务器将公钥交给CA认证机构，请求给予一份数字证书</p>
+<p>3、CA认证机构生成数字证书，并颁发给服务器</p>
+<p>4、服务器将带有公钥信息的数字证书发给客户端</p>
+<p>5、进入客户端生成对称密钥再进行对接的过程……</p>
+<p><img src="https://img-blog.csdnimg.cn/20190426152200712.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NjQyMDM2,size_16,color_FFFFFF,t_70"></p>
+<h1 id="HTTPS的缺点"><a href="#HTTPS的缺点" class="headerlink" title="HTTPS的缺点"></a>HTTPS的缺点</h1><p> 　　<strong>虽然说HTTPS有很大的优势，但其相对来说，还是存在不足之处的：</strong></p>
+<p>　　（1）HTTPS协议握手阶段比较费时，会使页面的加载时间延长近50%，增加10%到20%的耗电；</p>
+<p>　　（2）HTTPS连接缓存不如HTTP高效，会增加数据开销和功耗，甚至已有的安全措施也会因此而受到影响；</p>
+<p>　　（3）SSL证书需要钱，功能越强大的证书费用越高，个人网站、小网站没有必要一般不会用。</p>
+<p>　    （4）SSL证书通常需要绑定IP，不能在同一IP上绑定多个域名，IPv4资源不可能支撑这个消耗。</p>
+<p>　　（5）HTTPS协议的加密范围也比较有限，在黑客攻击、拒绝服务攻击、服务器劫持等方面几乎起不到什么作用。最关键的，SSL证书的信用链体系并不安全，特别是在某些国家可以控制CA根证书的情况下，中间人攻击一样可行。</p>
+<p><strong><em>实践中建议保留http。所以我们在切换的时候可以做http和https的兼容，具体实现方式是，去掉页面链接中的http头部，这样可以自动匹配http头和https头。例如：将<a target="_blank" rel="noopener" href="http://www.baidu.com改为//www.baidu.com%E3%80%82%E7%84%B6%E5%90%8E%E5%BD%93%E7%94%A8%E6%88%B7%E4%BB%8Ehttp%E7%9A%84%E5%85%A5%E5%8F%A3%E8%BF%9B%E5%85%A5%E8%AE%BF%E9%97%AE%E9%A1%B5%E9%9D%A2%E6%97%B6%EF%BC%8C%E9%A1%B5%E9%9D%A2%E5%B0%B1%E6%98%AFhttp%EF%BC%8C%E5%A6%82%E6%9E%9C%E7%94%A8%E6%88%B7%E6%98%AF%E4%BB%8Ehttps%E7%9A%84%E5%85%A5%E5%8F%A3%E8%BF%9B%E5%85%A5%E8%AE%BF%E9%97%AE%E9%A1%B5%E9%9D%A2%EF%BC%8C%E9%A1%B5%E9%9D%A2%E5%8D%B3%E4%BD%BFhttps%E7%9A%84">http://www.baidu.com改为//www.baidu.com。然后当用户从http的入口进入访问页面时，页面就是http，如果用户是从https的入口进入访问页面，页面即使https的</a></em></strong></p>
+<h1 id="SSL与TLS的区别"><a href="#SSL与TLS的区别" class="headerlink" title="SSL与TLS的区别"></a>SSL与TLS的区别</h1><p><strong>SSL</strong>：（Secure Socket Layer，安全套接字层），位于可靠的面向连接的网络层协议和应用层协议之间的一种协议层。SSL通过互相认证、使用数字签名确保完整性、使用加密确保私密性，以实现客户端和服务器之间的安全通讯。该协议由两层组成：SSL记录协议和SSL握手协议。</p>
+<p><strong>TLS</strong>：(Transport Layer Security，传输层安全协议)，用于两个应用程序之间提供保密性和数据完整性。该协议由两层组成：TLS记录协议和TLS握手协议。</p>
+<h1 id="如何优化HTTPS的速度"><a href="#如何优化HTTPS的速度" class="headerlink" title="如何优化HTTPS的速度"></a>如何优化HTTPS的速度</h1><p><strong>1、HSTS重定向技术</strong></p>
+<p>HSTS（HTTP Strict Transport Security）技术，启用HSTS后，将保证浏览器始终连接到网站的 HTTPS 加密版本。</p>
+<ol>
+<li><p>用户在浏览器里输入 HTTP 协议进行访问时，浏览器会自动将 HTTP 转换为 HTTPS 进行访问，确保用户访问安全；</p>
+</li>
+<li><p>省去301跳转的出现，缩短访问时间；</p>
+</li>
+<li><p>能阻止基于 SSL Strip 的中间人攻击，万一证书有错误，则显示错误，用户不能回避警告，从而能够更加有效安全的保障用户的访问。</p>
+</li>
+</ol>
+<p><strong>2、TLS握手优化</strong></p>
+<p>  在应用数据之前，客户端必须与服务端协商密钥、加密算法等信息，服务端还要把自己的证书发给客户端表明其身份，这些环节构成 TLS 握手过程。</p>
+<p>采用 False Start （抢先开始）技术，浏览器在与服务器完成 TLS 握手前，就开始发送请求数据，服务器在收到这些数据后，完成 TLS 握手的同时，开始发送响应数据。</p>
+<p>开启 False Start 功能后，数据传输时间将进一步缩短。</p>
+<p><strong>3、Session Identifier（会话标识符）复用</strong></p>
+<p>如果用户的一个业务请求包含了多条的加密流，客户端与服务器将会反复握手，必定会导致更多的时间损耗。或者某些特殊情况导致了对话突然中断，双方就需要重新握手，增加了用户访问时间。<br>（1）服务器为每一次的会话都生成并记录一个 ID 号，然后发送给客户端；</p>
+<p>（2）如果客户端发起重新连接，则只要向服务器发送该 ID 号；</p>
+<p>（3）服务器收到客户端发来的 ID 号，然后查找自己的会话记录，匹配 ID 之后，双方就可以重新使用之前的对称加密秘钥进行数据加密传输，而不必重新生成，减少交互时间。</p>
+<p><strong>4、开启OSCP Stapling，提高TLS握手效率</strong></p>
+<p>采用OCSP Stapling ，提升 HTTPS 性能。服务端主动获取 OCSP 查询结果并随着证书一起发送给客户端，从而客户端可直接通过 Web Server 验证证书，提高 TLS 握手效率。</p>
+<p>服务器模拟浏览器向 CA 发起请求，并将带有 CA 机构签名的 OCSP 响应保存到本地，然后在与客户端握手阶段，将 OCSP 响应下发给浏览器，省去浏览器的在线验证过程。由于浏览器不需要直接向 CA 站点查询证书状态，这个功能对访问速度的提升非常明显。</p>
+<p><strong>5、完全前向加密PFS，保护用户数据，预防私钥泄漏</strong></p>
+<p>非对称加密算法 RSA，包含了公钥、私钥，其中私钥是保密不对外公开的，由于此算法既可以用于加密也可以用于签名，所以用途甚广，但是还是会遇到一些问题：</p>
+<p>（1） 假如我是一名黑客，虽然现在我不知道私钥，但是我可以先把客户端与服务器之前的传输数据（已加密）全部保存下来</p>
+<p>（2）如果某一天，服务器维护人员不小心把私钥泄露了，或者服务器被我攻破获取到了私钥</p>
+<p>（3）那我就可以利用这个私钥，破解掉之前已被我保存的数据，从中获取有用的信息</p>
+<p>所以为了防止上述现象发生，我们必须保护好自己的私钥。</p>
+<p><strong><em>如果私钥确实被泄漏了，那我们改如何补救呢？那就需要PFS（perfect forward secrecy）完全前向保密功能，此功能用于客户端与服务器交换对称密钥，起到前向保密的作用，也即就算私钥被泄漏，黑客也无法破解先前已加密的数据。维基解释是：长期使用的主密钥泄漏不会导致过去的会话密钥泄漏</em></strong></p>
+<p> <strong><em>实现此功能需要服务器支持以下算法和签名组合：</em></strong></p>
+<p>（1）ECDHE 密钥交换、RSA 签名；<br>（2）ECDHE 密钥交换、ECDSA 签名；</p>
+<hr>
+<hr>
+<h1 id="面试常见问题，HTTPS优化总结易记版："><a href="#面试常见问题，HTTPS优化总结易记版：" class="headerlink" title="面试常见问题，HTTPS优化总结易记版："></a>面试常见问题，HTTPS优化总结易记版：</h1><p><strong>1、HSTS重定向技术：将http自动转换为https，减少301重定向<br>2、TLS握手优化：在TLS握手完成前客户端就提前向服务器发送数据<br>3、会话标识符：服务器记录下与某客户端的会话ID，下次连接客户端发ID过来就可以直接用之前的私钥交流了<br>4、OSCP Stapling：服务器将带有 CA 机构签名的 OCSP 响应在握手时发给客户端，省的客户端再去CA查询<br>5、完全前向加密PFS：使用更牛逼复杂的秘钥算法</strong></p>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/12/12/HTTP%E4%B8%8EHTTPS/">https://github.com/xuMr6/xumr6.github.io.git/2018/12/12/HTTP%E4%B8%8EHTTPS/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/12/18/json的转换/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">json的转换 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/12/04/Django中间件/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Django中间件 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-%E4%B8%8E-HTTPS-%E5%8C%BA%E5%88%AB"><span class="toc-text">HTTP 与 HTTPS 区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">TCP 三次握手</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%9C%A8%E4%BD%BF%E7%94%A8HTTPS%E6%96%B9%E5%BC%8F%E4%B8%8EWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%80%9A%E4%BF%A1%E6%97%B6%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-text">客户端在使用HTTPS方式与Web服务器通信时的步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CA%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">CA证书的申请及其使用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%9A%84%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="toc-text">非对称加密的优点：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%9A%84%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="toc-text">非对称加密的缺点：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTPS%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text">HTTPS的缺点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSL%E4%B8%8ETLS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">SSL与TLS的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96HTTPS%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="toc-text">如何优化HTTPS的速度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%EF%BC%8CHTTPS%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93%E6%98%93%E8%AE%B0%E7%89%88%EF%BC%9A"><span class="toc-text">面试常见问题，HTTPS优化总结易记版：</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-%E4%B8%8E-HTTPS-%E5%8C%BA%E5%88%AB"><span class="toc-text">HTTP 与 HTTPS 区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">TCP 三次握手</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%9C%A8%E4%BD%BF%E7%94%A8HTTPS%E6%96%B9%E5%BC%8F%E4%B8%8EWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%80%9A%E4%BF%A1%E6%97%B6%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-text">客户端在使用HTTPS方式与Web服务器通信时的步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CA%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">CA证书的申请及其使用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%9A%84%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="toc-text">非对称加密的优点：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%9A%84%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="toc-text">非对称加密的缺点：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTPS%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text">HTTPS的缺点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSL%E4%B8%8ETLS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">SSL与TLS的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96HTTPS%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="toc-text">如何优化HTTPS的速度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%EF%BC%8CHTTPS%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93%E6%98%93%E8%AE%B0%E7%89%88%EF%BC%9A"><span class="toc-text">面试常见问题，HTTPS优化总结易记版：</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-%E4%B8%8E-HTTPS-%E5%8C%BA%E5%88%AB"><span class="toc-text">HTTP 与 HTTPS 区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">TCP 三次握手</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%9C%A8%E4%BD%BF%E7%94%A8HTTPS%E6%96%B9%E5%BC%8F%E4%B8%8EWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%80%9A%E4%BF%A1%E6%97%B6%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-text">客户端在使用HTTPS方式与Web服务器通信时的步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CA%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">CA证书的申请及其使用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%9A%84%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="toc-text">非对称加密的优点：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%9A%84%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="toc-text">非对称加密的缺点：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTPS%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text">HTTPS的缺点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSL%E4%B8%8ETLS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">SSL与TLS的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96HTTPS%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="toc-text">如何优化HTTPS的速度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%EF%BC%8CHTTPS%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93%E6%98%93%E8%AE%B0%E7%89%88%EF%BC%9A"><span class="toc-text">面试常见问题，HTTPS优化总结易记版：</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

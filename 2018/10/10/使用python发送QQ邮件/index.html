@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="使用python发送QQ邮件">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/10/10/%E4%BD%BF%E7%94%A8python%E5%8F%91%E9%80%81QQ%E9%82%AE%E4%BB%B6/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-10-10">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      使用python发送QQ邮件
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-10-10T02:29:27.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-10-10</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/django/" class="post-meta-link">django</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>539 words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="这里用到了Python的两个包来发送邮件：-smtplib-和-email-。"><a href="#这里用到了Python的两个包来发送邮件：-smtplib-和-email-。" class="headerlink" title="这里用到了Python的两个包来发送邮件： smtplib 和 email 。"></a>这里用到了Python的两个包来发送邮件： smtplib 和 email 。</h3><p>Python 的 <strong>email</strong> 模块里包含了许多实用的邮件格式设置函数，可以用来创建邮件“包裹”。使用的 MIMEText 对象，为底层的 MIME（Multipurpose Internet MailExtensions，多用途互联网邮件扩展类型）协议传输创建了一封空邮件，最后通过高层的SMTP 协议发送出去。 MIMEText 对象 <strong>msg</strong> 包括收发邮箱地址、邮件正文和主题，Python 通过它就可以创建一封格式正确的邮件。smtplib 模块用来设置服务器连接的相关信息。<br>　　要想通过QQ邮箱来发送邮件，需要开启QQ邮箱的设置-账户里<strong>SMTP服务</strong>，接下来会通过发送短信验证来获得<strong>授权码</strong>，有了授权码后就可以在代码里添加了。<br><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE1LmNuYmxvZ3MuY29tL2Jsb2cvMTAwMTc1My8yMDE3MDQvMTAwMTc1My0yMDE3MDQxMjIxNTAyODExMS0xMDg1MjI3NTc1LnBuZw?x-oss-process=image/format,png" alt="alt">        接下来看看QQ的邮件服务器配置：</p>
+<h6 id="使用SSL的通用配置：pop-qq-com，使用SSL，端口号995"><a href="#使用SSL的通用配置：pop-qq-com，使用SSL，端口号995" class="headerlink" title="使用SSL的通用配置：pop.qq.com，使用SSL，端口号995"></a>使用SSL的通用配置：pop.qq.com，使用SSL，端口号995</h6><h6 id="发送邮件服务器：smtp-qq-com，使用SSL，端口号465或587"><a href="#发送邮件服务器：smtp-qq-com，使用SSL，端口号465或587" class="headerlink" title="发送邮件服务器：smtp.qq.com，使用SSL，端口号465或587"></a>发送邮件服务器：smtp.qq.com，使用SSL，端口号465或587</h6><p>根据此配置来设置smtplib.SMTP_SSL()函数的参数。<br>具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"></span><br><span class="line"><span class="comment"># come_from 是自己的邮箱，password是邮箱的授权码</span></span><br><span class="line">come_from = <span class="string">&#x27;3426628229@qq.com&#x27;</span>  <span class="comment">#  用户是谁  用户名</span></span><br><span class="line">password = <span class="string">&#x27;qtyohkdcrbozdbcf&#x27;</span>   <span class="comment">#  秘钥串  相当于密码</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#  to_email 是接收的邮箱</span></span><br><span class="line">to_email = <span class="string">&#x27;1052117505@qq.com&#x27;</span>  <span class="comment">#  要发送给谁</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 邮箱服务器</span></span><br><span class="line">smtp_server = <span class="string">&#x27;smtp.qq.com&#x27;</span></span><br><span class="line"></span><br><span class="line">infos = <span class="string">&#x27;董老师好，我是海日汉，有机会来我们大内蒙骑马丫~~&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#  邮箱正文，第一个参数为内容，第二个参数为格式，默认为纯文本，第三个参数是编码</span></span><br><span class="line"><span class="comment">#  这里我用把发送内容赋值给变量infos</span></span><br><span class="line">msg = MIMEText(infos,<span class="string">&#x27;plain&#x27;</span>,<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  邮件头部信息</span></span><br><span class="line">msg[<span class="string">&#x27;From&#x27;</span>] = Header(come_from)</span><br><span class="line"><span class="comment">#  发送给谁</span></span><br><span class="line">msg[<span class="string">&#x27;To&#x27;</span>] = Header(to_email)</span><br><span class="line"><span class="comment">#  邮件主题</span></span><br><span class="line">msg[<span class="string">&#x27;Subject&#x27;</span>] = Header(<span class="string">&#x27;1908大实训&#x27;</span>)</span><br><span class="line"><span class="comment">#  创建实例</span></span><br><span class="line">server = smtplib.SMTP_SSL(smtp_server)</span><br><span class="line"><span class="comment">#  QQ邮箱SMTP的端口号时465或者587</span></span><br><span class="line">server.connect(smtp_server,<span class="number">465</span>)</span><br><span class="line"><span class="comment">#  登录邮件</span></span><br><span class="line">server.login(come_from,password)</span><br><span class="line"><span class="comment">#  发送邮件</span></span><br><span class="line">server.sendmail(come_from,to_email,msg.as_string())</span><br><span class="line">print(<span class="string">&#x27;邮件已发送&#x27;</span>)</span><br><span class="line"><span class="comment">#  退出邮件</span></span><br><span class="line">server.quit()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/10/10/%E4%BD%BF%E7%94%A8python%E5%8F%91%E9%80%81QQ%E9%82%AE%E4%BB%B6/">https://github.com/xuMr6/xumr6.github.io.git/2018/10/10/%E4%BD%BF%E7%94%A8python%E5%8F%91%E9%80%81QQ%E9%82%AE%E4%BB%B6/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/10/13/序列化的使用/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">序列化的使用 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/10/02/实现微博第三方登录/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">实现微博第三方登录 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%94%A8%E5%88%B0%E4%BA%86Python%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%8C%85%E6%9D%A5%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%EF%BC%9A-smtplib-%E5%92%8C-email-%E3%80%82"><span class="toc-text">这里用到了Python的两个包来发送邮件： smtplib 和 email 。</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8SSL%E7%9A%84%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE%EF%BC%9Apop-qq-com%EF%BC%8C%E4%BD%BF%E7%94%A8SSL%EF%BC%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7995"><span class="toc-text">使用SSL的通用配置：pop.qq.com，使用SSL，端口号995</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%9Asmtp-qq-com%EF%BC%8C%E4%BD%BF%E7%94%A8SSL%EF%BC%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7465%E6%88%96587"><span class="toc-text">发送邮件服务器：smtp.qq.com，使用SSL，端口号465或587</span></a></li></ol></li></ol></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%94%A8%E5%88%B0%E4%BA%86Python%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%8C%85%E6%9D%A5%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%EF%BC%9A-smtplib-%E5%92%8C-email-%E3%80%82"><span class="toc-text">这里用到了Python的两个包来发送邮件： smtplib 和 email 。</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8SSL%E7%9A%84%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE%EF%BC%9Apop-qq-com%EF%BC%8C%E4%BD%BF%E7%94%A8SSL%EF%BC%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7995"><span class="toc-text">使用SSL的通用配置：pop.qq.com，使用SSL，端口号995</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%9Asmtp-qq-com%EF%BC%8C%E4%BD%BF%E7%94%A8SSL%EF%BC%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7465%E6%88%96587"><span class="toc-text">发送邮件服务器：smtp.qq.com，使用SSL，端口号465或587</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%94%A8%E5%88%B0%E4%BA%86Python%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%8C%85%E6%9D%A5%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%EF%BC%9A-smtplib-%E5%92%8C-email-%E3%80%82"><span class="toc-text">这里用到了Python的两个包来发送邮件： smtplib 和 email 。</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8SSL%E7%9A%84%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE%EF%BC%9Apop-qq-com%EF%BC%8C%E4%BD%BF%E7%94%A8SSL%EF%BC%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7995"><span class="toc-text">使用SSL的通用配置：pop.qq.com，使用SSL，端口号995</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%9Asmtp-qq-com%EF%BC%8C%E4%BD%BF%E7%94%A8SSL%EF%BC%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7465%E6%88%96587"><span class="toc-text">发送邮件服务器：smtp.qq.com，使用SSL，端口号465或587</span></a></li></ol></li></ol></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

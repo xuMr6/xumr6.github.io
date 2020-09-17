@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Django 模型类的使用，超级详细版本">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2020/02/16/Django%20%E6%A8%A1%E5%9E%8B%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%8C%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%89%88%E6%9C%AC/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2020-02-16">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Django 模型类的使用，超级详细版本
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-02-15T20:56:08.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2020-02-16</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/djangobook/" class="post-meta-link">djangobook</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.5k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="定义模型类"><a href="#定义模型类" class="headerlink" title="定义模型类"></a>定义模型类</h3><ul>
+<li>模型类被定义在”应用/models.py”文件中。</li>
+<li>模型类必须继承自Model类，位于包django.db.models中。</li>
+</ul>
+<p>接下来首先以”图书-人物”管理为例进行演示。</p>
+<h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a>1 定义</h4><p>在models.py 文件中定义模型类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create your models here.</span></span><br><span class="line"><span class="comment"># 准备书籍列表信息的模型类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BookInfo</span>(<span class="params">models.Model</span>):</span></span><br><span class="line">    <span class="comment"># 创建字段，字段类型...</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">20</span>, verbose_name=<span class="string">&#x27;名称&#x27;</span>)</span><br><span class="line">    pub_date = models.DateField(verbose_name=<span class="string">&#x27;发布日期&#x27;</span>,null=<span class="literal">True</span>)</span><br><span class="line">    readcount = models.IntegerField(default=<span class="number">0</span>, verbose_name=<span class="string">&#x27;阅读量&#x27;</span>)</span><br><span class="line">    commentcount = models.IntegerField(default=<span class="number">0</span>, verbose_name=<span class="string">&#x27;评论量&#x27;</span>)</span><br><span class="line">    is_delete = models.BooleanField(default=<span class="literal">False</span>, verbose_name=<span class="string">&#x27;逻辑删除&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        db_table = <span class="string">&#x27;bookinfo&#x27;</span>  <span class="comment"># 指明数据库表名</span></span><br><span class="line">        verbose_name = <span class="string">&#x27;图书&#x27;</span>  <span class="comment"># 在admin站点中显示的名称</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;定义每个数据对象的显示信息&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备人物列表信息的模型类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PeopleInfo</span>(<span class="params">models.Model</span>):</span></span><br><span class="line">    GENDER_CHOICES = (</span><br><span class="line">        (<span class="number">0</span>, <span class="string">&#x27;male&#x27;</span>),</span><br><span class="line">        (<span class="number">1</span>, <span class="string">&#x27;female&#x27;</span>)</span><br><span class="line">    )</span><br><span class="line">    name = models.CharField(max_length=<span class="number">20</span>, verbose_name=<span class="string">&#x27;名称&#x27;</span>)</span><br><span class="line">    gender = models.SmallIntegerField(choices=GENDER_CHOICES, default=<span class="number">0</span>, verbose_name=<span class="string">&#x27;性别&#x27;</span>)</span><br><span class="line">    description = models.CharField(max_length=<span class="number">200</span>, null=<span class="literal">True</span>, verbose_name=<span class="string">&#x27;描述信息&#x27;</span>)</span><br><span class="line">    book = models.ForeignKey(BookInfo, on_delete=models.CASCADE, verbose_name=<span class="string">&#x27;图书&#x27;</span>)  <span class="comment"># 外键</span></span><br><span class="line">    is_delete = models.BooleanField(default=<span class="literal">False</span>, verbose_name=<span class="string">&#x27;逻辑删除&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        db_table = <span class="string">&#x27;peopleinfo&#x27;</span></span><br><span class="line">        verbose_name = <span class="string">&#x27;人物信息&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>数据库表名</p>
+<p>模型类如果未指明表名，Django默认以小写app应用名_小写模型类名为数据库表名。</p>
+<p>可通过db_table指明数据库表名。</p>
+</li>
+<li><p>关于主键</p>
+<p>django会为表创建自动增长的主键列，每个模型只能有一个主键列，如果使用选项设置某属性为主键列后django不会再创建自动增长的主键列。</p>
+<p>默认创建的主键列属性为id，可以使用pk代替，pk全拼为primary key。</p>
+</li>
+<li><p>属性命名限制</p>
+<p>不能是python的保留关键字。<br>不允许使用连续的下划线，这是由django的查询方式决定的。</p>
+<p>定义属性时需要指定字段类型，通过字段类型的参数指定选项，语法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">属性=models.字段类型(选项)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字段类型</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AutoField</td>
+<td>自动增长的IntegerField，通常不用指定，不指定时Django会自动创建属性名为id的自动增长属性</td>
+</tr>
+<tr>
+<td>BooleanField</td>
+<td>布尔字段，值为True或False</td>
+</tr>
+<tr>
+<td>NullBooleanField</td>
+<td>支持Null、True、False三种值</td>
+</tr>
+<tr>
+<td>CharField</td>
+<td>字符串，参数max_length表示最大字符个数</td>
+</tr>
+<tr>
+<td>TextField</td>
+<td>大文本字段，一般超过4000个字符时使用</td>
+</tr>
+<tr>
+<td>IntegerField</td>
+<td>整数</td>
+</tr>
+<tr>
+<td>DecimalField</td>
+<td>十进制浮点数， 参数max_digits表示总位数， 参数decimal_places表示小数位数</td>
+</tr>
+<tr>
+<td>FloatField</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>DateField</td>
+<td>日期， 参数auto_now表示每次保存对象时，自动设置该字段为当前时间，用于”最后一次修改”的时间戳，它总是使用当前日期，默认为False； 参数auto_now_add表示当对象第一次被创建时自动设置当前时间，用于创建的时间戳，它总是使用当前日期，默认为False; 参数auto_now_add和auto_now是相互排斥的，组合将会发生错误</td>
+</tr>
+<tr>
+<td>TimeField</td>
+<td>时间，参数同DateField</td>
+</tr>
+<tr>
+<td>DateTimeField</td>
+<td>日期时间，参数同DateField</td>
+</tr>
+<tr>
+<td>FileField</td>
+<td>上传文件字段</td>
+</tr>
+<tr>
+<td>ImageField</td>
+<td>继承于FileField，对上传的内容进行校验，确保是有效的图片</td>
+</tr>
+</tbody></table>
+<ol>
+<li>选项</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>null</td>
+<td>如果为True，表示允许为空，默认值是False</td>
+</tr>
+<tr>
+<td>blank</td>
+<td>如果为True，则该字段允许为空白，默认值是False</td>
+</tr>
+<tr>
+<td>db_column</td>
+<td>字段的名称，如果未指定，则使用属性的名称</td>
+</tr>
+<tr>
+<td>db_index</td>
+<td>若值为True, 则在表中会为此字段创建索引，默认值是False</td>
+</tr>
+<tr>
+<td>default</td>
+<td>默认</td>
+</tr>
+<tr>
+<td>primary_key</td>
+<td>若为True，则该字段会成为模型的主键字段，默认值是False，一般作为AutoField的选项使用</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>如果为True, 这个字段在表中必须有唯一值，默认值是False</td>
+</tr>
+</tbody></table>
+<p><strong>null是数据库范畴的概念，blank是表单验证范畴的</strong></p>
+<ol>
+<li><p>外键</p>
+<p>在设置外键时，需要通过on_delete选项指明主表删除数据时，对于外键引用表数据如何处理，在django.db.models中包含了可选常量：</p>
+</li>
+</ol>
+<ul>
+<li>CASCADE级联，删除主表数据时连通一起删除外键表中数据</li>
+<li>PROTECT保护，通过抛出ProtectedError异常，来阻止删除主表中被外键应用的数据</li>
+<li>SET_NULL设置为NULL，仅在该字段null=True允许为null时可用</li>
+<li>SET_DEFAULT设置为默认值，仅在该字段设置了默认值时可用</li>
+<li>SET()设置为特定值或者调用特定方法</li>
+<li>DO_NOTHING不做任何操作，如果数据库前置指明级联性，此选项会抛出IntegrityError异常</li>
+</ul>
+<h4 id="2-迁移"><a href="#2-迁移" class="headerlink" title="2 迁移"></a>2 迁移</h4><p>将模型类同步到数据库中。</p>
+<ol>
+<li><p>生成迁移文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同步到数据库中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="3-添加测试数据"><a href="#3-添加测试数据" class="headerlink" title="3 添加测试数据"></a>3 添加测试数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">insert into bookinfo(name, pub_date, readcount,commentcount, is_delete) values</span><br><span class="line">(<span class="string">&#x27;射雕英雄传&#x27;</span>, <span class="string">&#x27;1980-5-1&#x27;</span>, <span class="number">12</span>, <span class="number">34</span>, <span class="number">0</span>),</span><br><span class="line">(<span class="string">&#x27;天龙八部&#x27;</span>, <span class="string">&#x27;1986-7-24&#x27;</span>, <span class="number">36</span>, <span class="number">40</span>, <span class="number">0</span>),</span><br><span class="line">(<span class="string">&#x27;笑傲江湖&#x27;</span>, <span class="string">&#x27;1995-12-24&#x27;</span>, <span class="number">20</span>, <span class="number">80</span>, <span class="number">0</span>),</span><br><span class="line">(<span class="string">&#x27;雪山飞狐&#x27;</span>, <span class="string">&#x27;1987-11-11&#x27;</span>, <span class="number">58</span>, <span class="number">24</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">insert into peopleinfo(name, gender, book_id, description, is_delete)  values</span><br><span class="line">    (<span class="string">&#x27;郭靖&#x27;</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">&#x27;降龙十八掌&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;黄蓉&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="string">&#x27;打狗棍法&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;黄药师&#x27;</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">&#x27;弹指神通&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;欧阳锋&#x27;</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">&#x27;蛤蟆功&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;梅超风&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="string">&#x27;九阴白骨爪&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;乔峰&#x27;</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="string">&#x27;降龙十八掌&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;段誉&#x27;</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="string">&#x27;六脉神剑&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;虚竹&#x27;</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="string">&#x27;天山六阳掌&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;王语嫣&#x27;</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="string">&#x27;神仙姐姐&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;令狐冲&#x27;</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="string">&#x27;独孤九剑&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;任盈盈&#x27;</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="string">&#x27;弹琴&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;岳不群&#x27;</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="string">&#x27;华山剑法&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;东方不败&#x27;</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="string">&#x27;葵花宝典&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;胡斐&#x27;</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="string">&#x27;胡家刀法&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;苗若兰&#x27;</span>, <span class="number">0</span>, <span class="number">4</span>, <span class="string">&#x27;黄衣&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;程灵素&#x27;</span>, <span class="number">0</span>, <span class="number">4</span>, <span class="string">&#x27;医术&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">    (<span class="string">&#x27;袁紫衣&#x27;</span>, <span class="number">0</span>, <span class="number">4</span>, <span class="string">&#x27;六合拳&#x27;</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>考虑到数据库 写入速度的效率，所以此时没有考虑到使用 ORM</p>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2020/02/16/Django%20%E6%A8%A1%E5%9E%8B%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%8C%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%89%88%E6%9C%AC/">https://github.com/xuMr6/xumr6.github.io.git/2020/02/16/Django%20%E6%A8%A1%E5%9E%8B%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%8C%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%89%88%E6%9C%AC/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2020/02/24/Django 中的 shell命令/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Django 中的 shell命令 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2020/02/10/Django 创建使用 整体流程/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Django 创建使用 整体流程 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="toc-text">定义模型类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89"><span class="toc-text">1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%BF%81%E7%A7%BB"><span class="toc-text">2 迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="toc-text">3 添加测试数据</span></a></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="toc-text">定义模型类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89"><span class="toc-text">1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%BF%81%E7%A7%BB"><span class="toc-text">2 迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="toc-text">3 添加测试数据</span></a></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="toc-text">定义模型类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89"><span class="toc-text">1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%BF%81%E7%A7%BB"><span class="toc-text">2 迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="toc-text">3 添加测试数据</span></a></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

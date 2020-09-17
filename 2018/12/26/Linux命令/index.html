@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Linux 命令">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/12/26/Linux%E5%91%BD%E4%BB%A4/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-12-26">
+  <meta property="og:article:modified_time" content="2020-09-04">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="Linux">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Linux 命令
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-12-25T19:10:06.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-12-26</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/linux/" class="post-meta-link">linux</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>2.5k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/Linux/" class="post-meta-link">Linux</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h2 id="1-系统信息"><a href="#1-系统信息" class="headerlink" title="1.系统信息"></a>1.系统信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">arch 					显示机器的处理器架构</span><br><span class="line">uname -m 				显示机器的处理器架构</span><br><span class="line">uname -r 				显示正在使用的内核版本</span><br><span class="line">cat &#x2F;proc&#x2F;cpuinfo 		显示CPU info的信息</span><br><span class="line">cat &#x2F;proc&#x2F;interrupts 	显示中断</span><br><span class="line">cat &#x2F;proc&#x2F;meminfo 		校验内存使用</span><br><span class="line">cat &#x2F;proc&#x2F;swaps 		显示哪些swap被使用</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-关机"><a href="#2-关机" class="headerlink" title="2.关机"></a>2.关机</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">shutdown -h now 		关闭系统</span><br><span class="line">init 0 					关闭系统</span><br><span class="line">telinit 0 				关闭系统</span><br><span class="line">shutdown -h hours:minutes &amp; 	按预定时间关闭系统</span><br><span class="line">shutdown -c 			取消按预定时间关闭系统</span><br><span class="line">shutdown -r now 		重启</span><br><span class="line">reboot 					重启</span><br><span class="line">logout 					注销</span><br></pre></td></tr></table></figure>
+<h2 id="3-文件和目录"><a href="#3-文件和目录" class="headerlink" title="3.文件和目录"></a>3.文件和目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;home 				进入 &#39;&#x2F; home&#39; 目录&#39; </span><br><span class="line">cd .. 					返回上一级目录 </span><br><span class="line">cd ..&#x2F;.. 					返回上两级目录 </span><br><span class="line">cd 						进入个人的主目录 </span><br><span class="line">cd ~user1 				进入个人的主目录 </span><br><span class="line">cd - 					返回上次所在的目录</span><br><span class="line"></span><br><span class="line">pwd 					显示工作路径 </span><br><span class="line">ls 						查看目录中的文件 </span><br><span class="line">ls -F 					查看目录中的文件 </span><br><span class="line">ls -l 					显示文件和目录的详细资料 </span><br><span class="line">ls -a 					显示隐藏文件 </span><br><span class="line">ls [0-9] 					显示包含数字的文件名和目录名 </span><br><span class="line">tree 					显示文件和目录由根目录开始的树形结构</span><br><span class="line">lstree 					显示文件和目录由根目录开始的树形结构</span><br><span class="line"></span><br><span class="line">mkdir dir1 				创建一个叫做 &#39;dir1&#39; 的目录&#39; </span><br><span class="line">mkdir dir1 dir2 			同时创建两个目录 </span><br><span class="line">mkdir -p &#x2F;tmp&#x2F;dir1&#x2F;dir2 创建一个目录树 </span><br><span class="line"></span><br><span class="line">rm -f file1 				删除一个叫做 &#39;file1&#39; 的文件&#39; </span><br><span class="line">rmdir dir1 				删除一个叫做 &#39;dir1&#39; 的目录&#39; </span><br><span class="line">rm -rf dir1 				删除一个叫做 &#39;dir1&#39; 的目录并同时删除其内容 </span><br><span class="line">rm -rf dir1 dir2 			同时删除两个目录及它们的内容 </span><br><span class="line">mv dir1 new_dir 		重命名&#x2F;移动 一个目录 </span><br><span class="line"></span><br><span class="line">cp file1 file2 			复制一个文件 </span><br><span class="line">cp dir&#x2F;* . 				复制一个目录下的所有文件到当前工作目录 </span><br><span class="line">cp -a &#x2F;tmp&#x2F;dir1 . 		复制一个目录到当前工作目录 </span><br><span class="line">cp -a dir1 dir2 			复制一个目录</span><br><span class="line">cp -r dir1 dir2 			复制一个目录及子目录</span><br><span class="line"></span><br><span class="line">ln -s file1 lnk1 			创建一个指向文件或目录的软链接 </span><br><span class="line">ln file1 lnk1 			创建一个指向文件或目录的物理链接 </span><br><span class="line">touch -t 0712250000 file1 修改一个文件或目录的时间戳 - (YYMMDDhhmm) </span><br></pre></td></tr></table></figure>
+
+<h2 id="4-文件搜索"><a href="#4-文件搜索" class="headerlink" title="4.文件搜索"></a>4.文件搜索</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">find &#x2F; -name file1 从 &#39;&#x2F;&#39; 	开始进入根文件系统搜索文件和目录 </span><br><span class="line">find &#x2F; -user user1 			搜索属于用户 &#39;user1&#39; 的文件和目录 </span><br><span class="line">find &#x2F;home&#x2F;user1 -name *.bin 	在目录 &#39;&#x2F; home&#x2F;user1&#39; 中搜索带有&#39;.bin&#39; 结尾的文件 </span><br><span class="line">find &#x2F;usr&#x2F;bin -type f -atime +100 搜索在过去100天内未被使用过的执行文件 </span><br><span class="line">find &#x2F;usr&#x2F;bin -type f -mtime -10 	搜索在10天内被创建或者修改过的文件 </span><br><span class="line">find &#x2F; -name *.rpm -exec chmod 755 &#39;&#123;&#125;&#39; \; 搜索以 &#39;.rpm&#39; 结尾的文件并定义其权限 </span><br><span class="line">find &#x2F; -xdev -name *.rpm 		搜索以 &#39;.rpm&#39; 结尾的文件，忽略光驱、捷盘等可移动设备 </span><br><span class="line">locate *.ps 				寻找以 &#39;.ps&#39; 结尾的文件 - 先运行 &#39;updatedb&#39; 命令 </span><br><span class="line">whereis halt 			显示一个二进制文件、源码或man的位置 </span><br><span class="line">which halt 				显示一个二进制文件或可执行文件的完整路径</span><br></pre></td></tr></table></figure>
+<h2 id="5-挂载系统"><a href="#5-挂载系统" class="headerlink" title="5.挂载系统"></a>5.挂载系统</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mount &#x2F;dev&#x2F;hda2 &#x2F;mnt&#x2F;hda2 	挂载一个叫做hda2的盘 - 确定目录 &#39;&#x2F; mnt&#x2F;hda2&#39; 						已经存在 </span><br><span class="line">umount &#x2F;dev&#x2F;hda2 卸载一个叫做hda2的盘 - 先从挂载点 &#39;&#x2F; mnt&#x2F;hda2&#39; 退出 </span><br><span class="line">fuser -km &#x2F;mnt&#x2F;hda2 			当设备繁忙时强制卸载 </span><br><span class="line">umount -n &#x2F;mnt&#x2F;hda2 运行卸载操作而不写入 &#x2F;etc&#x2F;mtab 文件- 当文件为只读或当磁盘写满时非常有用 </span><br><span class="line">mount &#x2F;dev&#x2F;fd0 &#x2F;mnt&#x2F;floppy 	挂载一个软盘 </span><br><span class="line">mount &#x2F;dev&#x2F;cdrom &#x2F;mnt&#x2F;cdrom 		挂载一个cdrom或dvdrom </span><br><span class="line">mount &#x2F;dev&#x2F;hdc &#x2F;mnt&#x2F;cdrecorder 	挂载一个cdrw或dvdrom </span><br><span class="line">mount &#x2F;dev&#x2F;hdb &#x2F;mnt&#x2F;cdrecorder 	挂载一个cdrw或dvdrom </span><br><span class="line">mount -o loop file.iso &#x2F;mnt&#x2F;cdrom 	挂载一个文件或ISO镜像文件 </span><br><span class="line">mount -t vfat &#x2F;dev&#x2F;hda5 &#x2F;mnt&#x2F;hda5 	挂载一个Windows FAT32文件系统 </span><br><span class="line">mount &#x2F;dev&#x2F;sda1 &#x2F;mnt&#x2F;usbdisk 		挂载一个usb 捷盘或闪存设备 </span><br></pre></td></tr></table></figure>
+
+<h2 id="6-RPM管理工具"><a href="#6-RPM管理工具" class="headerlink" title="6.RPM管理工具"></a>6.RPM管理工具</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh package.rpm 	安装一个rpm包 </span><br><span class="line">rpm -ivh --nodeeps package.rpm 安装一个rpm包而忽略依赖关系警告 </span><br><span class="line">rpm -U package.rpm 	更新一个rpm包但不改变其配置文件 </span><br><span class="line">rpm -F package.rpm 	更新一个确定已经安装的rpm包 </span><br><span class="line">rpm -e package_name.rpm 	删除一个rpm包 </span><br><span class="line">rpm -qa 显示系统中所有已经安装的rpm包 </span><br><span class="line">rpm -qa | grep httpd 	显示所有名称中包含 &quot;httpd&quot; 字样的rpm包 </span><br><span class="line">rpm -qi package_name 	获取一个已安装包的特殊信息 </span><br><span class="line">rpm -qg &quot;System Environment&#x2F;Daemons&quot; 显示一个组件的rpm包 </span><br><span class="line">rpm -ql package_name 	显示一个已经安装的rpm包提供的文件列表 </span><br><span class="line">rpm -qc package_name 	显示一个已经安装的rpm包提供的配置文件列表 </span><br><span class="line">rpm -q package_name --whatrequires 	显示与一个rpm包存在依赖关系的列表 </span><br><span class="line">rpm -q package_name --whatprovides 显示一个rpm包所占的体积 </span><br><span class="line">rpm -q package_name --scripts 显示在安装&#x2F;删除期间所执行的脚本l </span><br><span class="line">rpm -q package_name --changelog 	显示一个rpm包的修改历史 </span><br><span class="line">rpm -qf &#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf 确认所给的文件由哪个rpm包所提供 </span><br><span class="line">rpm -qp package.rpm -l 	显示由一个尚未安装的rpm包提供的文件列表 </span><br><span class="line">rpm --import &#x2F;media&#x2F;cdrom&#x2F;RPM-GPG-KEY 导入公钥数字证书 </span><br><span class="line">rpm --checksig package.rpm 			确认一个rpm包的完整性 </span><br><span class="line">rpm -qa gpg-pubkey 		确认已安装的所有rpm包的完整性 </span><br><span class="line">rpm -V package_name 	检查文件尺寸、 许可、类型、所有者、群组、MD5检查以及最后修改时间 </span><br><span class="line">rpm -Va 				检查系统中所有已安装的rpm包- 小心使用 </span><br><span class="line">rpm -Vp package.rpm 	确认一个rpm包还未安装 </span><br><span class="line">rpm2cpio package.rpm | cpio --extract --make-directories bin 从一个rpm包运行可执行文件 </span><br><span class="line">rpm -ivh &#x2F;usr&#x2F;src&#x2F;redhat&#x2F;RPMS&#x2F;arch&#x2F;package.rpm 从一个rpm源码安装一个构建好的包 </span><br><span class="line">rpmbuild --rebuild package_name.src.rpm 从一个rpm源码构建一个 rpm 包</span><br></pre></td></tr></table></figure>
+<h2 id="7-YUM管理工具"><a href="#7-YUM管理工具" class="headerlink" title="7.YUM管理工具"></a>7.YUM管理工具</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum install package_name 			下载并安装一个rpm包 </span><br><span class="line">yum localinstall package_name.rpm 	将安装一个rpm包，使用你自己的软件仓库为你解决所有依赖关系 </span><br><span class="line">yum update package_name.rpm 		更新当前系统中所有安装的rpm包 </span><br><span class="line">yum update package_name 			更新一个rpm包 </span><br><span class="line">yum remove package_name 			删除一个rpm包 </span><br><span class="line">yum list 							列出当前系统中安装的所有包 </span><br><span class="line">yum search package_name 			在rpm仓库中搜寻软件包 </span><br><span class="line">yum clean packages 					清理rpm缓存删除下载的包 </span><br><span class="line">yum clean headers 					删除所有头文件 </span><br><span class="line">yum clean all 						删除所有缓存的包和头文件</span><br></pre></td></tr></table></figure>
+<h2 id="38查看文件内容"><a href="#38查看文件内容" class="headerlink" title="38查看文件内容"></a>38查看文件内容</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat file1 		从第一个字节开始正向查看文件的内容 </span><br><span class="line">tac file1 		从最后一行开始反向查看一个文件的内容 </span><br><span class="line">more file1 		查看一个长文件的内容 </span><br><span class="line">less file1 		类似于 &#39;more&#39; 命令，但是它允许在文件中和正向操作一样的反向操作 </span><br><span class="line">head -2 file1 	查看一个文件的前两行 </span><br><span class="line">tail -2 file1 		查看一个文件的最后两行 </span><br><span class="line">tail -f &#x2F;var&#x2F;log&#x2F;messages 	实时查看被添加到一个文件中的内容</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-字符设置、文件格式转换"><a href="#9-字符设置、文件格式转换" class="headerlink" title="9.字符设置、文件格式转换"></a>9.字符设置、文件格式转换</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dos2unix filedos.txt fileunix.txt 	将一个文本文件的格式从MSDOS转换成UNIX </span><br><span class="line">unix2dos fileunix.txt filedos.txt 	将一个文本文件的格式从UNIX转换成MSDOS </span><br><span class="line">recode ..HTML &lt; page.txt &gt; page.html 	将一个文本文件转换成html </span><br><span class="line">recode -l | more 				显示所有允许的转换格式</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="10-备份"><a href="#10-备份" class="headerlink" title="10.备份"></a>10.备份</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dump -0aj -f &#x2F;tmp&#x2F;home0.bak &#x2F;home 制作一个 &#39;&#x2F;home&#39; 目录的完整备份 </span><br><span class="line">dump -1aj -f &#x2F;tmp&#x2F;home0.bak &#x2F;home 制作一个 &#39;&#x2F;home&#39; 目录的交互式备份 </span><br><span class="line">restore -if &#x2F;tmp&#x2F;home0.bak 还原一个交互式备份 </span><br><span class="line">rsync -rogpav --delete &#x2F;home &#x2F;tmp 同步两边的目录 </span><br><span class="line">rsync -rogpav -e ssh --delete &#x2F;home ip_address:&#x2F;tmp 通过SSH通道</span><br><span class="line">rsync rsync -az -e ssh --delete ip_addr:&#x2F;home&#x2F;public &#x2F;home&#x2F;local 通过ssh和压缩将一个远程目录同步到本地目录 </span><br><span class="line">rsync -az -e ssh --delete &#x2F;home&#x2F;local ip_addr:&#x2F;home&#x2F;public 通过ssh和压缩将本地目录同步到远程目录 </span><br><span class="line">dd bs&#x3D;1M if&#x3D;&#x2F;dev&#x2F;hda | gzip | ssh user@ip_addr &#39;dd of&#x3D;hda.gz&#39; 通过ssh在远程主机上执行一次备份本地磁盘的操作 </span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;sda of&#x3D;&#x2F;tmp&#x2F;file1 备份磁盘内容到一个文件 </span><br><span class="line">tar -Puf backup.tar &#x2F;home&#x2F;user 执行一次对 &#39;&#x2F;home&#x2F;user&#39; 目录的交互式备份操作 </span><br><span class="line">( cd &#x2F;tmp&#x2F;local&#x2F; &amp;&amp; tar c . ) | ssh -C user@ip_addr &#39;cd &#x2F;home&#x2F;share&#x2F; &amp;&amp; tar x -p&#39; 通过ssh在远程目录中复制一个目录内容 </span><br><span class="line">( tar c &#x2F;home ) | ssh -C user@ip_addr &#39;cd &#x2F;home&#x2F;backup-home &amp;&amp; tar x -p&#39; 通过ssh在远程目录中复制一个本地目录 </span><br><span class="line">tar cf - . | (cd &#x2F;tmp&#x2F;backup ; tar xf - ) 本地将一个目录复制到另一个地方，保留原有权限及链接 </span><br><span class="line">find &#x2F;home&#x2F;user1 -name &#39;*.txt&#39; | xargs cp -av --target-directory&#x3D;&#x2F;home&#x2F;backup&#x2F; --parents 从一个目录查找并复制所有以 &#39;.txt&#39; 结尾的文件到另一个目录 </span><br><span class="line">find &#x2F;var&#x2F;log -name &#39;*.log&#39; | tar cv --files-from&#x3D;- | bzip2 &gt; log.tar.bz2 查找所有以 &#39;.log&#39; 结尾的文件并做成一个bzip包 </span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;hda of&#x3D;&#x2F;dev&#x2F;fd0 bs&#x3D;512 count&#x3D;1 做一个将 MBR (Master Boot Record)内容复制到软盘的动作 </span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;fd0 of&#x3D;&#x2F;dev&#x2F;hda bs&#x3D;512 count&#x3D;1 从已经保存到软盘的备份中恢复MBR内容</span><br></pre></td></tr></table></figure>
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/12/26/Linux%E5%91%BD%E4%BB%A4/">https://github.com/xuMr6/xumr6.github.io.git/2018/12/26/Linux%E5%91%BD%E4%BB%A4/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/12/31/md5加密原理/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">md5加密原理 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/12/21/JWT使用/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">JWT使用 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="toc-text">1.系统信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%B3%E6%9C%BA"><span class="toc-text">2.关机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="toc-text">3.文件和目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2"><span class="toc-text">4.文件搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%8C%82%E8%BD%BD%E7%B3%BB%E7%BB%9F"><span class="toc-text">5.挂载系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-RPM%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">6.RPM管理工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-YUM%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">7.YUM管理工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#38%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-text">38查看文件内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%AD%97%E7%AC%A6%E8%AE%BE%E7%BD%AE%E3%80%81%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-text">9.字符设置、文件格式转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%A4%87%E4%BB%BD"><span class="toc-text">10.备份</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="toc-text">1.系统信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%B3%E6%9C%BA"><span class="toc-text">2.关机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="toc-text">3.文件和目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2"><span class="toc-text">4.文件搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%8C%82%E8%BD%BD%E7%B3%BB%E7%BB%9F"><span class="toc-text">5.挂载系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-RPM%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">6.RPM管理工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-YUM%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">7.YUM管理工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#38%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-text">38查看文件内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%AD%97%E7%AC%A6%E8%AE%BE%E7%BD%AE%E3%80%81%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-text">9.字符设置、文件格式转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%A4%87%E4%BB%BD"><span class="toc-text">10.备份</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="toc-text">1.系统信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%B3%E6%9C%BA"><span class="toc-text">2.关机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="toc-text">3.文件和目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2"><span class="toc-text">4.文件搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%8C%82%E8%BD%BD%E7%B3%BB%E7%BB%9F"><span class="toc-text">5.挂载系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-RPM%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">6.RPM管理工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-YUM%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">7.YUM管理工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#38%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-text">38查看文件内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%AD%97%E7%AC%A6%E8%AE%BE%E7%BD%AE%E3%80%81%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-text">9.字符设置、文件格式转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%A4%87%E4%BB%BD"><span class="toc-text">10.备份</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

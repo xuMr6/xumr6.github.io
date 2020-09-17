@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="数据解析之正则&amp;BS4&amp;xpath">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/07/25/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E4%B9%8B%E6%AD%A3%E5%88%99&amp;BS4&amp;xpath/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-07-25">
+  <meta property="og:article:modified_time" content="2020-09-04">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      数据解析之正则&BS4&xpath
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-07-24T21:34:09.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-07-25</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/爬虫/" class="post-meta-link">爬虫</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>3.5k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h1 id="数据解析"><a href="#数据解析" class="headerlink" title="数据解析"></a>数据解析</h1><hr>
+<h6 id="数据解析就是应用一定的技术手段在响应数据中获取目标数据"><a href="#数据解析就是应用一定的技术手段在响应数据中获取目标数据" class="headerlink" title="数据解析就是应用一定的技术手段在响应数据中获取目标数据"></a>数据解析就是应用一定的技术手段在响应数据中获取目标数据</h6><hr>
+<h5 id="常用数据解析方式"><a href="#常用数据解析方式" class="headerlink" title="常用数据解析方式:"></a>常用数据解析方式:</h5><ul>
+<li>正则: 匹配高效, 但正则表达式书写有难度</li>
+<li>BS4: 解析数据速度慢, 但使用简单</li>
+<li>xpath: 解析速度快, 使用简单</li>
+</ul>
+<hr>
+<h5 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置:"></a>环境配置:</h5><ul>
+<li><p>正则: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install re</span><br></pre></td></tr></table></figure></li>
+<li><p>BS4:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install lxml</span><br><span class="line">pip install BeautifulSoup4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>xpath:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install lxml</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="1-正则"><a href="#1-正则" class="headerlink" title="1.正则"></a>1.正则</h2><h3 id="元字符匹配"><a href="#元字符匹配" class="headerlink" title="元字符匹配"></a>元字符匹配</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> .     匹配任意字符，除了换行符</span><br><span class="line"></span><br><span class="line">[]    用来表示一组字符,单独列出：[abc] 匹配 &#39;a&#39;，&#39;b&#39;或&#39;c&#39;</span><br><span class="line"></span><br><span class="line">[^...]	匹配除了字符组中字符的所有字符</span><br><span class="line"></span><br><span class="line">\d    匹配任意数字，等价于 [0-9].</span><br><span class="line"></span><br><span class="line">\D    匹配任意非数字</span><br><span class="line"></span><br><span class="line">\w    匹配字母数字及下划线</span><br><span class="line"></span><br><span class="line">\W    匹配非字母数字及下划线</span><br><span class="line"></span><br><span class="line">\s    匹配任意空白字符，等价于 [\t\n\r\f].</span><br><span class="line"></span><br><span class="line">\S    匹配任意非空字符</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="字符组：要求在一个位置匹配的字符可能出现很多种情况-各种情况组成一个组"><a href="#字符组：要求在一个位置匹配的字符可能出现很多种情况-各种情况组成一个组" class="headerlink" title="字符组：要求在一个位置匹配的字符可能出现很多种情况, 各种情况组成一个组"></a>字符组：要求在一个位置匹配的字符可能出现很多种情况, 各种情况组成一个组</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[0123456789]: 匹配0到9任意字符</span><br><span class="line">[0-9]: 同上</span><br><span class="line">[a-z]: 匹配a到z的任意小写字母</span><br><span class="line">[A-Z]: 匹配A到Z的任意大写字母</span><br><span class="line">[0-9a-fA-F]: 以上三种的组合, 匹配0-9任意数组或a到f之间任意字母, 不区分大小写</span><br><span class="line">自定义字符组:[a3h5]  ---&gt;  代表匹配a, 3, h, 5等字符</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="量词"><a href="#量词" class="headerlink" title="量词:"></a>量词:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">*  	重复零次或更多次</span><br><span class="line">+	重复一次或更多次</span><br><span class="line">?	重复零次或一次</span><br><span class="line">&#123;n&#125;	重复n次</span><br><span class="line">&#123;n,&#125;	重复n次或更多次</span><br><span class="line">&#123;n,m&#125;	重复n到m次</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="边界修饰符"><a href="#边界修饰符" class="headerlink" title="边界修饰符"></a>边界修饰符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">^	匹配开始</span><br><span class="line">$	匹配结尾</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在正则表达式中添加(), 就形成了一个分组, 在re模块中优先匹配显示分组内容</span><br><span class="line"></span><br><span class="line">import re</span><br><span class="line">s &#x3D; &quot;&lt;a href&#x3D;&#39;www.baidu.com&#39;&gt;正则匹配实验&lt;&#x2F;a&gt;&quot;</span><br><span class="line">res &#x3D; re.findall(&quot;href&#x3D;&#39;(.*)&#39;&gt;&quot;, s)</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="匹配模式"><a href="#匹配模式" class="headerlink" title="匹配模式"></a>匹配模式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">re.S  单行模式</span><br><span class="line">re.M  多行模式	</span><br><span class="line">re.I 忽略大小写</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="贪婪匹配与非贪婪匹配"><a href="#贪婪匹配与非贪婪匹配" class="headerlink" title="贪婪匹配与非贪婪匹配"></a>贪婪匹配与非贪婪匹配</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">贪婪匹配是指: 在使用量词:  * ,  +  等时, 尽可能的匹配内容</span><br><span class="line"></span><br><span class="line">非贪婪匹配是指: 使用?对正则表达式进行修饰, 使量词的匹配尽可能少, 如+代表匹配1次或多次, 在?的修饰下, 只匹配1次.</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="re模块"><a href="#re模块" class="headerlink" title="re模块"></a>re模块</h3><ul>
+<li>re.findall(‘正则表达式’, ‘待匹配字符串’): 返回所有满足匹配条件的结果, 以列表形式返回</li>
+<li>re.search(‘正则表达式’, ‘带匹配字符串’): 匹配到第一个就返回一个对象, 该对象使用group()进行取值, 如果为匹配到则返回None</li>
+<li>re.match(‘正则表达式’, ‘待匹配字符串’): 只从字符串开始进行匹配, 如果匹配成功返回一个对象,同样使用group()进行取值, 匹配不成功返回None</li>
+<li>re.compile(‘正则表达式’): 将正则表达式编译为对象, 但需要按该正则表达式匹配是可以在直接使用该对象调用以上方法即可.</li>
+</ul>
+<h4 id="re模块示例"><a href="#re模块示例" class="headerlink" title="re模块示例:"></a>re模块示例:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">s &#x3D; &quot;abcabc你好&quot;</span><br><span class="line"></span><br><span class="line"># findall方法演示</span><br><span class="line">res_findall &#x3D; re.findall(&#39;a&#39;, s)</span><br><span class="line">print(&#39;findall匹配结果:&#39;, res_findall)</span><br><span class="line"></span><br><span class="line"># search方法演示, 不确定是否能匹配出结果, 不可直接使用group进行取值, 需要判断或进行异常处理</span><br><span class="line">res_search &#x3D; re.search(&quot;你&quot;, s)</span><br><span class="line">if res:</span><br><span class="line">    print(&#39;search匹配结果&#39;, res.group())</span><br><span class="line">else:</span><br><span class="line">    print(&#39;None&#39;)</span><br><span class="line">    </span><br><span class="line"># match方法演示:</span><br><span class="line">res_match_1 &#x3D; re.match(&#39;abc&#39;, s)</span><br><span class="line">res_match_2 &#x3D; re.match(&#39;bc&#39;, s)</span><br><span class="line">print(&#39;res_match_1结果:&#39;, res_match_1)</span><br><span class="line">print(&#39;res_match_2结果:&#39;, res_match_2)</span><br><span class="line"></span><br><span class="line"># compile方法演示:</span><br><span class="line">re_obj &#x3D; re.compile(&#39;ab&#39;)</span><br><span class="line">res &#x3D; re_obj.findall(s)</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="利用正则表达式抓取校花网图片"><a href="#利用正则表达式抓取校花网图片" class="headerlink" title="利用正则表达式抓取校花网图片"></a>利用正则表达式抓取校花网图片</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line"># 请求url, 抓取页面</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;www.xiaohuar.com&#x2F;hua&#x2F;&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">html &#x3D; res.text</span><br><span class="line"></span><br><span class="line"># 利用正则匹配页面中的img标签, 获取其src属性值</span><br><span class="line">all_src &#x3D; re.findall(&#39;&lt;img.*src&#x3D;&quot;(.*jpg)&quot;&#39;, html, re.M)</span><br><span class="line"></span><br><span class="line"># 遍历获取到的图片连接, 处理连接为完整的url, 再次请求抓取图片二进制流数据, 写入文件</span><br><span class="line">for num, url in enumerate(all_src):</span><br><span class="line">    url &#x3D; &#39;http:&#x2F;&#x2F;www.xiaohuar.com&#39; + url</span><br><span class="line">    image &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">    with open(&#39;%s.jpg&#39; % num, &#39;wb&#39;) as f:</span><br><span class="line">        f.write(image.content)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-BS4"><a href="#2-BS4" class="headerlink" title="2.BS4"></a>2.BS4</h2><h3 id="BS4解析库解析数据原理"><a href="#BS4解析库解析数据原理" class="headerlink" title="BS4解析库解析数据原理:"></a>BS4解析库解析数据原理:</h3><p>定位标签节点  —&gt;  提取标签节点内容或属性值</p>
+<hr>
+<h3 id="BS4基本使用步骤"><a href="#BS4基本使用步骤" class="headerlink" title="BS4基本使用步骤:"></a>BS4基本使用步骤:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from BS4 import BeautifulSoup</span><br><span class="line"># 网络文件实例化对象</span><br><span class="line">soup &#x3D; BeautifulSoup(text, &#39;lxml&#39;)  </span><br><span class="line">soup &#x3D; BeautifulSoup(open(&#39;filename&#39;, &#39;lxml&#39;)</span><br><span class="line">tag_element_or_attribute &#x3D; soup.选择器</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="BS4可用选择器"><a href="#BS4可用选择器" class="headerlink" title="BS4可用选择器:"></a>BS4可用选择器:</h3><h4 id="节点选择器"><a href="#节点选择器" class="headerlink" title="节点选择器:"></a>节点选择器:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- 节点名单选: soup.div</span><br><span class="line">- 嵌套选择: soup.div.span</span><br><span class="line">- 关联选择: </span><br><span class="line">    - 子节点:contents返回字节子节点, 包含换行符, 返回类型是一个列表</span><br><span class="line">            children效果相同, 但返回一个生成器</span><br><span class="line">    - 子孙节点:descendants, 返回生成器遍历取值</span><br><span class="line">        1).深度选择, 从第一个子节点开始, 直至第一个子节点内的所有孙节点全部选择到</span><br><span class="line">        2).如果两个标签在两行上, 匹配第一个节点的所有深度后选择换行符.</span><br><span class="line">        3).如果标签中的文本是换行的, 则不单独匹配换行符, 换行符包含在文本内</span><br><span class="line">    - 父节点:parent</span><br><span class="line">    - 祖先节点:parents</span><br><span class="line">    - 兄弟节点:</span><br><span class="line">            next_sibling: 当前节点的下一个兄弟节点</span><br><span class="line">            previous_sibling: 当前节点的上一个兄弟节点</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="方法选择器"><a href="#方法选择器" class="headerlink" title="方法选择器:"></a>方法选择器:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">1).find_all(name, attrs, recursive, text, **kwargs)</span><br><span class="line">    </span><br><span class="line">    - 标签名选择:soup.find_all(name&#x3D;&#39;ul&#39;)   # 选择所有ul标签</span><br><span class="line">    </span><br><span class="line">    - 嵌套选择:</span><br><span class="line">        for ul in soup.find_all(name&#x3D;&#39;ul&#39;):   </span><br><span class="line">            ul.find_all(name&#x3D;&#39;li&#39;)  # 循环ul列表, 选择每个ul中的li标签</span><br><span class="line"></span><br><span class="line">    - 属性值选择:soup.find_all(attrs&#x3D;&#123;&#39;class&#39;: &#39;element&#39;&#125;), # 根据属性选择节点,等效:soup.find_all(class&#x3D;&#39;element&#39;)</span><br><span class="line">    </span><br><span class="line">    - 文本正则选择:soup.find_all(text&#x3D;re.compile(&#39;link&#39;))  # 返回所有标签中包含link字符的文字的对象</span><br><span class="line"></span><br><span class="line">2).find():返回一个对象</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="css选择器"><a href="#css选择器" class="headerlink" title="css选择器:"></a>css选择器:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">css选择器需要调用select方法, 改方法返回一个列表</span><br><span class="line"></span><br><span class="line">1).选择:</span><br><span class="line">        soup.select(&#39;ul li&#39;)  # 选择ul下的li所有标签</span><br><span class="line">        soup.select(&#39;.panel&#39;)  # 选择class的值为panel的标签</span><br><span class="line">        soup.select(&#39;#item1&#39;)  # 选择id为item1的标签</span><br><span class="line">2).嵌套选择:</span><br><span class="line">    for ul in soup.select(&#39;ul&#39;):</span><br><span class="line">        ul.select(&#39;li&#39;)</span><br><span class="line">3).获取文本与属性:</span><br><span class="line">    获取属性:</span><br><span class="line">        for li in soup.select(&#39;ul li&#39;):</span><br><span class="line">            print(li.attrs[&#39;id&#39;])</span><br><span class="line">            print(li[&#39;id&#39;])   # 上下两种形式效果一致</span><br><span class="line">    获取文本:</span><br><span class="line">        for li in soup.select(&#39;ul li&#39;):</span><br><span class="line">            print(li.get_text())</span><br><span class="line">            print(li.string)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="节点文本或属性的获取"><a href="#节点文本或属性的获取" class="headerlink" title="节点文本或属性的获取"></a>节点文本或属性的获取</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tag_element.name  # 获取节点名称</span><br><span class="line">tag_element.attrs  # 获取节点所有属性, 结果为字典形式</span><br><span class="line">tag_element.attrs[&#39;name&#39;]  # 获取节点的单个属性值, 等效: tag_element[&#39;name&#39;], 属性多值是返回列表</span><br><span class="line">tag_element.string   # 获取节点的文本内容</span><br><span class="line">如果使用关联选择, 且结果为生成器可以先转为列表再索引定位元素后在调用上面的获取元素方法, 如:</span><br><span class="line">list(p.parents)[0].attrs[&#39;name&#39;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="练习示例"><a href="#练习示例" class="headerlink" title="练习示例"></a>练习示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">html &#x3D; &#39;&#39;&#39;</span><br><span class="line">    &lt;div class&#x3D;&quot;panel&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;panel-heading&quot;&gt;</span><br><span class="line">            &lt;h4&gt;BeautifulSoup练习&lt;&#x2F;h4&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;panel-body&quot;&gt;</span><br><span class="line">            &lt;ul class&#x3D;&quot;list&quot; id&#x3D;&quot;list-1&quot;&gt;</span><br><span class="line">                &lt;li class&#x3D;&quot;element&quot;&gt;第一个li标签&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li class&#x3D;&quot;element&quot;&gt;第二个li标签&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li class&#x3D;&quot;element&quot;&gt;第三个li标签&lt;&#x2F;li&gt;</span><br><span class="line">            &lt;&#x2F;ul&gt;</span><br><span class="line">            &lt;ul class&#x3D;&quot;list list-small&quot;&gt;</span><br><span class="line">                &lt;li class&#x3D;&quot;element&quot;&gt;one&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li class&#x3D;&quot;element&quot;&gt;two&lt;&#x2F;li&gt;</span><br><span class="line">            &lt;&#x2F;ul&gt;</span><br><span class="line">            &lt;li class&#x3D;&quot;element&quot;&gt;测试多层级选择器&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line"># 1.根据节点名定位节点, 获取其文本</span><br><span class="line">h4 &#x3D; soup.select(&#39;h4&#39;)   # 标签选择器</span><br><span class="line">print(h4[0].get_text())</span><br><span class="line"></span><br><span class="line"># 2.根据class属性定位节点</span><br><span class="line">panel &#x3D; soup.select(&#39;.panel-heading&#39;)</span><br><span class="line">print(panel)</span><br><span class="line"></span><br><span class="line"># 3.根据id属性定位节点</span><br><span class="line">ul &#x3D; soup.select(&#39;#list-1&#39;)</span><br><span class="line">print(ul)</span><br><span class="line"></span><br><span class="line"># 4.嵌套选择</span><br><span class="line">ul_list &#x3D; soup.select(&#39;ul&#39;)</span><br><span class="line">for ul in ul_list:</span><br><span class="line">    li &#x3D; ul.select(&#39;li&#39;)</span><br><span class="line">    print(li)</span><br><span class="line">    </span><br><span class="line"># 5.单层级选择器与多层级选择器</span><br><span class="line">li_list_single &#x3D; soup.select(&quot;.panel-body &gt; ul &gt; li&quot;)</span><br><span class="line">li_list_multi &#x3D; soup.select(&quot;.panel-body li&quot;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="爬取整部三国演义销售-写入txt文件"><a href="#爬取整部三国演义销售-写入txt文件" class="headerlink" title="爬取整部三国演义销售, 写入txt文件:"></a>爬取整部三国演义销售, 写入txt文件:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;www.shicimingju.com&#x2F;book&#x2F;sanguoyanyi.html&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">soup &#x3D; BeautifulSoup(res.text, &#39;lxml&#39;)</span><br><span class="line">a_list &#x3D; soup.select(&quot;.book-mulu ul li a&quot;)</span><br><span class="line">for item in a_list:</span><br><span class="line">    name &#x3D; item.string</span><br><span class="line">    href &#x3D; item[&quot;href&quot;]</span><br><span class="line">    # print(href)</span><br><span class="line">    full_url &#x3D; &#39;http:&#x2F;&#x2F;www.shicimingju.com&#39; + href</span><br><span class="line">    detail_page &#x3D; requests.get(url&#x3D;full_url, headers&#x3D;headers).text</span><br><span class="line">    soup_detail &#x3D; BeautifulSoup(detail_page, &#39;lxml&#39;)</span><br><span class="line">    div &#x3D; soup_detail.select(&quot;.chapter_content&quot;)[0]</span><br><span class="line">    print(type(div.get_text()))</span><br><span class="line">    with open(&#39;%s.txt&#39; % name, &#39;w&#39;, encoding&#x3D;&quot;utf-8&quot;) as f:</span><br><span class="line">        f.write(div.get_text())</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-xpath"><a href="#3-xpath" class="headerlink" title="3.xpath"></a>3.xpath</h2><h3 id="xpath解析库的介绍"><a href="#xpath解析库的介绍" class="headerlink" title="xpath解析库的介绍"></a>xpath解析库的介绍</h3><p>数据解析的过程中使用过正则表达式, 但正则表达式想要进准匹配难度较高, 一旦正则表达式书写错误, 匹配的数据也会出错.<br>网页由三部分组成: HTML, Css, JavaScript, HTML页面标签存在层级关系, 即DOM树, 在获取目标数据时可以根据网页层次关系定位标签, 在获取标签的文本或属性.</p>
+<hr>
+<h3 id="xpath解析库解析数据原理"><a href="#xpath解析库解析数据原理" class="headerlink" title="xpath解析库解析数据原理:"></a>xpath解析库解析数据原理:</h3><ol>
+<li>根据网页DOM树定位节点标签</li>
+<li>获取节点标签的正文文本或属性值</li>
+</ol>
+<hr>
+<h3 id="xpath安装"><a href="#xpath安装" class="headerlink" title="xpath安装"></a>xpath安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install lxml</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="requests模块爬取糗事百科热门的标题"><a href="#requests模块爬取糗事百科热门的标题" class="headerlink" title="requests模块爬取糗事百科热门的标题:"></a>requests模块爬取糗事百科热门的标题:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.qiushibaike.com&#x2F;&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &quot;User-Agent&quot;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line"></span><br><span class="line">tree &#x3D; etree.HTML(res.text)</span><br><span class="line">title_lst &#x3D; tree.xpath(&#39;&#x2F;&#x2F;ul&#x2F;li&#x2F;div&#x2F;a&#x2F;text()&#39;)</span><br><span class="line">for item in title_lst:</span><br><span class="line">    print(item)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="xpath使用步骤"><a href="#xpath使用步骤" class="headerlink" title="xpath使用步骤"></a>xpath使用步骤</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">tree &#x3D; etree.HTML(res.text)</span><br><span class="line">tree &#x3D; etree.parse(res.html, etree.HTMLParse())  # 示例如下, 了解内容</span><br><span class="line"></span><br><span class="line">tag_or_attr &#x3D; tree.xpath(&#39;xpath表达式&#39;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="xpath语法"><a href="#xpath语法" class="headerlink" title="xpath语法:"></a>xpath语法:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">1.常用规则:</span><br><span class="line">      1.  nodename:		  节点名定位</span><br><span class="line">      2.  &#x2F;&#x2F;:			  从当前节点选取子孙节点</span><br><span class="line">      3.  &#x2F;:			  从当前节点选取直接子节点</span><br><span class="line">      4.  nodename[@attribute&#x3D;&quot;...&quot;]  根据属性定位标签</span><br><span class="line">      5.  @attributename:  获取属性 </span><br><span class="line">      6.  text():		   获取文本</span><br><span class="line">   </span><br><span class="line">2.属性匹配两种情况: 多属性匹配 &amp;  单属性多值匹配  </span><br><span class="line">    2.1 单属性多值匹配</span><br><span class="line">    示例: tree.xpath(&#39;&#x2F;&#x2F;div[contains(@class, &quot;dc&quot;)]&#x2F;text()&#39;)</span><br><span class="line"></span><br><span class="line">    2.2 多属性匹配</span><br><span class="line">    示例: tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;item&quot; and @name&#x3D;&quot;test&quot;]&#x2F;text()&#39;) 	</span><br><span class="line">    </span><br><span class="line">3.按序选择:</span><br><span class="line">    3.1 索引定位: 从1开始</span><br><span class="line">    3.2 last()函数</span><br><span class="line">    3.3 position()函数</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="获取响应数据内容"><a href="#获取响应数据内容" class="headerlink" title="获取响应数据内容:"></a>获取响应数据内容:</h3><pre><code>res.text        获取HTML文本
+res.content        获取二进制流
+res.json()        获取json数据</code></pre>
+<hr>
+<h3 id="解析示例-示例解析的是本地文件"><a href="#解析示例-示例解析的是本地文件" class="headerlink" title="解析示例: 示例解析的是本地文件"></a>解析示例: 示例解析的是本地文件</h3><h5 id="本地文件"><a href="#本地文件" class="headerlink" title="本地文件"></a>本地文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Xpath练习文件&lt;&#x2F;title&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id&#x3D;&quot;007&quot;&gt;</span><br><span class="line">    &quot;我是div标签的文字内容, 和下面的p标签还有div标签是同级的哦&quot;</span><br><span class="line">    &lt;p&gt;这是p标签内的文字内容&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;div&gt;这是p标签同级的div标签&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class&#x3D;&quot;divtag&quot;&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;第1个li标签&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;第2个li标签&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;第3个li标签&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;第4个li标签&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;第5个li标签&lt;&#x2F;li&gt;</span><br><span class="line">    &lt;&#x2F;ul&gt;</span><br><span class="line">    &lt;a href&#x3D;&quot;https:&#x2F;&#x2F;www.baidu.com&quot;&gt;这是百度的跳转连接&lt;&#x2F;a&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;div class&#x3D;&quot;c1&quot; name&#x3D;&quot;laoda&quot;&gt;老大在此&lt;&#x2F;div&gt;</span><br><span class="line">&lt;div class&#x3D;&quot;c1 c3&quot; name&#x3D;&quot;laoer&quot;&gt;老二任性, class有两个值&lt;&#x2F;div&gt;</span><br><span class="line">&lt;div class&#x3D;&quot;c1&quot; name&#x3D;&quot;laosan&quot;&gt;我是老三&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="解析本地文件"><a href="#解析本地文件" class="headerlink" title="解析本地文件"></a>解析本地文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">tree &#x3D; etree.parse(&#39;.&#x2F;x.html&#39;, etree.HTMLParser())</span><br><span class="line"></span><br><span class="line"># 1.根据节点名, 即nodename定位title标签, 获取标签内文字</span><br><span class="line">title_text &#x3D; tree.xpath(&#39;&#x2F;&#x2F;title&#x2F;text()&#39;)</span><br><span class="line">print(title_text)</span><br><span class="line"></span><br><span class="line"># 2.根据节点属性定位: 定位id为007的div标签</span><br><span class="line">div_007 &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@id&#x3D;&quot;007&quot;]&#39;)</span><br><span class="line">print(div_007)</span><br><span class="line"></span><br><span class="line"># 3.示例直接子节点与子孙节点:&#x2F;, &#x2F;&#x2F;</span><br><span class="line">div_007_one &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@id&#x3D;&quot;007&quot;]&#x2F;text()&#39;)</span><br><span class="line">print(div_007_one)</span><br><span class="line">div_007_two &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@id&#x3D;&quot;007&quot;]&#x2F;&#x2F;text()&#39;)</span><br><span class="line">print(div_007_two)</span><br><span class="line"></span><br><span class="line"># 4.获取a标签的href属性</span><br><span class="line">a_href &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;divtag&quot;]&#x2F;a&#x2F;@href&#39;)</span><br><span class="line">print(a_href)</span><br><span class="line"></span><br><span class="line"># 4.多属性定位: 根据class属性和name属性定位div标签</span><br><span class="line">div_two_attr &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;c1&quot; and @name&#x3D;&quot;laoda&quot;]&#x2F;text()&#39;)</span><br><span class="line">print(div_two_attr)</span><br><span class="line"></span><br><span class="line"># 5.属性多值定位: 定位所有class中有c1的div标签</span><br><span class="line">div_c1 &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[contains(@class, &quot;c1&quot;)]&#39;)</span><br><span class="line"></span><br><span class="line"># 6.按序定位</span><br><span class="line">li_first &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;divtag&quot;]&#x2F;ul&#x2F;li[1]&#x2F;text()&#39;)  # 定位第一个li标签, 获取其文本</span><br><span class="line">print(li_first)</span><br><span class="line"></span><br><span class="line">li_last &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;divtag&quot;]&#x2F;ul&#x2F;li[last()]&#x2F;text()&#39;)  # 定位最后一个li标签</span><br><span class="line">print(li_last)</span><br><span class="line"></span><br><span class="line">li_daotwo &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;divtag&quot;]&#x2F;ul&#x2F;li[last()-1]&#x2F;text()&#39;)  # 定位倒数第二个li标签</span><br><span class="line">print(li_daotwo)</span><br><span class="line"></span><br><span class="line">li_qianthree &#x3D; tree.xpath(&#39;&#x2F;&#x2F;div[@class&#x3D;&quot;divtag&quot;]&#x2F;ul&#x2F;li[position()&lt;4]&#x2F;text()&#39;)  # 定位前三个li标签</span><br><span class="line">print(li_qianthree)</span><br></pre></td></tr></table></figure>
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/07/25/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E4%B9%8B%E6%AD%A3%E5%88%99&amp;BS4&amp;xpath/">https://github.com/xuMr6/xumr6.github.io.git/2018/07/25/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E4%B9%8B%E6%AD%A3%E5%88%99&amp;BS4&amp;xpath/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/08/01/多线程爬虫/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">多线程爬虫 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/07/17/requests模块初级用法&amp;高级用法/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">requests模块初级用法&amp;高级用法 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90"><span class="toc-text">数据解析</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E5%B0%B1%E6%98%AF%E5%BA%94%E7%94%A8%E4%B8%80%E5%AE%9A%E7%9A%84%E6%8A%80%E6%9C%AF%E6%89%8B%E6%AE%B5%E5%9C%A8%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E6%95%B0%E6%8D%AE"><span class="toc-text">数据解析就是应用一定的技术手段在响应数据中获取目标数据</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E6%96%B9%E5%BC%8F"><span class="toc-text">常用数据解析方式:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">环境配置:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%AD%A3%E5%88%99"><span class="toc-text">1.正则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D"><span class="toc-text">元字符匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%BB%84%EF%BC%9A%E8%A6%81%E6%B1%82%E5%9C%A8%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE%E5%8C%B9%E9%85%8D%E7%9A%84%E5%AD%97%E7%AC%A6%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%88%E5%A4%9A%E7%A7%8D%E6%83%85%E5%86%B5-%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E7%BB%84%E6%88%90%E4%B8%80%E4%B8%AA%E7%BB%84"><span class="toc-text">字符组：要求在一个位置匹配的字符可能出现很多种情况, 各种情况组成一个组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E8%AF%8D"><span class="toc-text">量词:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-text">边界修饰符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">匹配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="toc-text">贪婪匹配与非贪婪匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#re%E6%A8%A1%E5%9D%97"><span class="toc-text">re模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#re%E6%A8%A1%E5%9D%97%E7%A4%BA%E4%BE%8B"><span class="toc-text">re模块示例:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8A%93%E5%8F%96%E6%A0%A1%E8%8A%B1%E7%BD%91%E5%9B%BE%E7%89%87"><span class="toc-text">利用正则表达式抓取校花网图片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-BS4"><span class="toc-text">2.BS4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E8%A7%A3%E6%9E%90%E5%BA%93%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="toc-text">BS4解析库解析数据原理:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">BS4基本使用步骤:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E5%8F%AF%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">BS4可用选择器:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">节点选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">方法选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#css%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">css选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%96%87%E6%9C%AC%E6%88%96%E5%B1%9E%E6%80%A7%E7%9A%84%E8%8E%B7%E5%8F%96"><span class="toc-text">节点文本或属性的获取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%E7%A4%BA%E4%BE%8B"><span class="toc-text">练习示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%95%B4%E9%83%A8%E4%B8%89%E5%9B%BD%E6%BC%94%E4%B9%89%E9%94%80%E5%94%AE-%E5%86%99%E5%85%A5txt%E6%96%87%E4%BB%B6"><span class="toc-text">爬取整部三国演义销售, 写入txt文件:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-xpath"><span class="toc-text">3.xpath</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%A7%A3%E6%9E%90%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">xpath解析库的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%A7%A3%E6%9E%90%E5%BA%93%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="toc-text">xpath解析库解析数据原理:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E5%AE%89%E8%A3%85"><span class="toc-text">xpath安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E7%88%AC%E5%8F%96%E7%B3%97%E4%BA%8B%E7%99%BE%E7%A7%91%E7%83%AD%E9%97%A8%E7%9A%84%E6%A0%87%E9%A2%98"><span class="toc-text">requests模块爬取糗事百科热门的标题:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">xpath使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%AF%AD%E6%B3%95"><span class="toc-text">xpath语法:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9"><span class="toc-text">获取响应数据内容:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E7%A4%BA%E4%BE%8B-%E7%A4%BA%E4%BE%8B%E8%A7%A3%E6%9E%90%E7%9A%84%E6%98%AF%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">解析示例: 示例解析的是本地文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">本地文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">解析本地文件</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90"><span class="toc-text">数据解析</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E5%B0%B1%E6%98%AF%E5%BA%94%E7%94%A8%E4%B8%80%E5%AE%9A%E7%9A%84%E6%8A%80%E6%9C%AF%E6%89%8B%E6%AE%B5%E5%9C%A8%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E6%95%B0%E6%8D%AE"><span class="toc-text">数据解析就是应用一定的技术手段在响应数据中获取目标数据</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E6%96%B9%E5%BC%8F"><span class="toc-text">常用数据解析方式:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">环境配置:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%AD%A3%E5%88%99"><span class="toc-text">1.正则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D"><span class="toc-text">元字符匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%BB%84%EF%BC%9A%E8%A6%81%E6%B1%82%E5%9C%A8%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE%E5%8C%B9%E9%85%8D%E7%9A%84%E5%AD%97%E7%AC%A6%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%88%E5%A4%9A%E7%A7%8D%E6%83%85%E5%86%B5-%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E7%BB%84%E6%88%90%E4%B8%80%E4%B8%AA%E7%BB%84"><span class="toc-text">字符组：要求在一个位置匹配的字符可能出现很多种情况, 各种情况组成一个组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E8%AF%8D"><span class="toc-text">量词:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-text">边界修饰符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">匹配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="toc-text">贪婪匹配与非贪婪匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#re%E6%A8%A1%E5%9D%97"><span class="toc-text">re模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#re%E6%A8%A1%E5%9D%97%E7%A4%BA%E4%BE%8B"><span class="toc-text">re模块示例:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8A%93%E5%8F%96%E6%A0%A1%E8%8A%B1%E7%BD%91%E5%9B%BE%E7%89%87"><span class="toc-text">利用正则表达式抓取校花网图片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-BS4"><span class="toc-text">2.BS4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E8%A7%A3%E6%9E%90%E5%BA%93%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="toc-text">BS4解析库解析数据原理:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">BS4基本使用步骤:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E5%8F%AF%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">BS4可用选择器:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">节点选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">方法选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#css%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">css选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%96%87%E6%9C%AC%E6%88%96%E5%B1%9E%E6%80%A7%E7%9A%84%E8%8E%B7%E5%8F%96"><span class="toc-text">节点文本或属性的获取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%E7%A4%BA%E4%BE%8B"><span class="toc-text">练习示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%95%B4%E9%83%A8%E4%B8%89%E5%9B%BD%E6%BC%94%E4%B9%89%E9%94%80%E5%94%AE-%E5%86%99%E5%85%A5txt%E6%96%87%E4%BB%B6"><span class="toc-text">爬取整部三国演义销售, 写入txt文件:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-xpath"><span class="toc-text">3.xpath</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%A7%A3%E6%9E%90%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">xpath解析库的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%A7%A3%E6%9E%90%E5%BA%93%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="toc-text">xpath解析库解析数据原理:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E5%AE%89%E8%A3%85"><span class="toc-text">xpath安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E7%88%AC%E5%8F%96%E7%B3%97%E4%BA%8B%E7%99%BE%E7%A7%91%E7%83%AD%E9%97%A8%E7%9A%84%E6%A0%87%E9%A2%98"><span class="toc-text">requests模块爬取糗事百科热门的标题:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">xpath使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%AF%AD%E6%B3%95"><span class="toc-text">xpath语法:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9"><span class="toc-text">获取响应数据内容:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E7%A4%BA%E4%BE%8B-%E7%A4%BA%E4%BE%8B%E8%A7%A3%E6%9E%90%E7%9A%84%E6%98%AF%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">解析示例: 示例解析的是本地文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">本地文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">解析本地文件</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90"><span class="toc-text">数据解析</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E5%B0%B1%E6%98%AF%E5%BA%94%E7%94%A8%E4%B8%80%E5%AE%9A%E7%9A%84%E6%8A%80%E6%9C%AF%E6%89%8B%E6%AE%B5%E5%9C%A8%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E6%95%B0%E6%8D%AE"><span class="toc-text">数据解析就是应用一定的技术手段在响应数据中获取目标数据</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E6%96%B9%E5%BC%8F"><span class="toc-text">常用数据解析方式:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">环境配置:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%AD%A3%E5%88%99"><span class="toc-text">1.正则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D"><span class="toc-text">元字符匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%BB%84%EF%BC%9A%E8%A6%81%E6%B1%82%E5%9C%A8%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE%E5%8C%B9%E9%85%8D%E7%9A%84%E5%AD%97%E7%AC%A6%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%88%E5%A4%9A%E7%A7%8D%E6%83%85%E5%86%B5-%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E7%BB%84%E6%88%90%E4%B8%80%E4%B8%AA%E7%BB%84"><span class="toc-text">字符组：要求在一个位置匹配的字符可能出现很多种情况, 各种情况组成一个组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E8%AF%8D"><span class="toc-text">量词:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-text">边界修饰符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">匹配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="toc-text">贪婪匹配与非贪婪匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#re%E6%A8%A1%E5%9D%97"><span class="toc-text">re模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#re%E6%A8%A1%E5%9D%97%E7%A4%BA%E4%BE%8B"><span class="toc-text">re模块示例:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8A%93%E5%8F%96%E6%A0%A1%E8%8A%B1%E7%BD%91%E5%9B%BE%E7%89%87"><span class="toc-text">利用正则表达式抓取校花网图片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-BS4"><span class="toc-text">2.BS4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E8%A7%A3%E6%9E%90%E5%BA%93%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="toc-text">BS4解析库解析数据原理:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">BS4基本使用步骤:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BS4%E5%8F%AF%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">BS4可用选择器:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">节点选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">方法选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#css%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">css选择器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%96%87%E6%9C%AC%E6%88%96%E5%B1%9E%E6%80%A7%E7%9A%84%E8%8E%B7%E5%8F%96"><span class="toc-text">节点文本或属性的获取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%E7%A4%BA%E4%BE%8B"><span class="toc-text">练习示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%AC%E5%8F%96%E6%95%B4%E9%83%A8%E4%B8%89%E5%9B%BD%E6%BC%94%E4%B9%89%E9%94%80%E5%94%AE-%E5%86%99%E5%85%A5txt%E6%96%87%E4%BB%B6"><span class="toc-text">爬取整部三国演义销售, 写入txt文件:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-xpath"><span class="toc-text">3.xpath</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%A7%A3%E6%9E%90%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">xpath解析库的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%A7%A3%E6%9E%90%E5%BA%93%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="toc-text">xpath解析库解析数据原理:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E5%AE%89%E8%A3%85"><span class="toc-text">xpath安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E7%88%AC%E5%8F%96%E7%B3%97%E4%BA%8B%E7%99%BE%E7%A7%91%E7%83%AD%E9%97%A8%E7%9A%84%E6%A0%87%E9%A2%98"><span class="toc-text">requests模块爬取糗事百科热门的标题:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">xpath使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath%E8%AF%AD%E6%B3%95"><span class="toc-text">xpath语法:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9"><span class="toc-text">获取响应数据内容:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E7%A4%BA%E4%BE%8B-%E7%A4%BA%E4%BE%8B%E8%A7%A3%E6%9E%90%E7%9A%84%E6%98%AF%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">解析示例: 示例解析的是本地文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">本地文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6"><span class="toc-text">解析本地文件</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

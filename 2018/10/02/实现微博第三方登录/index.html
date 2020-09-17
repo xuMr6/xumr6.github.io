@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="实现微博第三方登录">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/10/02/%E5%AE%9E%E7%8E%B0%E5%BE%AE%E5%8D%9A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-10-02">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      实现微博第三方登录
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-10-02T01:32:00.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-10-02</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/django/" class="post-meta-link">django</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>493 words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h6 id="在微博网站-注册使用apphttps-open-weibo-com"><a href="#在微博网站-注册使用apphttps-open-weibo-com" class="headerlink" title="在微博网站 注册使用apphttps://open.weibo.com/"></a>在微博网站 注册使用app<a target="_blank" rel="noopener" href="https://open.weibo.com/">https://open.weibo.com/</a></h6><h5 id="登录账号选择网站接入"><a href="#登录账号选择网站接入" class="headerlink" title="登录账号选择网站接入"></a>登录账号选择网站接入</h5><p><img src="/myimg/%E7%BD%91%E7%AB%99%E6%8E%A5%E5%85%A5.png" alt="~````"></p>
+<hr>
+<h5 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h5><p><img src="/myimg/%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8.png" alt="~````"></p>
+<hr>
+<h5 id="应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核"><a href="#应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核" class="headerlink" title="应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核"></a>应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核</h5><p><img src="/myimg/3.png" alt="~~"></p>
+<hr>
+<h5 id="之后填写指定的回调路径"><a href="#之后填写指定的回调路径" class="headerlink" title="之后填写指定的回调路径"></a>之后填写指定的回调路径</h5><p><img src="/myimg/%E5%9B%9E%E8%B0%83%E4%BF%A1%E6%81%AF.png" alt="~~"></p>
+<hr>
+<h5 id="此时我们有了-App-Key-App-Secret-回调页-需要构思编码的流程"><a href="#此时我们有了-App-Key-App-Secret-回调页-需要构思编码的流程" class="headerlink" title="此时我们有了 App Key App Secret 回调页 需要构思编码的流程"></a>此时我们有了 App Key App Secret 回调页 需要构思编码的流程</h5><p><img src="/myimg/%E6%80%9D%E8%B7%AF.png" alt="~~"></p>
+<hr>
+<h5 id="首先根据-app-key-来访问请求API接口"><a href="#首先根据-app-key-来访问请求API接口" class="headerlink" title="首先根据 app key 来访问请求API接口"></a>首先根据 app key 来访问请求API接口</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//新浪微博第三方登录</span><br><span class="line">sina()&#123;</span><br><span class="line">    let client_id=<span class="number">2464168997</span></span><br><span class="line">    let url=<span class="string">&quot;https://api.weibo.com/oauth2/authorize?client_id=&quot;</span>+client_id+<span class="string">&quot;&amp;redirect_uri=回调路由&quot;</span></span><br><span class="line">    window.location.href=url</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="在指定回调路由下-接受参数"><a href="#在指定回调路由下-接受参数" class="headerlink" title="在指定回调路由下 接受参数"></a>在指定回调路由下 接受参数</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wb_back</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="comment"># 初始返回一个code</span></span><br><span class="line">    code=request.GET.get(<span class="string">&#x27;code&#x27;</span>,<span class="literal">None</span>)</span><br><span class="line">    <span class="comment"># 微博接口地址</span></span><br><span class="line">    access_token_url = <span class="string">&quot;https://api.weibo.com/oauth2/access_token&quot;</span></span><br><span class="line">    <span class="comment"># 定义参数</span></span><br><span class="line">    re = requests.post(access_token_url, data=&#123;</span><br><span class="line">        <span class="string">&quot;client_id&quot;</span>: <span class="string">&#x27;app key&#x27;</span>,</span><br><span class="line">        <span class="string">&quot;client_secret&quot;</span>: <span class="string">&quot;secert key&quot;</span>,</span><br><span class="line">        <span class="string">&quot;grant_type&quot;</span>: <span class="string">&quot;authorization_code&quot;</span>,</span><br><span class="line">        <span class="string">&quot;code&quot;</span>: code,</span><br><span class="line">        <span class="string">&quot;redirect_uri&quot;</span>: <span class="string">&quot;回调路由&quot;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment"># 获取用户信息</span></span><br><span class="line">    res=requests.get(<span class="string">&#x27;https://api.weibo.com/2/users/show.json&#x27;</span>,params=&#123;<span class="string">&quot;access_token&quot;</span>:re.json()[<span class="string">&quot;access_token&quot;</span>],<span class="string">&quot;uid&quot;</span>:re.json()[<span class="string">&quot;uid&quot;</span>]&#125;)</span><br><span class="line">    <span class="comment"># res.json（）就是用户登录的信息</span></span><br><span class="line">    print(res.json())</span><br><span class="line">上面代码实现了接受用户的参数</span><br><span class="line"></span><br><span class="line">下面根据用户参数实现一些判断逻辑</span><br><span class="line"></span><br><span class="line">    username=str(res.json()[<span class="string">&#x27;name&#x27;</span>])</span><br><span class="line">    <span class="comment"># 判断是否用新浪微博登录过</span></span><br><span class="line">    user=User.objects.filter(username=username).first()</span><br><span class="line">    sina_id=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    user_id=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> user:</span><br><span class="line">        <span class="comment"># 代表曾经登录过</span></span><br><span class="line">        sina_id=user.username</span><br><span class="line">        user_id=user.id</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 首次登陆</span></span><br><span class="line">        User(username=username,password=res.json()[<span class="string">&#x27;id&#x27;</span>]).save()</span><br><span class="line">        user=User.objects.filter(username=username).first()</span><br><span class="line">        sina_id=user.username</span><br><span class="line">        user_id=user.id</span><br><span class="line"></span><br><span class="line">    print(sina_id,user_id)</span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="comment"># 重定向到主页 并传递参数</span></span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&quot;http://localhost:8080?sina_id=&quot;</span>+str(sina_id)+<span class="string">&quot;&amp;uid=&quot;</span>+str(user_id))</span><br><span class="line">前端解析后端传递的参数</span><br><span class="line"></span><br><span class="line">var sina_id = this.$route.query.sina_id;</span><br><span class="line">var user_id = this.$route.query.uid;</span><br><span class="line"><span class="keyword">if</span> (sina_id)&#123;</span><br><span class="line">    // 自动帮用户登录</span><br><span class="line">    localStorage.setItem(<span class="string">&#x27;username&#x27;</span>,sina_id)</span><br><span class="line">    localStorage.setItem(<span class="string">&#x27;uid&#x27;</span>,user_id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/10/02/%E5%AE%9E%E7%8E%B0%E5%BE%AE%E5%8D%9A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/">https://github.com/xuMr6/xumr6.github.io.git/2018/10/02/%E5%AE%9E%E7%8E%B0%E5%BE%AE%E5%8D%9A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/10/10/使用python发送QQ邮件/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">使用python发送QQ邮件 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/09/27/切换主题模式/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">切换主题模式 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%BE%AE%E5%8D%9A%E7%BD%91%E7%AB%99-%E6%B3%A8%E5%86%8C%E4%BD%BF%E7%94%A8apphttps-open-weibo-com"><span class="toc-text">在微博网站 注册使用apphttps:&#x2F;&#x2F;open.weibo.com&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7%E9%80%89%E6%8B%A9%E7%BD%91%E7%AB%99%E6%8E%A5%E5%85%A5"><span class="toc-text">登录账号选择网站接入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="toc-text">创建应用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%88%9B%E5%BB%BA%E6%88%90%E5%8A%9F%E5%90%8E%EF%BC%8C%E4%BC%9A%E7%AB%8B%E5%8D%B3%E8%B7%B3%E8%BD%AC%E5%AE%A1%E6%A0%B8%E9%A1%B5%E9%9D%A2%EF%BC%8C%E9%9C%80%E8%A6%81%E5%A1%AB%E5%86%99%E4%B8%80%E4%BA%9B%E8%B5%84%E8%B4%A8%EF%BC%8C%E7%94%A8%E6%9D%A5%E8%BF%9B%E8%A1%8C%E5%AE%A1%E6%A0%B8%EF%BC%8C%E5%85%B6%E5%AE%9E%E8%BF%99%E4%BA%9B%E5%AE%A1%E6%A0%B8%E5%AD%97%E6%AE%B5%E9%83%BD%E4%B8%8D%E7%94%A8%E6%90%AD%E7%90%86%EF%BC%8C%E5%BA%94%E7%94%A8%E5%8E%8B%E6%A0%B9%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E9%80%9A%E8%BF%87%E5%AE%A1%E6%A0%B8"><span class="toc-text">应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B9%8B%E5%90%8E%E5%A1%AB%E5%86%99%E6%8C%87%E5%AE%9A%E7%9A%84%E5%9B%9E%E8%B0%83%E8%B7%AF%E5%BE%84"><span class="toc-text">之后填写指定的回调路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E6%9C%89%E4%BA%86-App-Key-App-Secret-%E5%9B%9E%E8%B0%83%E9%A1%B5-%E9%9C%80%E8%A6%81%E6%9E%84%E6%80%9D%E7%BC%96%E7%A0%81%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">此时我们有了 App Key App Secret 回调页 需要构思编码的流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E6%A0%B9%E6%8D%AE-app-key-%E6%9D%A5%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82API%E6%8E%A5%E5%8F%A3"><span class="toc-text">首先根据 app key 来访问请求API接口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9C%A8%E6%8C%87%E5%AE%9A%E5%9B%9E%E8%B0%83%E8%B7%AF%E7%94%B1%E4%B8%8B-%E6%8E%A5%E5%8F%97%E5%8F%82%E6%95%B0"><span class="toc-text">在指定回调路由下 接受参数</span></a>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%BE%AE%E5%8D%9A%E7%BD%91%E7%AB%99-%E6%B3%A8%E5%86%8C%E4%BD%BF%E7%94%A8apphttps-open-weibo-com"><span class="toc-text">在微博网站 注册使用apphttps:&#x2F;&#x2F;open.weibo.com&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7%E9%80%89%E6%8B%A9%E7%BD%91%E7%AB%99%E6%8E%A5%E5%85%A5"><span class="toc-text">登录账号选择网站接入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="toc-text">创建应用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%88%9B%E5%BB%BA%E6%88%90%E5%8A%9F%E5%90%8E%EF%BC%8C%E4%BC%9A%E7%AB%8B%E5%8D%B3%E8%B7%B3%E8%BD%AC%E5%AE%A1%E6%A0%B8%E9%A1%B5%E9%9D%A2%EF%BC%8C%E9%9C%80%E8%A6%81%E5%A1%AB%E5%86%99%E4%B8%80%E4%BA%9B%E8%B5%84%E8%B4%A8%EF%BC%8C%E7%94%A8%E6%9D%A5%E8%BF%9B%E8%A1%8C%E5%AE%A1%E6%A0%B8%EF%BC%8C%E5%85%B6%E5%AE%9E%E8%BF%99%E4%BA%9B%E5%AE%A1%E6%A0%B8%E5%AD%97%E6%AE%B5%E9%83%BD%E4%B8%8D%E7%94%A8%E6%90%AD%E7%90%86%EF%BC%8C%E5%BA%94%E7%94%A8%E5%8E%8B%E6%A0%B9%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E9%80%9A%E8%BF%87%E5%AE%A1%E6%A0%B8"><span class="toc-text">应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B9%8B%E5%90%8E%E5%A1%AB%E5%86%99%E6%8C%87%E5%AE%9A%E7%9A%84%E5%9B%9E%E8%B0%83%E8%B7%AF%E5%BE%84"><span class="toc-text">之后填写指定的回调路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E6%9C%89%E4%BA%86-App-Key-App-Secret-%E5%9B%9E%E8%B0%83%E9%A1%B5-%E9%9C%80%E8%A6%81%E6%9E%84%E6%80%9D%E7%BC%96%E7%A0%81%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">此时我们有了 App Key App Secret 回调页 需要构思编码的流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E6%A0%B9%E6%8D%AE-app-key-%E6%9D%A5%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82API%E6%8E%A5%E5%8F%A3"><span class="toc-text">首先根据 app key 来访问请求API接口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9C%A8%E6%8C%87%E5%AE%9A%E5%9B%9E%E8%B0%83%E8%B7%AF%E7%94%B1%E4%B8%8B-%E6%8E%A5%E5%8F%97%E5%8F%82%E6%95%B0"><span class="toc-text">在指定回调路由下 接受参数</span></a>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%BE%AE%E5%8D%9A%E7%BD%91%E7%AB%99-%E6%B3%A8%E5%86%8C%E4%BD%BF%E7%94%A8apphttps-open-weibo-com"><span class="toc-text">在微博网站 注册使用apphttps:&#x2F;&#x2F;open.weibo.com&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7%E9%80%89%E6%8B%A9%E7%BD%91%E7%AB%99%E6%8E%A5%E5%85%A5"><span class="toc-text">登录账号选择网站接入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="toc-text">创建应用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%88%9B%E5%BB%BA%E6%88%90%E5%8A%9F%E5%90%8E%EF%BC%8C%E4%BC%9A%E7%AB%8B%E5%8D%B3%E8%B7%B3%E8%BD%AC%E5%AE%A1%E6%A0%B8%E9%A1%B5%E9%9D%A2%EF%BC%8C%E9%9C%80%E8%A6%81%E5%A1%AB%E5%86%99%E4%B8%80%E4%BA%9B%E8%B5%84%E8%B4%A8%EF%BC%8C%E7%94%A8%E6%9D%A5%E8%BF%9B%E8%A1%8C%E5%AE%A1%E6%A0%B8%EF%BC%8C%E5%85%B6%E5%AE%9E%E8%BF%99%E4%BA%9B%E5%AE%A1%E6%A0%B8%E5%AD%97%E6%AE%B5%E9%83%BD%E4%B8%8D%E7%94%A8%E6%90%AD%E7%90%86%EF%BC%8C%E5%BA%94%E7%94%A8%E5%8E%8B%E6%A0%B9%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E9%80%9A%E8%BF%87%E5%AE%A1%E6%A0%B8"><span class="toc-text">应用创建成功后，会立即跳转审核页面，需要填写一些资质，用来进行审核，其实这些审核字段都不用搭理，应用压根就不需要通过审核</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B9%8B%E5%90%8E%E5%A1%AB%E5%86%99%E6%8C%87%E5%AE%9A%E7%9A%84%E5%9B%9E%E8%B0%83%E8%B7%AF%E5%BE%84"><span class="toc-text">之后填写指定的回调路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E6%9C%89%E4%BA%86-App-Key-App-Secret-%E5%9B%9E%E8%B0%83%E9%A1%B5-%E9%9C%80%E8%A6%81%E6%9E%84%E6%80%9D%E7%BC%96%E7%A0%81%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">此时我们有了 App Key App Secret 回调页 需要构思编码的流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E6%A0%B9%E6%8D%AE-app-key-%E6%9D%A5%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82API%E6%8E%A5%E5%8F%A3"><span class="toc-text">首先根据 app key 来访问请求API接口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9C%A8%E6%8C%87%E5%AE%9A%E5%9B%9E%E8%B0%83%E8%B7%AF%E7%94%B1%E4%B8%8B-%E6%8E%A5%E5%8F%97%E5%8F%82%E6%95%B0"><span class="toc-text">在指定回调路由下 接受参数</span></a>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

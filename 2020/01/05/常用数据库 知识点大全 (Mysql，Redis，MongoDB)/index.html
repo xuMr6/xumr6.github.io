@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="常用数据库 知识点大全 (Mysql，Redis，MongoDB)">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2020/01/05/%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%20%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%A7%E5%85%A8%20(Mysql%EF%BC%8CRedis%EF%BC%8CMongoDB)/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2020-01-05">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      常用数据库 知识点大全 (Mysql，Redis，MongoDB)
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-01-04T17:23:21.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2020-01-05</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/python/" class="post-meta-link">python</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>15.2k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="1-Mysql"><a href="#1-Mysql" class="headerlink" title="1. Mysql"></a>1. Mysql</h3><p><strong>简介：</strong></p>
+<p>MySQL是一个关系型数据库管理系统，由瑞典MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。<br>MySQL是一种关系型数据库管理系统，关系数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。<br>MySQL所使用的 SQL 语言是用于访问数据库的最常用标准化语言。MySQL 软件采用了双授权政策，分为社区版和商业版，由于其体积小、速度快、总体拥有成本低，尤其是开放源码这一特点，一般中小型网站的开发都选择 MySQL 作为网站数据库。</p>
+<h3 id="五大引擎"><a href="#五大引擎" class="headerlink" title="五大引擎"></a>五大引擎</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因MyISAM 和 InnoDB 是主要引擎所以多做概述</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>MyISAM</strong>：<br>Myisam只支持表级锁，用户在操作 myisam 表时，select、update、delete、insert、语句都会给表自动加锁，如果加锁以后的表满足 insert 并发的情况下，可以在表的尾部插入新的数据。也可以通过 locktable 命令来锁表，这样的操作主要是可以模仿事务，<strong>但消耗特别大</strong>。</p>
+<p>因为MyISAM表有无法处理事务，所以它只适合在一下几种情况下使用<br>1.选择密集型的表。MyISAM存储引擎在筛选大量数据时非常迅速，这是它最突出的优点。<br>2.插入密集型的表。MyISAM的并发插入特性允许同时选择和插入数据。例如：MyISAM存储引擎很适合管理邮件或Web服务器日志数据。</p>
+</li>
+<li><p><strong>InnoDB</strong>：</p>
+<p>1.更新密集的表。InnoDB存储引擎特别适合处理多重并发的更新请求。<br>2.事务。InnoDB存储引擎是支持事务的标准MySQL存储引擎。<br>3.自动灾难恢复。与其它存储引擎不同，InnoDB表能够自动从灾难中恢复。<br>4.外键约束。MySQL支持外键的存储引擎只有InnoDB。<br>5.支持自动增加列AUTO_INCREMENT属性。</p>
+<ul>
+<li>Innodb支持事务和行级锁。</li>
+<li>事物的ACID属性：atomicity、consistent、isolation、durable</li>
+<li>Innodb属于索引组织表。</li>
+<li>Innodb有两种存储方式，<strong>共享表空间</strong>和<strong>多表空间</strong>存储</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2020020621203888.png" alt="在这里插入图片描述"><br><strong>MyISAM &amp; InnoDB 差异：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">- 自增长差异：</span><br><span class="line"></span><br><span class="line">MyISAM 引擎的自动增长列必须是索引，如果是组合索引，自动增长可以不是第一列，</span><br><span class="line">它可以根据前面几列进行排序后递增。</span><br><span class="line"></span><br><span class="line">InnoDB 引擎的自动增长列必须是索引，如果是组合索引也必须是组合索引的第一列</span><br><span class="line"></span><br><span class="line">- 主键差异：</span><br><span class="line"></span><br><span class="line">MyISAM 允许没有任何索引和主键的存在，</span><br><span class="line">MyISAM 的索引都是保存行的地址</span><br><span class="line"></span><br><span class="line">InnoDB 如果没有设定主键 或者 非空唯一索引，就会自动生成一个6字节的主键（用户不可见）</span><br><span class="line">InnoDB 的数据是主索引的一部分，附加索引保存的是主索引的值。</span><br><span class="line"></span><br><span class="line">- count()函数差异：</span><br><span class="line"></span><br><span class="line">MyISAM 保存有表的总行数，如果 select count(*) from table; 会直接取出该值</span><br><span class="line">InnoDB 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当之大，但是加了 where  条件后，MyIASM 和 InnoDB 的处理方式都一样</span><br><span class="line"></span><br><span class="line">- 全文索引差异：</span><br><span class="line"></span><br><span class="line">MyISAM 支持 FullText 类型的全文索引</span><br><span class="line">InnoDB 不支持 FullText 类型的全文索引，但是 InnoDB 可以使用 </span><br><span class="line">	sphinx 插件支持全文索引，并且效果更好</span><br><span class="line"></span><br><span class="line">delete from table </span><br><span class="line">使用这条命令时，InnoDB不会从新建立表，而实一条条的删除数据，在InnoDB上如果要清空保存有大量数据的表，最好不要使用这条命令。（推荐使用 truncate table，不过需要用户有 diop 此表的权限）</span><br><span class="line"></span><br><span class="line">- 索引保留位置差异：</span><br><span class="line"></span><br><span class="line">MYISAM 的索引以表名 + .MYI 文件分别保存</span><br><span class="line">InnoDB 的索引和数据一起保存在 表空间里</span><br><span class="line"></span><br><span class="line">- 存储疫情选择差异：</span><br><span class="line">MyISAM B+tree</span><br><span class="line">InnoDB B-tree</span><br><span class="line">12345678910111213141516171819202122232425262728293031323334353637</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200616091010658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li><p><strong>MEMORY</strong> <code>/meməri/ -- 买么瑞</code>：<br><code>使用MEMORY引擎主要是因为速度，好处就在MEMORY采用的逻辑存储是系统内存,极大的提高了储存数据表的性能； 坏处就是当mysqld守护进程崩溃时，所有的Memory数据都会丢失。</code><br>一般在以下几种情况下使用Memory存储引擎：</p>
+<p>1.目标数据较小，而且被非常频繁地访问。在内存中存放数据，所以会造成内存的使用，可以通过参数max_heap_table_size控制Memory表的大小，设置此参数，就可以限制Memory表的最大大小。<br>2.如果数据是临时的，而且必须立即使用，那么就可以存放在内存表中。<br>3.存储在Memory表中的数据如果突然丢失，不会对应用服务产生实质的负面影响。</p>
+</li>
+<li><p><strong>MERGE</strong> <code>/mɜːdʒ/ -- 么耳吱</code>：<br>MERGE存储引擎是一组MyISAM表的组合，这些MyISAM表结构必须完全相同，所以就相当于一个集合器。比起其他储存引擎MERGE不是很优秀，但是在某些情况下MERGE还是非常的有用。对于服务器日志这种信息，一般常用的存储策略是将数据分成很多表，每个名称与特定的时间端相关。</p>
+</li>
+<li><p><strong>ARCHIVE</strong> <code>/&#39;ɑ:kaiv/ -- 阿尔铠武</code>：<br>Archive是归档的意思，在归档之后很多的高级功能就不再支持了，仅仅支持最基本的插入和查询两种功能。在MySQL 5.5版以前，Archive是不支持索引，但是在MySQL 5.5以后的版本就开始支持索引了。Archive拥有很好的压缩机制，它使用zlib压缩库，在记录被请求时会实时压缩，所以它经常被用来当做仓库使用。</p>
+</li>
+<li><p><strong>BDB(BerkeleyDB)</strong></p>
+</li>
+<li><p><strong>EXAMPLE</strong> <code>/ɪɡˈzæmpl/ -- 诶个曾伯</code></p>
+</li>
+<li><p><strong>FEDERATED</strong> <code>/&#39;fɛdə,retɪd/ -- F艾 的瑞der</code></p>
+</li>
+<li><p><strong>CSV</strong></p>
+</li>
+<li><p><strong>BLACKHOLE</strong></p>
+</li>
+</ul>
+<h3 id="事务原理"><a href="#事务原理" class="headerlink" title="事务原理"></a>事务原理</h3><h4 id="InnoDB事务原理"><a href="#InnoDB事务原理" class="headerlink" title="InnoDB事务原理"></a>InnoDB事务原理</h4><ol>
+<li><p>事务（Transaction）是数据库区别于文件系统的重要特性之一，事务会把数据库从一种一致性状态转换为另一种一致性状态。</p>
+</li>
+<li><p>在数据库提交时，可以确保要么所有修改都已保存，要么所有修改都不保存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> MySQL数据库默认采用自动提交(autocommit)模式, 也就是说修改数据(insert、update、delete)的操 作会自动的触发事务,完成事务的提交或者回滚</span><br><span class="line"> 开启事务使用 begin 或者 start transaction; </span><br><span class="line"> 回滚事务使用 rollback;</span><br><span class="line"> pymysql 里面的 conn.commit() 操作就是提交事务</span><br><span class="line"> pymysql 里面的 conn.rollback() 操作就是回滚事务</span><br><span class="line">12345</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="事务的（ACID）特征"><a href="#事务的（ACID）特征" class="headerlink" title="事务的（ACID）特征"></a>事务的（ACID）特征</h4><ol>
+<li><strong>原子性</strong>(Atomicity)：整个事物的所有操作要么全部提交成功，要么全部失败回滚(不会出现部分执行的情况)。</li>
+<li><strong>一致性</strong>(Consistency)：几个并行执行的事务，其执行结果必须与按某一顺序串行执行的结果相一致。</li>
+<li><strong>隔离性</strong>(Isolation)：事务的执行不受其他事务的干扰，事务执行的中间结果对其他事务必须是透明的。</li>
+<li><strong>持久性</strong>(Durability): 一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作。</li>
+</ol>
+<h4 id="事物隔离级别"><a href="#事物隔离级别" class="headerlink" title="事物隔离级别"></a>事物隔离级别</h4><ul>
+<li><p><strong>未提交读: 脏读（READ UNCOMMITTED）</strong> 读未提交</p>
+<ol>
+<li>事务2查询到的数据是事务1中修改但未提交的数据，因为事务1回滚了数据</li>
+<li>所以事务2查询的数据是不正确的，因此出现了脏读的问题。</li>
+</ol>
+<p>（存在4个问题 脏读、不可重复读、幻读、更新丢失）<br><strong>解决方法:</strong><br>将数据库事务隔离级别调整到 <strong>Read_Commited</strong> 读已提交</p>
+</li>
+<li><p><strong>提交读: 不可重复读（READ COMMITTED）</strong></p>
+<ol>
+<li>事务2执行update语句但未提交前，事务1的前两个select操作返回结果是相同的。</li>
+<li>但事务2执行commit操作后，事务1的第三个select操作就读取到事务2对数据的改变。</li>
+<li>导致与前两次select操作返回不同的数据，因此出现了不可重复读的问题。</li>
+</ol>
+<p>（不可重复读、幻读、丢失更新）<br><strong>解决方法：</strong><br>将数据库事务隔离级别调整到 <strong>Repeatable_read</strong> 可重复 读</p>
+</li>
+<li><p><strong>可重复读: 幻读（REPEATABLE READ）：这是MySQL的默认事务隔离级别</strong></p>
+<ol>
+<li>事务每开启一个实例，都会分配一个版本号给它，如果读取的数据行正在被其它事务执行DELETE或UPDATE操作（即该行上有排他锁）</li>
+<li>这时该事物的读取操作不会等待行上的锁释放，而是根据版本号去读取行的快照数据（记录在undo log中）</li>
+<li>这样，事务中的查询操作返回的都是同一版本下的数据，解决了不可重复读问题。</li>
+<li>虽然该隔离级别下解决了不可重复读问题，但理论上会导致另一个问题：幻读（Phantom Read）。</li>
+<li>一个事务在执行过程中，另一个事物对已有数据行的更改，MVCC机制可保障该事物读取到的原有数据行的内容相同</li>
+<li>但并不能阻止另一个事务插入新的数据行，这就会导致该事物中凭空多出数据行，像出现了幻读一样，这便是幻读问题。</li>
+</ol>
+<p><strong>简易版</strong><br>指 事务A 对一个表中的数据进行了修改，而且该修改涉及到表中的所有数据行；同时另一个 事务B 也在修改表中的数据，该修改像表中插入一条新数据。那么经过操作之后，操作 事务A 的用户就会发现表中还有没修改的数据行，就像发觉了幻觉一样，故 <strong>幻读</strong>。<br>（存在两个问题 幻读、丢失更新）<br><strong>解决方法</strong><br>将数据库事务隔离级别调整到 <strong>Serializable_read</strong> 串行读</p>
+</li>
+<li><p><strong>可串行读（SERIALIZABLE）</strong> 序列化&amp;串行读</p>
+</li>
+</ul>
+<ol>
+<li>这是事务的最高隔离级别，通过强制事务排序，使之不可能相互冲突，就是在每个读的数据行加上共享锁来实现</li>
+<li>在该隔离级别下，可以解决前面出现的脏读、不可重复读和幻读问题，但也会导致大量的超时和锁竞争现象，一般不推荐使用</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>read uncommitted（未提交读）</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>read committed（提交读）</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>repeatable read（可重复读）</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+</tr>
+<tr>
+<td>serializable （可串行化）</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<p><strong>级别高低：脏读 &lt; 不可重复读 &lt; 幻读</strong><br>所以只要是设置了 最高级别 Serializable 就解决了 前三个问题了，当时 他的资源消耗是最致命的。</p>
+<h4 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h4><p><strong>什么是锁？</strong></p>
+<p>锁是协调多个进程或线程并发访问某一资源的一种机制。在数据库当中，除了传统的计算资源（CPU、RAM、I/O等等）的争用之外，数据也是一种供许多用户共享访问的资源。如何保证数据并发访问的一致性、有效性，是所有数据库必须解决的一个问题，锁的冲突也是影响数据库并发访问性能的一个重要因素。从这一角度来说，锁对于数据库而言就显得尤为重要。</p>
+<p><strong>在 Mysql中 有两种锁：Lock 和 Latch</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200129113951541.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>Latch一般称为闩锁（轻量级的锁），因为其要求锁定的时间必须非常短。若持续的时间长，则应用的性能会非常差，在InnoDB引擎中，Latch又可以分为mutex（互斥量）和 rwlock（读写锁）。其目的是用来保证并发线程操作临界资源的正确性，并且通常没有死锁检测的机制。</p>
+<p>Lock的对象是事务，用来锁定的是数据库中的对象，如表、页、行。并且一般lock的对象仅在事务commit或rollback后进行释放（不同事务隔离级别释放的时间可能不同）。</p>
+<p>关于Latch更详细的讲解可以参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/geaozhang/p/7287108.html">关于MySQL latch争用深入分析与判断</a>，本文主要关注的是Lock锁。</p>
+<h4 id="锁的类型"><a href="#锁的类型" class="headerlink" title="锁的类型"></a>锁的类型</h4><p>对数据的操作其实只有两种，也就是读和写，而数据库在实现锁时，也会对这两种操作使用不同的锁；InnoDB 实现了标准的行级锁，也就是共享锁（Shared Lock）和互斥锁（Exclusive Lock）。</p>
+<ul>
+<li>共享锁（读锁），允许事务读一行数据。</li>
+<li>排他锁（写锁），允许事务删除或更新一行数据。</li>
+</ul>
+<p><strong>共享锁之间是兼容的，而互斥锁与其他任意锁都不兼容：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200129121004560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br><strong>共享锁代表了读操作、互斥锁代表了写操作，所以我们可以在数据库中并行读，但是只能串行写，只有这样才能保证不会发生线程竞争，实现线程安全。</strong></p>
+<h4 id="锁的粒度"><a href="#锁的粒度" class="headerlink" title="锁的粒度"></a>锁的粒度</h4><p>Lock锁根据粒度主要分为表锁、页锁和行锁。不同的存储引擎拥有的锁粒度都不同。<br><img src="https://img-blog.csdnimg.cn/20200129121157490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h4 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h4><p>表级别的锁定是MySQL各存储引擎中最大颗粒度的锁定机制。该锁定机制最大的特点是实现逻辑非常简单，带来的系统负面影响最小。所以获取锁和释放锁的速度很快。由于表级锁一次会将整个表锁定，所以可以很好的避免困扰我们的死锁问题。<br>当然，锁定颗粒度大所带来最大的负面影响就是出现锁定资源争用的概率也会最高，致使并发度大打折扣。<br><strong>使用表级锁定的主要是MyISAM，MEMORY，CSV等一些非事务性存储引擎。</strong></p>
+<h4 id="页锁"><a href="#页锁" class="headerlink" title="页锁"></a>页锁</h4><p>页级锁定是MySQL中比较独特的一种锁定级别，在其他数据库管理软件中也并不是太常见。页级锁定的特点是锁定颗粒度介于行级锁定与表级锁之间，所以获取锁定所需要的资源开销，以及所能提供的并发处理能力也同样是介于上面二者之间。另外，页级锁定和行级锁定一样，会发生死锁。<br>在数据库实现资源锁定的过程中，随着锁定资源颗粒度的减小，锁定相同数据量的数据所需要消耗的内存数量是越来越多的，实现算法也会越来越复杂。不过，随着锁定资源颗粒度的减小，应用程序的访问请求遇到锁等待的可能性也会随之降低，系统整体并发度也随之提升。<br><strong>使用页级锁定的主要是BerkeleyDB存储引擎。</strong></p>
+<h4 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h4><p>行级锁定最大的特点就是锁定对象的粒度很小，也是目前各大数据库管理软件所实现的锁定颗粒度最小的。由于锁定颗粒度很小，所以发生锁定资源争用的概率也最小，能够给予应用程序尽可能大的并发处理能力而提高一些需要高并发应用系统的整体性能。<br>虽然能够在并发处理能力上面有较大的优势，但是行级锁定也因此带来了不少弊端。由于锁定资源的颗粒度很小，所以每次获取锁和释放锁需要做的事情也更多，带来的消耗自然也就更大了。此外，行级锁定也最容易发生死锁。<br><strong>使用行级锁定的主要是InnoDB存储引擎。</strong></p>
+<p><strong>总结</strong></p>
+<ul>
+<li>表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。</li>
+<li>行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</li>
+<li>页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
+</ul>
+<h4 id="InnoDB中的锁"><a href="#InnoDB中的锁" class="headerlink" title="InnoDB中的锁"></a>InnoDB中的锁</h4><p><strong>意向锁</strong></p>
+<p>上节提到InnoDB 支持多种粒度的锁，也就是行锁和表锁。为了支持多粒度锁定，InnoDB 存储引擎引入了意向锁（Intention Lock）。</p>
+<p>那什么是意向锁呢？我们在这里可以举一个例子：<strong>如果没有意向锁，当已经有人使用行锁对表中的某一行进行修改时，如果另外一个请求要对全表进行修改，那么就需要对所有的行是否被锁定进行扫描，在这种情况下，效率是非常低的；不过，在引入意向锁之后，当有人使用行锁对表中的某一行进行修改之前，会先为表添加意向互斥锁（IX），再为行记录添加互斥锁（X），在这时如果有人尝试对全表进行修改就不需要判断表中的每一行数据是否被加锁了，只需要通过等待意向互斥锁被释放就可以了。</strong></p>
+<p>与上一节中提到的两种锁的种类相似的是，意向锁也分为两种：</p>
+<ul>
+<li>意向共享锁（IS）：事务想要在获得表中某些记录的共享锁，需要在表上先加意向共享锁。</li>
+<li>意向互斥锁（IX）：事务想要在获得表中某些记录的互斥锁，需要在表上先加意向互斥锁。</li>
+</ul>
+<p>以上原文出处：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/bruceleenumberone/article/details/81865045">https://blog.csdn.net/bruceleenumberone/article/details/81865045</a></p>
+<hr>
+<h3 id="锁分类"><a href="#锁分类" class="headerlink" title="锁分类"></a>锁分类</h3><ol>
+<li>按操作划分：DML锁，DDL锁</li>
+<li>按锁的粒度划分：<strong>表级锁、行级锁、页级锁</strong></li>
+<li>按锁级别划分：<strong>共享锁、排他锁</strong></li>
+<li>按加锁方式划分：自动锁、显示锁</li>
+<li>按使用方式划分：<strong>乐观锁、悲观锁</strong></li>
+</ol>
+<h3 id="乐观锁实现方法"><a href="#乐观锁实现方法" class="headerlink" title="乐观锁实现方法"></a>乐观锁实现方法</h3><ol>
+<li>每次获取商品时，（读操作）不对该商品加锁。</li>
+<li>写操作加锁</li>
+<li>在更新数据的时候需要比较程序中的库存量与数据库中的库存量是否相等，如果相等则进行更新</li>
+<li>反之程序重新获取库存量，再次进行比较，直到两个库存量的数值相等才进行数据更新。</li>
+</ol>
+<p><strong>举例：</strong><br>我们收藏购物车 就是乐观锁。假如商品只有1件的时候，所有人都会加入购物车，但是购买只会有一个人</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#### 乐观锁实现加一操作代码</span></span><br><span class="line"><span class="comment"># 我们可以看到，只有当对数量-1操作时才会加锁，只有当程序中值和数据库中的值相等时才正真执行。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">//不加锁</span></span><br><span class="line"><span class="string">select id,name,stock where id=1;</span></span><br><span class="line"><span class="string">//业务处理</span></span><br><span class="line"><span class="string">begin;</span></span><br><span class="line"><span class="string">update shop set stock=stock-1 where id=1 and stock=stock;</span></span><br><span class="line"><span class="string">commit;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="number">12345678910</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h3><ol>
+<li>每次获取商品时，对该商品加排他锁。</li>
+<li>也就是在用户A获取获取 id=1 的商品信息时对该行记录加锁，期间其他用户阻塞等待访问该记录。</li>
+</ol>
+<p>举例：<br>购买商品的付款时间就是悲观锁，购买商品 30分钟付款时间 就是开的悲观锁，假设商品只有一个，这三个小时我买了没付钱、最后订单取消。这30分钟你都不会购买到次商品</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#### 悲观锁实现加一操作代码</span></span><br><span class="line"><span class="comment"># 我们可以看到，首先通过begin开启一个事物，在获得shop信息和修改数据的整个过程中都对数据加锁，保证了数据的一致性。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">begin;</span></span><br><span class="line"><span class="string">select id,name,stock as old_stock from shop  where id=1 for update;</span></span><br><span class="line"><span class="string">update shop set stock=stock-1 where id=1 and stock=old_stock;</span></span><br><span class="line"><span class="string">commit</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="number">12345678</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="排它锁"><a href="#排它锁" class="headerlink" title="排它锁"></a>排它锁</h3><ol>
+<li>排它锁又叫写锁，如果事务T对A加上排它锁，则其它事务都不能对A加任何类型的锁。获准排它锁的事务既能读数据，又能写数据。</li>
+<li>用法 ： SELECT … FOR UPDATE</li>
+</ol>
+<p><strong>举例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果我们进入洗手间是为了上厕所，那么就不能允许任何人进来了。</span><br><span class="line">这就是排他锁，也叫写锁，就是我们对数据进行写操作的时候，要想获得写锁，获得写锁的事务既可以写数据也可以读数据。</span><br><span class="line">当时，如果数据库已经被别人增加了排他锁，那么后面的事务是无法在获得该数据库得任何锁得。</span><br><span class="line">也就是说，如果事务A对 数据加上了排他锁后，则其他事务不能在对 数据 加任何类型得封锁。获准排他锁得事务既能读数据，又能修改数据。</span><br><span class="line">1234</span><br></pre></td></tr></table></figure>
+
+<h3 id="共享锁-share-lock"><a href="#共享锁-share-lock" class="headerlink" title="共享锁(share lock)"></a>共享锁(share lock)</h3><ol>
+<li>共享锁又叫读锁，如果事务T对A加上共享锁，则其它事务只能对A再加共享锁，不能加其它锁。</li>
+<li>获准共享锁的事务只能读数据，不能写数据。</li>
+<li>用法： SELECT … LOCK IN SHARE MODE;</li>
+</ol>
+<p><strong>举例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果我们进家里的洗手间只是想洗手，一般不会锁门，其他人也可以来洗手，但是 其他人是不可以进来上厕所的。</span><br><span class="line">这就是共享锁，也叫读锁，就是我们对数据进行读取操作的时候，其实是不会改变数据的值的。所以我们可以给数据库增加读锁，获得读锁的事务j就可以读取数据了。</span><br><span class="line">当数据库已经被别人增加了读锁的时候，其他新来的事务y也可以读数据，但是不能写。</span><br><span class="line">也就是说，如果 事务A 对数据加上了 共享锁后，则 其他事务只能对 数据 再加共享锁，不能加排他锁。获取共享锁的事务只能读数据，不能修改数据。</span><br><span class="line">1234</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Btree-B-tree"><a href="#Btree-B-tree" class="headerlink" title="Btree/B+tree"></a>Btree/B+tree</h3><h3 id="Btree"><a href="#Btree" class="headerlink" title="Btree"></a>Btree</h3><p>Btree是一种多路自平衡搜索树，它类似普通的二叉树，但是Btree允许每个节点有更多的子节点。Btree示意图如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200206151155853.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>由上图可知 <strong>Btree 的一些特点:</strong></p>
+<ol>
+<li>所有键值分布在整个树中</li>
+<li>任何关键字出现且只出现在一个节点中</li>
+<li>搜索有可能在非叶子节点结束</li>
+<li>在关键字全集内做一次查找，性能逼近二分查找算法</li>
+</ol>
+<h3 id="B-tree"><a href="#B-tree" class="headerlink" title="B+tree"></a>B+tree</h3><p>B+树是B树的变体，也是一种多路平衡查找树，B+树的示意图为：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200206151537864.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>由图可看出B+tree的特点 同时也是 <strong>Btree 和 B+tree的区别</strong></p>
+<ol>
+<li>所有关键字存储在叶子节点，非叶子节点不存储真正的data</li>
+<li>为所有叶子节点增加了一个链指针 只有一个</li>
+</ol>
+<p><strong>在数据存储的索引结构上 Btree 更偏向于 纵向深度的存储数据 而 B+tree 更青睐于 横向广度的存储数据。</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0371c9569736">参考原址-(写的非常好)</a></p>
+<h3 id="MySQL主从复制原理"><a href="#MySQL主从复制原理" class="headerlink" title="MySQL主从复制原理"></a>MySQL主从复制原理</h3><h5 id="什么是mysql的主从复制？"><a href="#什么是mysql的主从复制？" class="headerlink" title="什么是mysql的主从复制？"></a>什么是mysql的主从复制？</h5><p>MySQL 主从复制是指数据可以从一个MySQL数据库服务器主节点复制到一个或多个从节点。MySQL 默认采用异步复制方式，这样从节点不用一直访问主服务器来更新自己的数据，数据的更新可以在远程连接上进行，从节点可以复制主数据库中的所有数据库或者特定的数据库，或者特定的表。</p>
+<h5 id="mysql复制原理"><a href="#mysql复制原理" class="headerlink" title="mysql复制原理"></a>mysql复制原理</h5><ol>
+<li>master服务器将数据的改变记录二进制binlog日志，当master上的数据发生改变时，则将其改变写入二进制日志中；</li>
+<li>slave服务器会在一定时间间隔内对master二进制日志进行探测其是否发生改变，如果发生改变，则开始一个I/OThread请求master二进制事件</li>
+<li>同时主节点为每个I/O线程启动一个dump线程，用于向其发送二进制事件，并保存至从节点本地的中继日志中，从节点将启动SQL线程从中继日志中读取二进制日志，在本地重放，使得其数据和主节点的保持一致，最后I/OThread和SQLThread将进入睡眠状态，等待下一次被唤醒。</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200206210611596.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="也就是说"><a href="#也就是说" class="headerlink" title="也就是说"></a>也就是说</h5><ul>
+<li>从库会生成两个线程,一个I/O线程,一个SQL线程;</li>
+<li>I/O线程会去请求主库的binlog,并将得到的binlog写到本地的relay-log(中继日志)文件中;</li>
+<li>主库会生成一个log dump线程,用来给从库I/O线程传binlog;</li>
+<li>SQL线程,会读取relay log文件中的日志,并解析成sql语句逐一执行;</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/96212530">主从复制原址</a></p>
+<h3 id="binlog日志"><a href="#binlog日志" class="headerlink" title="binlog日志"></a>binlog日志</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>mysql-binlog是MySQL数据库的二进制日志，用于记录用户对数据库操作的SQL语句（(除了数据查询语句）信息。可以使用mysqlbin命令查看二进制日志的内容。</p>
+<h4 id="MySQL-binlog格式"><a href="#MySQL-binlog格式" class="headerlink" title="MySQL binlog格式"></a>MySQL binlog格式</h4><p>binlog的格式也有三种：STATEMENT、ROW、MIXED 。</p>
+<ol>
+<li><strong>STATMENT模式</strong>：基于SQL语句的复制(statement-based replication, SBR)，每一条会修改数据的sql语句会记录到binlog中。</li>
+</ol>
+<ul>
+<li>优点：不需要记录每一条SQL语句与每行的数据变化，这样子binlog的日志也会比较少，减少了磁盘IO，提高性能。</li>
+<li>缺点：在某些情况下会导致master-slave中的数据不一致(如sleep()函数， last_insert_id()，以及user-defined functions(udf)等会出现问题)</li>
+</ul>
+<ol>
+<li><strong>基于行的复制</strong>(row-based replication, RBR)：不记录每一条SQL语句的上下文信息，仅需记录哪条数据被修改了，修改成了什么样子了。</li>
+</ol>
+<ul>
+<li>优点：不会出现某些特定情况下的存储过程、或function、或trigger的调用和触发无法被正确复制的问题。</li>
+<li>缺点：会产生大量的日志，尤其是alter table的时候会让日志暴涨。</li>
+</ul>
+<ol>
+<li><strong>混合模式复制</strong>(mixed-based replication, MBR)：以上两种模式的混合使用，一般的复制使用STATEMENT模式保存binlog，对于STATEMENT模式无法复制的操作使用ROW模式保存binlog，MySQL会根据执行的SQL语句选择日志保存方式。</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>无论是增量备份还是主从复制，都是需要开启mysql-binlog日志，最好跟数据目录设置到不同的磁盘分区，可以降低io等待，提升性能；并且在磁盘故障的时候可以利用mysql-binlog恢复数据。</p>
+<h3 id="mysql优化"><a href="#mysql优化" class="headerlink" title="mysql优化"></a>mysql优化</h3><h4 id="Mysql优化综合性的问题："><a href="#Mysql优化综合性的问题：" class="headerlink" title="Mysql优化综合性的问题："></a>Mysql优化综合性的问题：</h4><ol>
+<li>表的是设计合理化(符合 3范式)</li>
+<li>添加适当的索引(index)[四种：普通索引，主键索引，唯一索引，unique，全文索引]</li>
+<li>分表技术(水平分割，垂直分割)</li>
+<li>读写[写：update/delete/add]分离</li>
+<li>存储过程[模块化编程，可以提高速度]</li>
+<li>对mysql配置优化[配置最大并发数，my.ini调整缓存大小]</li>
+<li>Mysql服务器引荐升级</li>
+<li>定时的去清楚不需要的数据，定时进行碎片整理</li>
+</ol>
+<p><strong>1. 数据库的表设计</strong></p>
+<ul>
+<li>第一范式：1NF是对属性的原子性约束，要求属性(列)具有原子性，不可再分解；(只要是关系型数据库都满足1NF)</li>
+<li>第二范式：2NF是对记录的惟一性约束，要求记录有惟一标识，即实体的惟一性；</li>
+<li>第三范式：3NF是对字段冗余性的约束，它要求字段没有冗余。没有冗余的数据库设计可以做到。</li>
+</ul>
+<p><strong>2. 索引</strong></p>
+<ol>
+<li>主键索引<br><code>当把一张表的某列设置为主键的时候，则该列就是主键索引。</code></li>
+<li>唯一索引<br><code>当表的某列被指定为unique约束时，这列就是唯一索引</code></li>
+<li>普通索引<br><code>一般来说，普通索引是先创建表，然后创建普通索引。</code></li>
+<li>全文索引<br><code>全文索引，主要是针对文件，比如文章的索引全文索引针对MyISAM有用，针对innodb没有用</code></li>
+</ol>
+<p><strong>3. 表的分割</strong><br>水平分割：<br>大数据量的表,我们在提供检索的时候，应该根据业务的需求，找到表的标准，并在检索页面约束用户的检索方式，而且要配合分页，<br>案例：大数据量的用户表<br>三张表：A, B, C</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> A(</span><br><span class="line"></span><br><span class="line">       <span class="keyword">id</span> <span class="built_in">int</span> <span class="keyword">unsigned</span> <span class="keyword">not</span> <span class="literal">null</span> primary <span class="keyword">key</span>,<span class="comment">/* 这个id不能设置自增长 */</span></span><br><span class="line"></span><br><span class="line">       <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">32</span>)<span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span><span class="string">&#x27;&#x27;</span>，</span><br><span class="line"></span><br><span class="line">       pwd <span class="built_in">varchar</span>(<span class="number">32</span>)<span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">)<span class="keyword">engine</span> = myisam <span class="keyword">default</span> <span class="keyword">charset</span> = utf8;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> B(</span><br><span class="line"></span><br><span class="line">        <span class="keyword">id</span> <span class="built_in">int</span> <span class="keyword">unsigned</span> <span class="keyword">not</span> <span class="literal">null</span>主键，/ *这个<span class="keyword">id</span>不能设置自增长* /</span><br><span class="line"></span><br><span class="line">        <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">32</span>)<span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span><span class="string">&#x27;&#x27;</span>，</span><br><span class="line"></span><br><span class="line">        pwd <span class="built_in">varchar</span>(<span class="number">32</span>)<span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    )<span class="keyword">engine</span> = myisam <span class="keyword">default</span> <span class="keyword">charset</span> = utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> C(</span><br><span class="line"></span><br><span class="line">        <span class="keyword">id</span> <span class="built_in">int</span> <span class="keyword">unsigned</span> <span class="keyword">not</span> <span class="literal">null</span>主键，/ *这个<span class="keyword">id</span>不能设置自增长* /</span><br><span class="line"></span><br><span class="line">        <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">32</span>)<span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span><span class="string">&#x27;&#x27;</span>，</span><br><span class="line"></span><br><span class="line">        pwd <span class="built_in">varchar</span>(<span class="number">32</span>)<span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    )<span class="keyword">engine</span> = myisam <span class="keyword">default</span> <span class="keyword">charset</span> = utf8;</span><br><span class="line">123456789101112131415161718192021222324252627282930</span><br></pre></td></tr></table></figure>
+
+
+
+<p>垂直分割：</p>
+<p>把某个表的某些字段，这些字段，在查询时候并不关系，但是数据量很大，我们建议将这些字段放到一个表中，从而提高效率，</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/github_34457546/article/details/81634989">Mysql优化原文链接</a></p>
+<p><img src="https://img-blog.csdnimg.cn/20200206221445570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><h4 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h4><p>Redis（全称：Remote Dictionary Server 远程字典服务）是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。</p>
+<h3 id="Redis介绍"><a href="#Redis介绍" class="headerlink" title="Redis介绍"></a>Redis介绍</h3><h4 id="Redis-的优点-和-缺点"><a href="#Redis-的优点-和-缺点" class="headerlink" title="Redis 的优点 和 缺点"></a>Redis 的优点 和 缺点</h4><p><strong>优点</strong>:</p>
+<ul>
+<li>数据类型多 <code>上面有介绍</code></li>
+<li>快<br>\1. 纯内存操作<br>\2. 单线程避免上下文切换<br>\3. 非阻塞IO多路复用机制</li>
+</ul>
+<p><strong>缺点</strong><br>- 内存限制，不能用作海量数据</p>
+<h3 id="redis的五大数据类型实现原理"><a href="#redis的五大数据类型实现原理" class="headerlink" title="redis的五大数据类型实现原理"></a>redis的五大数据类型实现原理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. redis中所有数据结构都以唯一的key字符串作为名称，然后通过这个唯一的key来获取对应的value&#96;</span><br><span class="line">&#96;2. 不同的数据类型数据结构差异就在于value的结构不一样</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>1. 字符串（string）</strong></p>
+<ul>
+<li><strong>value的数据结构（数组）</strong></li>
+</ul>
+<ol>
+<li>字符串value数据结构类似于数组，采用与分配容易空间来减少内存频繁分配</li>
+<li>当字符串长度小于1M时，扩容就是加倍现有空间</li>
+<li>如果字符串长度操作1M时，扩容时最多扩容1M空间，字符串最大长度为 512M</li>
+</ol>
+<ul>
+<li><strong>字符串的使用场景（缓存）</strong></li>
+</ul>
+<ol>
+<li>字符串一个常见的用途是缓存用户信息，我们将用户信息使用JSON序列化成字符串</li>
+<li>取用户信息时会经过一次反序列化的过程</li>
+</ol>
+<p><strong>2. list（列表）</strong></p>
+<ul>
+<li><strong>value的数据结构（双向链表）</strong></li>
+</ul>
+<ol>
+<li>列表的数据结构是双向链表，这意味着插入和删除的时间复杂度是0(1)，索引的时间复杂度位0(n)</li>
+<li>当列表弹出最后一个元素后，该数据结构会被自动删除，内存被回手</li>
+</ol>
+<ul>
+<li><strong>列表的使用场景（队列、栈）</strong></li>
+</ul>
+<p><strong>3. hash（字典）</strong></p>
+<ul>
+<li><strong>value的数据结构（HashMap）</strong></li>
+</ul>
+<ol>
+<li>redis中的字典也是HashMap（数组+列表）的二维结构</li>
+<li>不同的是redis的字典的值只能是字符串</li>
+</ol>
+<ul>
+<li><strong>hash的使用场景（缓存）</strong></li>
+</ul>
+<ol>
+<li>hash可以用来缓存用户信息，与字符串一次性全部序列化整个对象不同，hash可以对每个字段进行单独存储</li>
+<li>这样可以部分获取用户信息，节约网络流量</li>
+<li>hash也有缺点，hash结构的存储消耗要高于单个字符串</li>
+</ol>
+<p><strong>4. set ( 集合对象 )</strong></p>
+<ul>
+<li><strong>集合对象 set 是 string 类型</strong>（整数也会转换成string类型进行存储）的无序集合。</li>
+<li><strong>集合类型和列表类型的最大的区别是</strong><br>有序性 – &gt; 列表有序<br>唯一性 – &gt; 集合唯一</li>
+<li><strong>数据结构</strong><br>底层数据结构以intset或者hashtable来存储</li>
+<li><strong>最多包含2^32-1元素。</strong></li>
+</ul>
+<p><strong>5. Sorted set (有序集合对象)</strong></p>
+<ul>
+<li>有序集合类型为集合中的每个元素都关联了一个分数</li>
+<li>数据结构</li>
+</ul>
+<ol>
+<li>内部是以ziplist或者skiplist+hashtable来实现<br>skiplist，也就是跳跃表</li>
+</ol>
+<h4 id="持久化方式"><a href="#持久化方式" class="headerlink" title="持久化方式"></a>持久化方式</h4><p><strong>前言</strong><br>由于<strong>Redis</strong>的数据都存放在内存中，如果没有配置持久化，<strong>redis</strong>重启后数据就全丢失了，于是需要开启<strong>redis</strong>的持久化功能，将数据保存到磁盘上，当<strong>redis</strong>重启后，可以从磁盘中恢复数据。<strong>redis</strong>提供两种方式进行持久化，一种是<strong>RDB</strong>持久化（原理是将Reids在内存中的数据库记录定时<strong>dump</strong>到磁盘上的<strong>RDB</strong>持久化），另外一种是<strong>AOF</strong>（append only file）持久化（原理是将<strong>Reids</strong>的操作日志以追加的方式写入文件）。</p>
+<p><strong>RDB：</strong><br>RDB持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘，实际操作过程是fork一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。<br><img src="https://img-blog.csdnimg.cn/20200130221139725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>AOF：</strong><br>AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。<br><img src="https://img-blog.csdnimg.cn/2020013022120278.png" alt="在这里插入图片描述"></p>
+<p><strong>二者之间的优缺点</strong></p>
+<p><strong>RDB的优势</strong></p>
+<ol>
+<li>一旦采用该方式，那么你的 <strong>整个Redis数据库将只包含一个文件</strong>，这对于文件备份而言是非常完美的。比如，你可能打算每个小时归档一次最近24小时的数据，同时还要每天归档一次最近30天的数据。通过这样的备份策略，一旦系统出现灾难性故障，我们可以非常容易的进行恢复。</li>
+<li>对于灾难恢复而言，RDB是非常不错的选择。因为我们可以非常轻松的<strong>将一个单独的文件压缩后再转移到其它存储介质上</strong>。</li>
+<li>性能最大化。对于Redis的服务进程而言，在开始持久化时，它唯一需要做的只是 f<strong>ork 出子进程，之后再由子进程完成这些持久化的工作</strong>，这样就可以极大的避免服务进程执行IO操作了。</li>
+<li>相比于AOF机制，如果 <strong>数据集很大，RDB的启动效率会更高</strong>。</li>
+</ol>
+<p><strong>RDB的劣势</strong></p>
+<ol>
+<li>如果你想保证数据的高可用性，即最大限度的避免数据丢失，那么RDB将不是一个很好的选择。因为<strong>系统一旦在定时持久化之前出现宕机现象，此前没有来得及写入磁盘的数据都将丢失</strong>。</li>
+<li>由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果<strong>当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟</strong>。</li>
+</ol>
+<p><strong>AOF的优势</strong></p>
+<ol>
+<li>该机制可以带来更高的<strong>数据安全性，即数据持久性</strong>。Redis中提供了3种同步策略，即每秒同步、每修改同步和不同步。事实上，每秒同步也是异步完成的，其效率也是非常高的，所差的是一旦系统出现宕机现象，那么这一秒钟之内修改的数据将会丢失。而每修改同步，我们可以将其视为同步持久化，即<strong>每次发生的数据变化都会被立即记录到磁盘中</strong>。可以预见，这种方式在效率上是最低的。至于无同步，无需多言，我想大家都能正确的理解它。</li>
+<li>由于<strong>该机制对日志文件的写入操作采用的是append模式，因此在写入过程中即使出现宕机现象，也不会破坏日志文件中已经存在的内容</strong>。然而如果我们本次操作只是写入了一半数据就出现了系统崩溃问题，不用担心，在Redis下一次启动之前，我们可以通过redis-check-aof工具来帮助我们解决数据一致性的问题。</li>
+<li>如果<strong>日志过大，Redis可以自动启用rewrite机制。即Redis以append模式不断的将修改数据写入到老的磁盘文件中</strong>，同时Redis还会创建一个新的文件用于记录此期间有哪些修改命令被执行。因此在进行rewrite切换时可以更好的保证数据安全性。</li>
+<li><strong>AOF包含一个格式清晰、易于理解的日志文件用于记录所有的修改操作</strong>。事实上，我们也可以<strong>通过该文件完成数据的重建。</strong></li>
+</ol>
+<p><strong>AOF的劣势</strong></p>
+<ol>
+<li>对于相同数量的数据集而言，AOF文件通常要大于RDB文件。<strong>RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</strong></li>
+<li>根据同步策略的不同，<strong>AOF在运行效率上往往会慢于RDB</strong>。总之，每秒同步策略的效率是比较高的，同步禁用策略的效率和RDB一样高效。</li>
+</ol>
+<p>二者选择的标准，就是看系统是愿意牺牲一些性能，换取更高的缓存一致性（aof），还是愿意写操作频繁的时候，不启用备份来换取更高的性能，待手动运行save的时候，再做备份（rdb）。rdb这个就更有些 eventually consistent的意思了。</p>
+<h2 id="高级"><a href="#高级" class="headerlink" title="高级"></a>高级</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis有哪几种集群?&#96;</span><br><span class="line">&#96;主从模式 哨兵模式 codis</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis主从复制"><a href="#Redis主从复制" class="headerlink" title="Redis主从复制"></a>Redis主从复制</h4><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到从节点。</p>
+<p>默认情况下，每台Redis服务器都是主节点；且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。<br><img src="https://img-blog.csdnimg.cn/20200131175346472.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h4><ol>
+<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务的冗余。</li>
+<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务（即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>读写分离：可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量；</li>
+<li>高可用基石：除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。</li>
+</ol>
+<h4 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h4><p>主从复制过程大体可以分为3个阶段：连接建立阶段（即准备阶段）、数据同步阶段、命令传播阶段。</p>
+<p>在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到，<br>从图中可以看出复制过程大致分为6个过程</p>
+<p><img src="https://img-blog.csdnimg.cn/20200131175642144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018268350">主从复制参考原址</a></p>
+<h4 id="主从同步"><a href="#主从同步" class="headerlink" title="主从同步"></a>主从同步</h4><h4 id="CPA原理"><a href="#CPA原理" class="headerlink" title="CPA原理"></a>CPA原理</h4><ol>
+<li>CPA原理是分布式存储理论的基石： C(一致性)； A(可用性)； P(分区容忍性);</li>
+<li>当主从网络无法连通时，修改操作无法同步到节点，所以“一致性”无法满足</li>
+<li>除非我们牺牲“可用性”，也就是暂停分布式节点服务，不再提供修改数据功能，知道网络恢复<br>一句话概括CAP: 当网络分区发生时，一致性 和 可用性 两难全</li>
+</ol>
+<h4 id="redis主从同步介绍"><a href="#redis主从同步介绍" class="headerlink" title="redis主从同步介绍"></a>redis主从同步介绍</h4><ol>
+<li>和MySQL主从复制的原因一样，Redis虽然读取写入的速度都特别快，但是也会产生读压力特别大的情况。</li>
+<li>为了分担读压力，Redis支持主从复制，Redis的主从结构可以采用一主多从或者级联结构。</li>
+<li>Redis主从复制可以根据是否是全量分为全量同步和增量同步。<br><code>注：redis主节点Master挂掉时，运维让从节点Slave接管（redis主从默认无法自动切换，需要运维手动切换）</code></li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200131225847853.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="redis主动同步机制"><a href="#redis主动同步机制" class="headerlink" title="redis主动同步机制"></a>redis主动同步机制</h3><h4 id="全量同步（快照同步）RDB"><a href="#全量同步（快照同步）RDB" class="headerlink" title="全量同步（快照同步）RDB"></a>全量同步（快照同步）RDB</h4><p>从服务器把有的数据全部丢弃，让主服务把所有数据全部发给他</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">注：Redis全量复制一般发生在Slave初始化阶段，这时Slave需要将Master上的所有数据都复制一份。具体步骤如下：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>从服务器连接主服务器，发送SYNC命令；</li>
+<li>主服务器接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令；</li>
+<li>主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令；</li>
+<li>从服务器收到快照文件后丢弃所有旧数据，载入收到的快照；</li>
+<li>主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令；</li>
+<li>从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令；</li>
+<li>完成上面几个步骤后就完成了从服务器数据初始化的所有操作，从服务器此时可以接收来自用户的读请求。</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200131225935669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="增量同步-AOF"><a href="#增量同步-AOF" class="headerlink" title="增量同步 AOF"></a>增量同步 AOF</h4><p>全量同步：从服务器把有的数据全部丢弃，让主服务把所有数据全部发给他</p>
+<ol>
+<li>主节点会将那些对自己状态产生修改性影响的指令记录在本地内存buffer中，然后异步将buffer中指令同步到从节点</li>
+<li>从节点一边执行同步指令达到主节点状态，一边向主节点反馈自己同步到哪里（偏移量）</li>
+<li>当网络状态不好时，从节点无法和主节点进行同步，当网络恢复时需要进行快照同步</li>
+</ol>
+<h4 id="Redis主从同步策略"><a href="#Redis主从同步策略" class="headerlink" title="Redis主从同步策略"></a>Redis主从同步策略</h4><ol>
+<li>主从刚刚连接的时候，进行全量同步；全同步结束后，进行增量同步。</li>
+<li>当然，如果有需要，slave 在任何时候都可以发起全量同步。</li>
+<li>redis 策略是，无论如何，首先会尝试进行增量同步，如不成功，要求从机进行全量同步。</li>
+</ol>
+<h4 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h4><ol>
+<li>如果多个Slave断线了，需要重启的时候，因为只要Slave启动，就会发送sync请求和主机全量同步，当多个同时出现的时候，可能会导致Master IO剧增宕机。</li>
+<li>不能自动切换master，所以master如果挂掉了，整个集群都不可以写入啦</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42711549/article/details/83061052">Redis主从同步参考地址</a></p>
+<h3 id="哨兵"><a href="#哨兵" class="headerlink" title="哨兵"></a>哨兵</h3><p>哨兵模式如何解决主从问题？</p>
+<p>当用Redis做主从方案时，假如master宕机，Redis本身无法自动进行主备切换<br>而Redis-sentinel本身也是一个独立运行的进程，它能监控多个master-slave集群，发现master宕机后能进行自动切换。</p>
+<p><strong>哨兵是redis集群架构中非常重要的一个组件，主要功能如下:</strong></p>
+<ol>
+<li>集群监控，负责监控redis master 和slave进程是否正常工作。</li>
+<li>消息通知，如果某个redis实例有故障，那么哨兵负责发送消息作为报警通知给管理员。</li>
+<li>故障转移，如果master node挂掉了，会自动转移到slave node上。</li>
+<li>配置中心，如果故障转移发生了，通知client客户端新的master地址。</li>
+</ol>
+<p><strong>哨兵本身也是分布式的，作为一个哨兵集群去运行的，相互协同工作</strong></p>
+<ol>
+<li>故障转移时，判断一个master node宕机了，需要大部分哨兵都同意才行，涉及到分布式选举问题。</li>
+<li>及时部分哨兵节点挂掉了，哨兵集群还是能正常工作的，因为如果一个作为高可用机制重要组成部分的故障转移系统本身就是单点，那么就不靠谱。</li>
+</ol>
+<p><strong>哨兵的核心知识</strong></p>
+<ul>
+<li>哨兵至少需要3个实例，来保证自己的健壮性。</li>
+<li>哨兵+redis主从的部署架构，是不会保证数据零丢失的，只能保证redis集群的高可用性</li>
+<li>对于哨兵+redis主从这种复杂的部署架构，尽量在测试环境和生产环境，都进行充分的测试和演练。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Eugene-Jin/p/10819601.html">哨兵详解</a></li>
+</ul>
+<h3 id="哨兵模式—-sentinel"><a href="#哨兵模式—-sentinel" class="headerlink" title="哨兵模式—-sentinel"></a>哨兵模式—-sentinel</h3><h4 id="sentinel作用"><a href="#sentinel作用" class="headerlink" title="sentinel作用"></a>sentinel作用</h4><ol>
+<li>当用Redis做主从方案时，假如master宕机，Redis本身无法自动进行主备切换</li>
+<li>而Redis-sentinel本身也是一个独立运行的进程，它能监控多个master-slave集群，发现master宕机后能进行自动切换。</li>
+</ol>
+<h4 id="sentinel原理"><a href="#sentinel原理" class="headerlink" title="sentinel原理"></a>sentinel原理</h4><ol>
+<li>sentinel负责持续监控主节点的健康，当主节挂掉时，自动选择一个最优的从节点切换成主节点</li>
+<li>从节点来连接集群时会首先连接sentinel，通过sentinel来查询主节点的地址</li>
+<li>当主节点发生故障时，sentinel会将最新的主节点地址告诉客户端，可以实现无需重启自动切换redis</li>
+</ol>
+<h4 id="Sentinel支持集群"><a href="#Sentinel支持集群" class="headerlink" title="Sentinel支持集群"></a>Sentinel支持集群</h4><ol>
+<li>只使用单个sentinel进程来监控redis集群是不可靠的，当sentinel进程宕掉后sentinel本身也有单点问题</li>
+<li>如果有多个sentinel，redis的客户端可以随意地连接任意一个sentinel来获得关于redis集群中的信息。</li>
+</ol>
+<h4 id="Sentinel版本"><a href="#Sentinel版本" class="headerlink" title="Sentinel版本"></a>Sentinel版本</h4><ol>
+<li>Sentinel当前稳定版本称为Sentinel 2，Redis2.8和Redis3.0附带稳定的哨兵版本</li>
+<li>安装完redis-3.2.8后，redis-3.2.8/src/redis-sentinel启动程序 redis-3.2.8/sentinel.conf是配置文件。</li>
+</ol>
+<h4 id="运行sentinel两种方式（效果相同）"><a href="#运行sentinel两种方式（效果相同）" class="headerlink" title="运行sentinel两种方式（效果相同）"></a>运行sentinel两种方式（效果相同）</h4><p>法1：redis-sentinel /path/to/sentinel.conf<br>法2：redis-server /path/to/sentinel.conf –sentinel</p>
+<ol>
+<li>以上两种方式，都必须指定一个sentinel的配置文件sentinel.conf，如果不指定，将无法启动sentinel。</li>
+<li>sentinel默认监听26379端口，所以运行前必须确定该端口没有被别的进程占用。</li>
+</ol>
+<h4 id="sentinel-conf配置文件说明"><a href="#sentinel-conf配置文件说明" class="headerlink" title="sentinel.conf配置文件说明"></a>sentinel.conf配置文件说明</h4><ol>
+<li>配置文件只需要配置master的信息就好啦，不用配置slave的信息，因为slave能够被自动检测到</li>
+<li>需要注意的是，配置文件在sentinel运行期间是会被动态修改的，例如当发生主备切换时候，配置文件中的master会被修改为另外一个slave。</li>
+<li>这样，之后sentinel如果重启时，就可以根据这个配置来恢复其之前所监控的redis集群的状态。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sentinel.conf 配置说明</span></span><br><span class="line">sentinel monitor mymaster <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">6379</span> <span class="number">2</span></span><br><span class="line">sentinel down-after-milliseconds mymaster <span class="number">60000</span></span><br><span class="line">sentinel failover-timeout mymaster <span class="number">180000</span></span><br><span class="line">sentinel parallel-syncs mymaster <span class="number">1</span></span><br><span class="line"><span class="number">12345</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置传播"><a href="#配置传播" class="headerlink" title="配置传播"></a>配置传播</h4><ol>
+<li>一旦一个sentinel成功地对一个master进行了failover，它将会把关于master的最新配置通过广播形式通知其它sentinel，其它的sentinel则更新对应master的配置。</li>
+<li>一个faiover要想被成功实行，sentinel必须能够向选为master的slave发送SLAVE OF NO ONE命令，然后能够通过INFO命令看到新master的配置信息。</li>
+<li>当将一个slave选举为master并发送SLAVE OF NO ONE`后，即使其它的slave还没针对新master重新配置自己，failover也被认为是成功了的。</li>
+</ol>
+<p>因为每一个配置都有一个版本号，所以以版本号最大的那个为标准：</p>
+<ol>
+<li>假设有一个名为mymaster的地址为192.168.1.50:6379。</li>
+<li>一开始，集群中所有的sentinel都知道这个地址，于是为mymaster的配置打上版本号1。</li>
+<li>一段时候后mymaster死了，有一个sentinel被授权用版本号2对其进行failover。</li>
+<li>如果failover成功了，假设地址改为了192.168.1.50:9000，此时配置的版本号为2</li>
+<li>进行failover的sentinel会将新配置广播给其他的sentinel，发现新配置的版本号为2时，版本号变大了，说明配置更新了，于是就会采用最新的版本号为2的配置。</li>
+</ol>
+<h4 id="sentinel缺点"><a href="#sentinel缺点" class="headerlink" title="sentinel缺点"></a>sentinel缺点</h4><p>redis的slave和master数据时完全一样的，但是有个问题，redis数据时存储在内存中<br>内存空间有限，所以哨兵模式不能处理大的数据量</p>
+<p>如何解决？codis</p>
+<h3 id="codis集群"><a href="#codis集群" class="headerlink" title="codis集群"></a>codis集群</h3><p><strong>简介</strong></p>
+<p>Codis 是一个分布式 Redis 解决方案, 对于上层的应用来说, 连接到 Codis Proxy 和连接原生的 Redis Server 没有明显的区别 (不支持的命令列表), 上层应用可以像使用单机的 Redis 一样使用, Codis 底层会处理请求的转发, 不停机的数据迁移等工作, 所有后边的一切事情, 对于前面的客户端来说是透明的, 可以简单的认为后边连接的是一个内存无限大的 Redis 服务.</p>
+<p>codis是redis集群解决方案之一，codis是GO语言开发的代理中间件<br>当客户端向codis发送指令时，codis负责将指令转发给后面的redis实例来执行，并将返回结果转发给客户端</p>
+<p><strong>为什么会出现codis</strong></p>
+<ol>
+<li>在大数据高并发场景下，单个redis实例往往会无法应对</li>
+<li>首先redis内存不易过大，内存太大会导致rdb文件过大，导致主从同步时间过长</li>
+<li>其次在CPU利用率中上，单个redis实例只能利用单核，数据量太大，压力就会特别大</li>
+</ol>
+<p><strong>codis部署方案</strong><br>\4. 单个codis代理支撑的QPS比较有限，通过启动多个codis代理可以显著增加整体QPS<br>\5. 多codis还能起到容灾功能，挂掉一个codis代理还有很多codis代理可以继续服务<br><img src="https://img-blog.csdnimg.cn/20200131202616740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>codis分片的原理</strong></p>
+<ol>
+<li>codis负责将特定key转发到特定redis实例，codis默认将所有key划分为1024个槽位</li>
+<li>首先会对客户端传来的key进行crc32计算hash值，然后将hash后的整数值对1024进行取模，这个余数就是对应的key槽位</li>
+<li>每个槽位都会唯一映射到后面的多个redis实例之一，codis会在内存中维护槽位和redis实例的映射关系</li>
+<li>这样有了上面key对应的槽位，那么它应该转发到那个redis实例就很明确了</li>
+<li>槽位数量默认是1024，如果集群中节点较多，建议将这个数值大一些，比如2048,4096</li>
+</ol>
+<p><strong>不同codis槽位如何同步</strong></p>
+<ol>
+<li>如果codis槽位值存在内存中，那么不同的codis实例间的槽位关系得不到同步</li>
+<li>所以codis还需要一个分布式配置存储的数据库专门来持久化槽位关系</li>
+<li>codis将槽位关系存储在zookeeper中，并且提供一个dashboard可以来观察和修改槽位关系</li>
+</ol>
+<h3 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h3><p><strong>布隆过滤器是什么？（判断某个key一定不存在）</strong></p>
+<ol>
+<li>本质上布隆过滤器是一种数据结构，比较巧妙的概率型数据结构</li>
+<li>特点是高效地插入和查询，可以用来告诉你 “某样东西一定不存在或者可能存在”。</li>
+<li>相比于传统的 List、Set、Map 等数据结构，它更高效、占用空间更少，但是缺点是其返回的结果是概率性的，而不是确切的。<br>使用：<br>　　1. 布隆过滤器在NoSQL数据库领域中应用的非常广泛<br>　　2. 当用户来查询某一个row时，可以先通过内存中的布隆过滤器过滤掉大量不存在的row请求，然后去再磁盘进行查询<br>　　3. 布隆过滤器说某个值不存在时，那肯定就是不存在，可以显著降低数据库IO请求数量</li>
+</ol>
+<p><strong>应用场景</strong></p>
+<ul>
+<li>场景1（给用户推荐新闻）</li>
+</ul>
+<ol>
+<li>当用户看过的新闻，肯定会被过滤掉，对于没有看多的新闻，可能会过滤极少的一部分（误判）。</li>
+<li>这样可以完全保证推送给用户的新闻都是无重复的。</li>
+</ol>
+<ul>
+<li>场景2（爬虫url去重）</li>
+</ul>
+<ol>
+<li>在爬虫系统中，我们需要对url去重，已经爬取的页面不再爬取</li>
+<li>当url高达几千万时，如果一个集合去装下这些URL地址非常浪费空间</li>
+<li>使用布隆过滤器可以大幅降低去重存储消耗，只不过也会使爬虫系统错过少量页面</li>
+</ol>
+<p><strong>布隆过滤器原理</strong></p>
+<ol>
+<li>每个布隆过滤器对应到Redis的数据结构是一个大型的数组和几个不一样的无偏hash函数</li>
+<li>如下图：f、g、h就是这样的hash函数（无偏差指让hash映射到数组的位置比较随机）</li>
+</ol>
+<p><strong>添加：值到布隆过滤器</strong><br>\1. 向布隆过滤器添加key,会使用 f、g、h hash函数对key算出一个整数索引，然后对长度取余<br>\2. 每个hash函数都会算出一个不同的位置，把算出的位置都设置成1就完成了布隆过滤器添加过程<br><strong>查询：布隆过滤器值</strong><br>\1. 当查询某个key时，先用hash函数算出一个整数索引，然后对长度取余<br>\2. 当你有一个不为1时肯定不存在这个key，当全部都为1时可能有这个key<br>\3. 这样内存中的布隆过滤器过滤掉大量不存在的row请求，然后去再磁盘进行查询，减少IO操作<br><strong>删除：不支持</strong><br>\1. 目前我们知道布隆过滤器可以支持 add 和 isExist 操作<br>\2. 如何解决这个问题，答案是计数删除，但是计数删除需要存储一个数值，而不是原先的 bit 位，会增大占用的内存大小。<br>\3. 增加一个值就是将对应索引槽上存储的值加一，删除则是减一，判断是否存在则是看值是否大于0。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200131223226757.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="redis事物与分布式锁"><a href="#redis事物与分布式锁" class="headerlink" title="redis事物与分布式锁"></a>redis事物与分布式锁</h3><h4 id="redis事物"><a href="#redis事物" class="headerlink" title="redis事物"></a>redis事物</h4><ol>
+<li>严格意义来讲,Redis的事务和我们理解的传统数据库(如mysql)的事务是不一样的；</li>
+<li>Redis的事务实质上是命令的集合，在一个事务中要么所有命令都被执行，要么所有命令都不执行。</li>
+</ol>
+<p>需要注意的是:<br>　　1.Redis的事务没有关系数据库事务提供的回滚（rollback），所以开发者必须在事务执行失败后进行后续的处理；<br>　　2.如果在一个事务中的命令出现错误，那么所有的命令都不会执行；<br>　　3.如果在一个事务中出现运行错误，那么正确的命令会被执行。</p>
+<h4 id="redis事物介绍"><a href="#redis事物介绍" class="headerlink" title="redis事物介绍"></a>redis事物介绍</h4><ol>
+<li>redis事物是可以一次执行多个命令，本质是一组命令的集合。</li>
+<li>一个事务中的所有命令都会序列化，按顺序串行化的执行而不会被其他命令插入<br>作用：一个队列中，一次性、顺序性、排他性的执行一系列命令</li>
+</ol>
+<h4 id="redis事物基本使用"><a href="#redis事物基本使用" class="headerlink" title="redis事物基本使用"></a>redis事物基本使用</h4><ol>
+<li>下面指令演示了一个完整的事物过程，所有指令在exec前不执行，而是缓存在服务器的一个事物队列中</li>
+<li>服务器一旦收到exec指令才开始执行事物队列，执行完毕后一次性返回所有结果</li>
+<li>因为redis是单线程的，所以不必担心自己在执行队列是被打断，可以保证这样的“原子性”</li>
+</ol>
+<p><code>注：redis事物在遇到指令失败后，后面的指令会继续执行</code><br><strong>mysql的rollback与redis的discard的区别:</strong></p>
+<ol>
+<li>mysql回滚为sql全部成功才执行,一条sql失败则全部失败,执行rollback后所有语句造成的影响消失</li>
+<li>redis的discard只是结束本次事务,正确命令造成的影响仍然还在.</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; multi（开始一个redis事物）</span><br><span class="line">incr books</span><br><span class="line">incr books</span><br><span class="line">&gt; exec （执行事物）</span><br><span class="line">&gt; discard （丢弃事物）</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="watch指令"><a href="#watch指令" class="headerlink" title="watch指令"></a>watch指令</h4><ol>
+<li><p>watch其实就是redis提供的一种乐观锁，可以解决并发修改问题</p>
+</li>
+<li><p>watch会在事物开始前盯住一个或多个关键变量，当服务器收到exec指令要顺序执行缓存中的事物队列时</p>
+</li>
+<li><p>redis会检查关键变量自watch后是否被修改（包括当前事物所在的客户端）</p>
+</li>
+<li><p>如果关键变量被人改动过，exec指令就会返回null回复告知客户端事物执行失败，这个时候客户端会选择重试<br>注：redis禁用在multi和exec之间执行watch指令，必须在multi之前盯住关键变量，否则会出错</p>
+</li>
+</ol>
+<h3 id="redis分布式锁"><a href="#redis分布式锁" class="headerlink" title="redis分布式锁"></a>redis分布式锁</h3><h4 id="redis原子操作"><a href="#redis原子操作" class="headerlink" title="redis原子操作"></a>redis原子操作</h4><ol>
+<li>原子操作是指不会被线程调度机制打断的操作</li>
+<li>这种操作一旦开始，就会一直运行到结束，中间不会切换任何进程</li>
+</ol>
+<h4 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h4><ol>
+<li>分布式锁本质是占一个坑，当别的进程也要来占坑时发现已经被占，就会放弃或者稍后重试</li>
+<li>占坑一般使用 setnx(set if not exists)指令，只允许一个客户端占坑</li>
+<li>先来先占，用完了在调用del指令释放坑</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; setnx lock:codehole true</span><br><span class="line">.... <span class="keyword">do</span> something critical ....</span><br><span class="line">&gt; <span class="built_in">del</span> lock:codehole</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>但是这样有一个问题，如果逻辑执行到中间出现异常，可能导致del指令没有被调用，这样就会陷入死锁，锁永远无法释放</li>
+<li>为了解决死锁问题，我们拿到锁时可以加上一个expire过期时间，这样即使出现异常，当到达过期时间也会自动释放锁</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; setnx lock:codehole true</span><br><span class="line">&gt; expire lock:codehole <span class="number">5</span></span><br><span class="line">.... <span class="keyword">do</span> something critical ....</span><br><span class="line">&gt; <span class="built_in">del</span> lock:codehole</span><br><span class="line"><span class="number">1234</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>这样又有一个问题，setnx和expire是两条指令而不是原子指令，如果两条指令之间进程挂掉依然会出现死锁</li>
+<li>为了治理上面乱象，在redis 2.8中加入了set指令的扩展参数，使setnx和expire指令可以一起执行</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">set</span> lock:codehole true ex <span class="number">5</span> nx</span><br><span class="line"><span class="string">&#x27;&#x27;</span><span class="string">&#x27; do something &#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">&gt; <span class="built_in">del</span> lock:codehole </span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="redis雪崩-amp-穿透-amp-击穿"><a href="#redis雪崩-amp-穿透-amp-击穿" class="headerlink" title="redis雪崩&amp;穿透&amp;击穿"></a>redis雪崩&amp;穿透&amp;击穿</h3><h4 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h4><ul>
+<li>定义</li>
+</ul>
+<ol>
+<li>缓存穿透是指查询一个一定不存在的数据，由于缓存不命中，接着查询数据库也无法查询出结果，</li>
+<li>虽然也不会写入到缓存中，但是这将会导致每个查询都会去请求数据库，造成缓存穿透；</li>
+</ol>
+<ul>
+<li>解决方法 ：布隆过滤</li>
+</ul>
+<ol>
+<li>对所有可能查询的参数以hash形式存储，在控制层先进行校验，不符合则丢弃，从而避免了对底层存储系统的查询压力；</li>
+</ol>
+<h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><ul>
+<li>定义</li>
+</ul>
+<ol>
+<li>缓存雪崩是指，由于缓存层承载着大量请求，有效的保护了存储层，但是如果缓存层由于某些原因整体不能提供服务</li>
+<li>于是所有的请求都会达到存储层，存储层的调用量会暴增，造成存储层也会挂掉的情况。</li>
+</ol>
+<ul>
+<li>解决方法</li>
+</ul>
+<ol>
+<li>保证缓存层服务高可用性：比如 Redis Sentinel 和 Redis Cluster 都实现了高可用</li>
+<li>依赖隔离组件为后端限流并降级：比如对某个key只允许一个线程查询数据和写缓存，其他线程等待。</li>
+</ol>
+<h4 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h4><ul>
+<li>定义：</li>
+</ul>
+<ol>
+<li>缓存击穿，就是说某个 key 非常热点，访问非常频繁，处于集中式高并发访问的情况</li>
+<li>当这个 key 在失效的瞬间，大量的请求就击穿了缓存，直接请求数据库，就像是在一道屏障上凿开了一个洞。</li>
+</ol>
+<ul>
+<li>解决方法</li>
+</ul>
+<ol>
+<li>解决方式也很简单，可以将热点数据设置为永远不过期；</li>
+<li>或者基于 redis or zookeeper 实现互斥锁，等待第一个请求构建完缓存之后，再释放锁，进而其它请求才能通过该 key 访问数据</li>
+</ol>
+<h3 id="redis项目缓存实现"><a href="#redis项目缓存实现" class="headerlink" title="redis项目缓存实现"></a>redis项目缓存实现</h3><p>待补充</p>
+<hr>
+<h3 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h3><h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><ol>
+<li>更高的写入负载</li>
+<li>高可用性</li>
+<li>表结构不明确，且数据在不断变大</li>
+</ol>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>不能保证事务安全性</li>
+<li>消耗内存大</li>
+</ol>
+<h4 id="MongoDB为什么快"><a href="#MongoDB为什么快" class="headerlink" title="MongoDB为什么快"></a>MongoDB为什么快</h4><p>写快：<br>写入数据存在在内存里就返回给应用程序，<br>而保存到硬体的操作则在后台异步完成</p>
+<hr>
+<h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><h4 id="RabbitMQ使用场景"><a href="#RabbitMQ使用场景" class="headerlink" title="RabbitMQ使用场景"></a>RabbitMQ使用场景</h4><ol>
+<li>异步处理</li>
+<li>应用解耦</li>
+<li>流量削锋</li>
+<li>日志处理：Kalfka消息中间件</li>
+</ol>
+<h4 id="RabbitMq与Redis队列对比"><a href="#RabbitMq与Redis队列对比" class="headerlink" title="RabbitMq与Redis队列对比"></a>RabbitMq与Redis队列对比</h4><ol>
+<li>可靠消费</li>
+<li>可靠发布</li>
+<li>高可用</li>
+<li>持久化</li>
+</ol>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2020/01/05/%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%20%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%A7%E5%85%A8%20(Mysql%EF%BC%8CRedis%EF%BC%8CMongoDB)/">https://github.com/xuMr6/xumr6.github.io.git/2020/01/05/%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%20%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%A7%E5%85%A8%20(Mysql%EF%BC%8CRedis%EF%BC%8CMongoDB)/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2020/01/12/Mysql 演示 脏读，不可重复读，幻读/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Mysql 演示 脏读，不可重复读，幻读 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2019/12/29/Vue 父子组件 传值 超详细/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Vue 父子组件 传值 超详细 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Mysql"><span class="toc-text">1. Mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E5%BC%95%E6%93%8E"><span class="toc-text">五大引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">事务原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">InnoDB事务原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%EF%BC%88ACID%EF%BC%89%E7%89%B9%E5%BE%81"><span class="toc-text">事务的（ACID）特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事物隔离级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81"><span class="toc-text">锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">锁的类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E7%B2%92%E5%BA%A6"><span class="toc-text">锁的粒度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E9%94%81"><span class="toc-text">表锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B5%E9%94%81"><span class="toc-text">页锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%8C%E9%94%81"><span class="toc-text">行锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%B8%AD%E7%9A%84%E9%94%81"><span class="toc-text">InnoDB中的锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="toc-text">锁分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%90%E8%A7%82%E9%94%81%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-text">乐观锁实现方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-text">悲观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%AE%83%E9%94%81"><span class="toc-text">排它锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E9%94%81-share-lock"><span class="toc-text">共享锁(share lock)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Btree-B-tree"><span class="toc-text">Btree&#x2F;B+tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Btree"><span class="toc-text">Btree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-tree"><span class="toc-text">B+tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">MySQL主从复制原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmysql%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%9F"><span class="toc-text">什么是mysql的主从复制？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#mysql%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">mysql复制原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4"><span class="toc-text">也就是说</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#binlog%E6%97%A5%E5%BF%97"><span class="toc-text">binlog日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL-binlog%E6%A0%BC%E5%BC%8F"><span class="toc-text">MySQL binlog格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E4%BC%98%E5%8C%96"><span class="toc-text">mysql优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mysql%E4%BC%98%E5%8C%96%E7%BB%BC%E5%90%88%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-text">Mysql优化综合性的问题：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E4%BB%8B%E7%BB%8D"><span class="toc-text">Redis介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis-%E7%9A%84%E4%BC%98%E7%82%B9-%E5%92%8C-%E7%BC%BA%E7%82%B9"><span class="toc-text">Redis 的优点 和 缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E7%9A%84%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">redis的五大数据类型实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text">持久化方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7"><span class="toc-text">高级</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">Redis主从复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">主从复制的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">主从复制原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5"><span class="toc-text">主从同步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPA%E5%8E%9F%E7%90%86"><span class="toc-text">CPA原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E4%BB%8B%E7%BB%8D"><span class="toc-text">redis主从同步介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BB%E5%8A%A8%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-text">redis主动同步机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%90%8C%E6%AD%A5%EF%BC%88%E5%BF%AB%E7%85%A7%E5%90%8C%E6%AD%A5%EF%BC%89RDB"><span class="toc-text">全量同步（快照同步）RDB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E5%90%8C%E6%AD%A5-AOF"><span class="toc-text">增量同步 AOF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5"><span class="toc-text">Redis主从同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">注意点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5"><span class="toc-text">哨兵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E2%80%94-sentinel"><span class="toc-text">哨兵模式—-sentinel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E4%BD%9C%E7%94%A8"><span class="toc-text">sentinel作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E5%8E%9F%E7%90%86"><span class="toc-text">sentinel原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sentinel%E6%94%AF%E6%8C%81%E9%9B%86%E7%BE%A4"><span class="toc-text">Sentinel支持集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sentinel%E7%89%88%E6%9C%AC"><span class="toc-text">Sentinel版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Csentinel%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%88%E6%95%88%E6%9E%9C%E7%9B%B8%E5%90%8C%EF%BC%89"><span class="toc-text">运行sentinel两种方式（效果相同）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-text">sentinel.conf配置文件说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BC%A0%E6%92%AD"><span class="toc-text">配置传播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E7%BC%BA%E7%82%B9"><span class="toc-text">sentinel缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#codis%E9%9B%86%E7%BE%A4"><span class="toc-text">codis集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">布隆过滤器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis事物与分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9"><span class="toc-text">redis事物</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E4%BB%8B%E7%BB%8D"><span class="toc-text">redis事物介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">redis事物基本使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#watch%E6%8C%87%E4%BB%A4"><span class="toc-text">watch指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-text">redis原子操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">分布式锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%9B%AA%E5%B4%A9-amp-%E7%A9%BF%E9%80%8F-amp-%E5%87%BB%E7%A9%BF"><span class="toc-text">redis雪崩&amp;穿透&amp;击穿</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="toc-text">缓存穿透</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="toc-text">缓存雪崩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="toc-text">缓存击穿</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%A1%B9%E7%9B%AE%E7%BC%93%E5%AD%98%E5%AE%9E%E7%8E%B0"><span class="toc-text">redis项目缓存实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB"><span class="toc-text">MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MongoDB%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%AB"><span class="toc-text">MongoDB为什么快</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ"><span class="toc-text">RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMQ%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">RabbitMQ使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMq%E4%B8%8ERedis%E9%98%9F%E5%88%97%E5%AF%B9%E6%AF%94"><span class="toc-text">RabbitMq与Redis队列对比</span></a></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Mysql"><span class="toc-text">1. Mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E5%BC%95%E6%93%8E"><span class="toc-text">五大引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">事务原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">InnoDB事务原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%EF%BC%88ACID%EF%BC%89%E7%89%B9%E5%BE%81"><span class="toc-text">事务的（ACID）特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事物隔离级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81"><span class="toc-text">锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">锁的类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E7%B2%92%E5%BA%A6"><span class="toc-text">锁的粒度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E9%94%81"><span class="toc-text">表锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B5%E9%94%81"><span class="toc-text">页锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%8C%E9%94%81"><span class="toc-text">行锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%B8%AD%E7%9A%84%E9%94%81"><span class="toc-text">InnoDB中的锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="toc-text">锁分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%90%E8%A7%82%E9%94%81%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-text">乐观锁实现方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-text">悲观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%AE%83%E9%94%81"><span class="toc-text">排它锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E9%94%81-share-lock"><span class="toc-text">共享锁(share lock)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Btree-B-tree"><span class="toc-text">Btree&#x2F;B+tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Btree"><span class="toc-text">Btree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-tree"><span class="toc-text">B+tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">MySQL主从复制原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmysql%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%9F"><span class="toc-text">什么是mysql的主从复制？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#mysql%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">mysql复制原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4"><span class="toc-text">也就是说</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#binlog%E6%97%A5%E5%BF%97"><span class="toc-text">binlog日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL-binlog%E6%A0%BC%E5%BC%8F"><span class="toc-text">MySQL binlog格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E4%BC%98%E5%8C%96"><span class="toc-text">mysql优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mysql%E4%BC%98%E5%8C%96%E7%BB%BC%E5%90%88%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-text">Mysql优化综合性的问题：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E4%BB%8B%E7%BB%8D"><span class="toc-text">Redis介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis-%E7%9A%84%E4%BC%98%E7%82%B9-%E5%92%8C-%E7%BC%BA%E7%82%B9"><span class="toc-text">Redis 的优点 和 缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E7%9A%84%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">redis的五大数据类型实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text">持久化方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7"><span class="toc-text">高级</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">Redis主从复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">主从复制的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">主从复制原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5"><span class="toc-text">主从同步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPA%E5%8E%9F%E7%90%86"><span class="toc-text">CPA原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E4%BB%8B%E7%BB%8D"><span class="toc-text">redis主从同步介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BB%E5%8A%A8%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-text">redis主动同步机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%90%8C%E6%AD%A5%EF%BC%88%E5%BF%AB%E7%85%A7%E5%90%8C%E6%AD%A5%EF%BC%89RDB"><span class="toc-text">全量同步（快照同步）RDB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E5%90%8C%E6%AD%A5-AOF"><span class="toc-text">增量同步 AOF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5"><span class="toc-text">Redis主从同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">注意点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5"><span class="toc-text">哨兵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E2%80%94-sentinel"><span class="toc-text">哨兵模式—-sentinel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E4%BD%9C%E7%94%A8"><span class="toc-text">sentinel作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E5%8E%9F%E7%90%86"><span class="toc-text">sentinel原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sentinel%E6%94%AF%E6%8C%81%E9%9B%86%E7%BE%A4"><span class="toc-text">Sentinel支持集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sentinel%E7%89%88%E6%9C%AC"><span class="toc-text">Sentinel版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Csentinel%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%88%E6%95%88%E6%9E%9C%E7%9B%B8%E5%90%8C%EF%BC%89"><span class="toc-text">运行sentinel两种方式（效果相同）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-text">sentinel.conf配置文件说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BC%A0%E6%92%AD"><span class="toc-text">配置传播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E7%BC%BA%E7%82%B9"><span class="toc-text">sentinel缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#codis%E9%9B%86%E7%BE%A4"><span class="toc-text">codis集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">布隆过滤器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis事物与分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9"><span class="toc-text">redis事物</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E4%BB%8B%E7%BB%8D"><span class="toc-text">redis事物介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">redis事物基本使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#watch%E6%8C%87%E4%BB%A4"><span class="toc-text">watch指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-text">redis原子操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">分布式锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%9B%AA%E5%B4%A9-amp-%E7%A9%BF%E9%80%8F-amp-%E5%87%BB%E7%A9%BF"><span class="toc-text">redis雪崩&amp;穿透&amp;击穿</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="toc-text">缓存穿透</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="toc-text">缓存雪崩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="toc-text">缓存击穿</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%A1%B9%E7%9B%AE%E7%BC%93%E5%AD%98%E5%AE%9E%E7%8E%B0"><span class="toc-text">redis项目缓存实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB"><span class="toc-text">MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MongoDB%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%AB"><span class="toc-text">MongoDB为什么快</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ"><span class="toc-text">RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMQ%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">RabbitMQ使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMq%E4%B8%8ERedis%E9%98%9F%E5%88%97%E5%AF%B9%E6%AF%94"><span class="toc-text">RabbitMq与Redis队列对比</span></a></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Mysql"><span class="toc-text">1. Mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E5%BC%95%E6%93%8E"><span class="toc-text">五大引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">事务原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">InnoDB事务原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%EF%BC%88ACID%EF%BC%89%E7%89%B9%E5%BE%81"><span class="toc-text">事务的（ACID）特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事物隔离级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81"><span class="toc-text">锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">锁的类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E7%B2%92%E5%BA%A6"><span class="toc-text">锁的粒度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E9%94%81"><span class="toc-text">表锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B5%E9%94%81"><span class="toc-text">页锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%8C%E9%94%81"><span class="toc-text">行锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB%E4%B8%AD%E7%9A%84%E9%94%81"><span class="toc-text">InnoDB中的锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="toc-text">锁分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%90%E8%A7%82%E9%94%81%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-text">乐观锁实现方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-text">悲观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%AE%83%E9%94%81"><span class="toc-text">排它锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E9%94%81-share-lock"><span class="toc-text">共享锁(share lock)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Btree-B-tree"><span class="toc-text">Btree&#x2F;B+tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Btree"><span class="toc-text">Btree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-tree"><span class="toc-text">B+tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">MySQL主从复制原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmysql%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%9F"><span class="toc-text">什么是mysql的主从复制？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#mysql%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">mysql复制原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4"><span class="toc-text">也就是说</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#binlog%E6%97%A5%E5%BF%97"><span class="toc-text">binlog日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL-binlog%E6%A0%BC%E5%BC%8F"><span class="toc-text">MySQL binlog格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E4%BC%98%E5%8C%96"><span class="toc-text">mysql优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mysql%E4%BC%98%E5%8C%96%E7%BB%BC%E5%90%88%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-text">Mysql优化综合性的问题：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E4%BB%8B%E7%BB%8D"><span class="toc-text">Redis介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis-%E7%9A%84%E4%BC%98%E7%82%B9-%E5%92%8C-%E7%BC%BA%E7%82%B9"><span class="toc-text">Redis 的优点 和 缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E7%9A%84%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">redis的五大数据类型实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text">持久化方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7"><span class="toc-text">高级</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">Redis主从复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">主从复制的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">主从复制原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5"><span class="toc-text">主从同步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPA%E5%8E%9F%E7%90%86"><span class="toc-text">CPA原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E4%BB%8B%E7%BB%8D"><span class="toc-text">redis主从同步介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%B8%BB%E5%8A%A8%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-text">redis主动同步机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%90%8C%E6%AD%A5%EF%BC%88%E5%BF%AB%E7%85%A7%E5%90%8C%E6%AD%A5%EF%BC%89RDB"><span class="toc-text">全量同步（快照同步）RDB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E5%90%8C%E6%AD%A5-AOF"><span class="toc-text">增量同步 AOF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5"><span class="toc-text">Redis主从同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">注意点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5"><span class="toc-text">哨兵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E2%80%94-sentinel"><span class="toc-text">哨兵模式—-sentinel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E4%BD%9C%E7%94%A8"><span class="toc-text">sentinel作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E5%8E%9F%E7%90%86"><span class="toc-text">sentinel原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sentinel%E6%94%AF%E6%8C%81%E9%9B%86%E7%BE%A4"><span class="toc-text">Sentinel支持集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sentinel%E7%89%88%E6%9C%AC"><span class="toc-text">Sentinel版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Csentinel%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%88%E6%95%88%E6%9E%9C%E7%9B%B8%E5%90%8C%EF%BC%89"><span class="toc-text">运行sentinel两种方式（效果相同）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-text">sentinel.conf配置文件说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BC%A0%E6%92%AD"><span class="toc-text">配置传播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sentinel%E7%BC%BA%E7%82%B9"><span class="toc-text">sentinel缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#codis%E9%9B%86%E7%BE%A4"><span class="toc-text">codis集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">布隆过滤器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis事物与分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9"><span class="toc-text">redis事物</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E4%BB%8B%E7%BB%8D"><span class="toc-text">redis事物介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E4%BA%8B%E7%89%A9%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">redis事物基本使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#watch%E6%8C%87%E4%BB%A4"><span class="toc-text">watch指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redis%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-text">redis原子操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">分布式锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%9B%AA%E5%B4%A9-amp-%E7%A9%BF%E9%80%8F-amp-%E5%87%BB%E7%A9%BF"><span class="toc-text">redis雪崩&amp;穿透&amp;击穿</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="toc-text">缓存穿透</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="toc-text">缓存雪崩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="toc-text">缓存击穿</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E9%A1%B9%E7%9B%AE%E7%BC%93%E5%AD%98%E5%AE%9E%E7%8E%B0"><span class="toc-text">redis项目缓存实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB"><span class="toc-text">MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MongoDB%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%AB"><span class="toc-text">MongoDB为什么快</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ"><span class="toc-text">RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMQ%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">RabbitMQ使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMq%E4%B8%8ERedis%E9%98%9F%E5%88%97%E5%AF%B9%E6%AF%94"><span class="toc-text">RabbitMq与Redis队列对比</span></a></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

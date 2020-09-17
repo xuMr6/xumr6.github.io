@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="python基础数据类型的操作">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2019/03/28/python%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%93%8D%E4%BD%9C/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2019-03-28">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      python基础数据类型的操作
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-03-28T13:00:55.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2019-03-28</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/python/" class="post-meta-link">python</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>3k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h1 id="列表和元组"><a href="#列表和元组" class="headerlink" title="列表和元组"></a>列表和元组</h1><h2 id="1-列表基本操作"><a href="#1-列表基本操作" class="headerlink" title="1.列表基本操作"></a>1.列表基本操作</h2><h3 id="1-1-列表赋值"><a href="#1-1-列表赋值" class="headerlink" title="1.1  列表赋值　"></a>1.1  列表赋值　</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line">a[<span class="number">0</span>] = <span class="number">100</span>        <span class="comment">#the result ： [100, 2, 3, 4, 5, 6, 7, 8]</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-2-元素删除"><a href="#1-2-元素删除" class="headerlink" title="1.2 元素删除"></a>1.2 元素删除</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> a[<span class="number">0</span>]　　                <span class="comment">#the result ： [2, 3, 4, 5, 6, 7, 8]</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-3-分片赋值"><a href="#1-3-分片赋值" class="headerlink" title="1.3 分片赋值"></a>1.3 分片赋值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line">a[::<span class="number">2</span>]                  <span class="comment"># [1, 3, 5, 7]</span></span><br><span class="line">a[<span class="number">-2</span>:]                  <span class="comment"># [7, 8]</span></span><br><span class="line">a[<span class="number">1</span>:<span class="number">1</span>] = [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]             <span class="comment"># the result : [1, 0, 0, 0, 2, 3, 4, 5, 6, 7, 8]</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-4-使用-for-i-in-range-10-1-1-生成列表"><a href="#1-4-使用-for-i-in-range-10-1-1-生成列表" class="headerlink" title="1.4 使用 for i in range(10,-1,-1) 生成列表"></a>1.4 使用 for i in range(10,-1,-1) 生成列表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>,<span class="number">-1</span>,<span class="number">-1</span>): </span><br><span class="line"><span class="comment"># 开始位置（10），结束位置（-1）， 步长（-1）		</span></span><br><span class="line">	<span class="keyword">print</span> i,</span><br><span class="line"><span class="comment"># 打印结果：10 9 8 7 6 5 4 3 2 1 0</span></span><br><span class="line"><span class="comment"># 从10开始，每次向后取一个值，直到遇到结束位置 -1</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-列表方法"><a href="#2-列表方法" class="headerlink" title="2.列表方法"></a>2.列表方法</h2><h3 id="2-1-append"><a href="#2-1-append" class="headerlink" title="2.1 append"></a>2.1 append</h3><p>作用：append用于在列表末尾追加新的对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">a.append(<span class="number">4</span>)          　　　　　　　<span class="comment">#the result ： [1, 2, 3, 4]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-2-count"><a href="#2-2-count" class="headerlink" title="2.2  count"></a>2.2  count</h3><p>作用：count方法统计某个元素在列表中出现的次数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a =[<span class="string">&#x27;aa&#x27;</span>,<span class="string">&#x27;bb&#x27;</span>,<span class="string">&#x27;cc&#x27;</span>,<span class="string">&#x27;aa&#x27;</span>,<span class="string">&#x27;aa&#x27;</span>]print(a.count(<span class="string">&#x27;aa&#x27;</span>))                  <span class="comment">#the result ： 3</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-3-extend"><a href="#2-3-extend" class="headerlink" title="2.3   extend"></a>2.3   extend</h3><p>作用：extend方法可以在列表的末尾一次性追加另一个序列中的多个值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">a.extend(b)       <span class="comment">#the result ：[1, 2, 3, 4, 5, 6]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-4-index"><a href="#2-4-index" class="headerlink" title="2.4  index"></a>2.4  index</h3><p>作用：index函数用于从列表中找出某个值第一个匹配项的索引位置</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>]``print(a.index(<span class="number">1</span>))                  <span class="comment">#the result ： 0`</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-5-insert"><a href="#2-5-insert" class="headerlink" title="2.5  insert"></a>2.5  insert</h3><p>作用： insert方法用于将对象插入到列表中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]``a.insert(<span class="number">0</span>,``<span class="string">&#x27;aa&#x27;</span>``)      <span class="comment">#the result : [``&#x27;aa&#x27;``, 1, 2, 3]`</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-6-pop"><a href="#2-6-pop" class="headerlink" title="2.6  pop"></a>2.6  pop</h3><p>作用：pop方法会移除列表中的一个元素（默认是最后一个），并且返回该元素的值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]``a.pop()                         <span class="comment">#the result ： [1, 2]``a.pop(0)`</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-7-remove"><a href="#2-7-remove" class="headerlink" title="2.7   remove"></a>2.7   remove</h3><p>作用：remove方法用于移除列表中某个值的第一个匹配项</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="string">&#x27;aa&#x27;</span>,<span class="string">&#x27;bb&#x27;</span>,<span class="string">&#x27;cc&#x27;</span>,<span class="string">&#x27;aa&#x27;</span>]</span><br><span class="line">a.remove(<span class="string">&#x27;aa&#x27;</span>)            <span class="comment">#the result ： [&#x27;bb&#x27;, &#x27;cc&#x27;, &#x27;aa&#x27;]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-8-reverse"><a href="#2-8-reverse" class="headerlink" title="2.8  reverse"></a>2.8  reverse</h3><p>作用：reverse方法将列表中的元素反向存放</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>]a.reverse()         <span class="comment">#the result ： [&#x27;c&#x27;, &#x27;b&#x27;, &#x27;a&#x27;]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-9-sort"><a href="#2-9-sort" class="headerlink" title="2.9  sort"></a>2.9  sort</h3><p>　　作用：sort方法用于在原位置对列表进行排序，意味着改变原来的列表，让其中的元素按一定顺序排列</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">a.sort()            <span class="comment">#the result ：[1, 2, 3, &#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-10-enumrate"><a href="#2-10-enumrate" class="headerlink" title="2.10  enumrate"></a>2.10  enumrate</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">li = [<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>]</span><br><span class="line"><span class="keyword">for</span>  k,v  <span class="keyword">in</span> enumerate(li, <span class="number">1</span>):</span><br><span class="line">print(k,v)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-11-range和xrange-指定范围，生成指定的数字"><a href="#2-11-range和xrange-指定范围，生成指定的数字" class="headerlink" title="2.11 range和xrange 指定范围，生成指定的数字"></a>2.11 range和xrange 指定范围，生成指定的数字</h3><p>注：python3中的range类似python2中的xrange，比如a = range(1,4) : a返回的不是列表对象而是一个可迭代对象（&lt;class ‘range’&gt;）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1、range根据start与stop指定的范围以及step设定的步长，生成一个序列：range([start,] stop[, step])``#2、xrange 用法与 range 完全相同，所不同的是生成的不是一个list对象，而是一个生成器for i in range(1,10,2):</span></span><br><span class="line">print(i)`</span><br></pre></td></tr></table></figure>
+<h3 id="2-12-列表去空"><a href="#2-12-列表去空" class="headerlink" title="2.12  列表去空"></a>2.12  列表去空</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#方法1：</span></span><br><span class="line">filter(<span class="literal">None</span>, your_list)</span><br><span class="line"><span class="comment">#方法2：</span></span><br><span class="line"><span class="keyword">while</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">in</span> your_list:</span><br><span class="line">	your_list.remove(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="comment">#方法3：</span></span><br><span class="line">your_list = [x  <span class="keyword">for</span> x  <span class="keyword">in</span> your_list  <span class="keyword">if</span> x != <span class="string">&#x27;&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。"><a href="#3-元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。" class="headerlink" title="3.元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。"></a>3.元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。</h2><h3 id="3-1-创建元组举例"><a href="#3-1-创建元组举例" class="headerlink" title="3.1  创建元组举例"></a>3.1  创建元组举例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1. 创建元组</span></span><br><span class="line">a = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line"><span class="comment">#2. 将列表转换成元组</span></span><br><span class="line">tuple([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])                  <span class="comment">#the result ： (1, 2, 3, 4)</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-列表和元组常用函数"><a href="#4-列表和元组常用函数" class="headerlink" title="4.列表和元组常用函数"></a>4.列表和元组常用函数</h2><p>com(x,y) 比较两个值<br>len(seq) 返回序列的长度<br>list(seq) 把序列转换成列表<br>max(args) 返回序列或者参数集合中得最大值<br>min(args) 返回序列或者参数集合中的最小值<br>reversed(seq) 对序列进行反向迭代<br>sorted(seq) 返回已经排列的包含seq 所有元素的列表<br>tuple(seq) 把序列转换成元组</p>
+<h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><h2 id="1-字符串格式化"><a href="#1-字符串格式化" class="headerlink" title="1.字符串格式化"></a>1.字符串格式化</h2><h3 id="1-1-使用百分号（-）字符串格式化"><a href="#1-1-使用百分号（-）字符串格式化" class="headerlink" title="1.1 使用百分号（%）字符串格式化"></a>1.1 使用百分号（%）字符串格式化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="number">100</span></span><br><span class="line">print(<span class="string">&quot;%d to hex is %x&quot;</span>%(num, num))    <span class="comment">#100 to hex is 64 </span></span><br><span class="line">print(<span class="string">&quot;%d to hex is %#x&quot;</span>%(num, num))    <span class="comment">#100 to hex is 0x64</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-使用format字符串格式化"><a href="#1-2-使用format字符串格式化" class="headerlink" title="1.2  使用format字符串格式化"></a>1.2  使用format字符串格式化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1. 位置参数</span></span><br><span class="line">print(<span class="string">&quot;&#123;0&#125; is &#123;1&#125; years old&quot;</span></span><br><span class="line">.format(<span class="string">&quot;tom&quot;</span>, <span class="number">28</span>))     </span><br><span class="line"> <span class="comment">#tom ``is` `28 years old``print(``&quot;&#123;&#125; is &#123;&#125; years old&quot;``.format(``&quot;tom&quot;``, 28))       #tom ``is` `28 years old``print(``&quot;Hi, &#123;0&#125;! &#123;0&#125; is &#123;1&#125; years old&quot;``.format(``&quot;tom&quot;``, 28)) #Hi, tom! tom ``is` `28 years old` `#2. 关键字参数``print(``&quot;&#123;name&#125; is &#123;age&#125; years old&quot;``.format(name = ``&quot;tom&quot;``, age = 28))  #tom ``is` `28 years old` `#3. 下标参数``li = [``&quot;tom&quot;``, 28]``print(``&quot;&#123;0[0]&#125; is &#123;0[1]&#125; years old&quot;``.format(li))     #tom ``is` `28 years old`</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-字符串方法"><a href="#2-字符串方法" class="headerlink" title="2.字符串方法"></a>2.字符串方法</h2><h3 id="2-1-find方法"><a href="#2-1-find方法" class="headerlink" title="2.1  find方法"></a>2.1  find方法</h3><p>作用：find方法可以在一个较长的字符串中查找子串，他返回子串所在位置的最左端索引，如果没有找到则返回-1</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a=<span class="string">&#x27;abcdefghijk&#x27;</span></span><br><span class="line">print(a.find(<span class="string">&#x27;abc&#x27;</span>))             </span><br><span class="line"><span class="comment">#the result ： 0</span></span><br><span class="line">print(a.find(<span class="string">&#x27;abc&#x27;</span>,<span class="number">10</span>,<span class="number">100</span>))          <span class="comment">#the result ： 11 指定查找的起始和结束查找位置</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-2-join方法"><a href="#2-2-join方法" class="headerlink" title="2.2  join方法"></a>2.2  join方法</h3><p>作用：join方法是非常重要的字符串方法，他是split方法的逆方法，用来连接序列中的元素，并且需要被连接的元素都必须是字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [``<span class="string">&#x27;1&#x27;</span>``,``<span class="string">&#x27;2&#x27;</span>``,``<span class="string">&#x27;3&#x27;</span>``]``print(``<span class="string">&#x27;+&#x27;</span>``.``join``(a))                  <span class="comment">#the result ： 1+2+3</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-3-split方法"><a href="#2-3-split方法" class="headerlink" title="2.3  split方法"></a>2.3  split方法</h3><p>作用：这是一个非常重要的字符串，它是join的逆方法，用来将字符串分割成序列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(&#96;&#96;&#39;1+2+3+4&#39;&#96;&#96;.split(&#96;&#96;&#39;+&#39;&#96;&#96;))              #the result ： [&#96;&#96;&#39;1&#39;&#96;&#96;, &#96;&#96;&#39;2&#39;&#96;&#96;, &#96;&#96;&#39;3&#39;&#96;&#96;, &#96;&#96;&#39;4&#39;&#96;&#96;]</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-strip"><a href="#2-4-strip" class="headerlink" title="2.4  strip"></a>2.4  strip</h3><p>作用：strip 方法返回去除首位空格（不包括内部）的字符串</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(``<span class="string">&quot;  test  test  &quot;</span>``.strip())        </span><br><span class="line"><span class="comment">#the result ：“test  test”</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-replace"><a href="#2-5-replace" class="headerlink" title="2.5 replace"></a>2.5 replace</h3><p>作用：replace方法返回某字符串所有匹配项均被替换之后得到字符串</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(``<span class="string">&quot;This is a test&quot;</span>``.replace(``<span class="string">&#x27;is&#x27;</span>``,``<span class="string">&#x27;is_test&#x27;</span>``))   </span><br><span class="line"><span class="comment">#the result ： This_test is_test a test</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-6-首字母大写"><a href="#2-6-首字母大写" class="headerlink" title="2.6 首字母大写"></a>2.6 首字母大写</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = ``<span class="string">&#x27;aBdkndfkFFD&#x27;</span>``&gt;&gt;&gt; s.capitalize()``<span class="string">&#x27;Abdkndfkffd&#x27;</span>`</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-7-Pinyin-模块，将汉字转换成拼音"><a href="#2-7-Pinyin-模块，将汉字转换成拼音" class="headerlink" title="2.7 Pinyin 模块，将汉字转换成拼音"></a>2.7 Pinyin 模块，将汉字转换成拼音</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> xpinyin <span class="keyword">import</span> Pinyin </span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:  </span><br><span class="line">p = Pinyin()  </span><br><span class="line">fullname =raw_input(<span class="string">&#x27;name：&#x27;</span>).strip()  fullname = fullname.decode(<span class="string">&#x27;utf8&#x27;</span>)  </span><br><span class="line">print(fullname)  </span><br><span class="line">xin = fullname[<span class="number">0</span>]  </span><br><span class="line">ming = fullname[<span class="number">1</span>:]  </span><br><span class="line">name = ming + ``<span class="string">&#x27;.&#x27;</span>` `+ xin</span><br><span class="line">username = p.get_pinyin(name, <span class="string">&#x27;&#x27;</span>)  </span><br><span class="line"><span class="keyword">print</span> username</span><br><span class="line"><span class="keyword">print</span> username + <span class="string">&#x27;@yiducloud.cn</span></span><br></pre></td></tr></table></figure>
+<h1 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h1><h2 id="1-字典基本使用"><a href="#1-字典基本使用" class="headerlink" title="1.字典基本使用"></a>1.字典基本使用</h2><h3 id="1-1-键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。-1-2-自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。"><a href="#1-1-键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。-1-2-自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。" class="headerlink" title="1.1 键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。 ### 1.2 自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。"></a>1.1 键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。 ### 1.2 自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">phonebook = &#123;``<span class="string">&#x27;Tom&#x27;</span>``:<span class="number">8777</span>,``<span class="string">&#x27;Jack&#x27;</span>``:<span class="number">9999</span>,``<span class="string">&#x27;Fly&#x27;</span>``:<span class="number">6666</span>&#125;</span><br><span class="line">print(``<span class="string">&quot;Tom&#x27;s Phonenumber is %(Tom)s&quot;</span>` `% phonebook)    </span><br><span class="line"><span class="comment">#Tom&#x27;s Phonenumber ``is` `8777`</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-字典常用方法"><a href="#2-字典常用方法" class="headerlink" title="2.字典常用方法"></a>2.字典常用方法</h2><h3 id="2-1-clear"><a href="#2-1-clear" class="headerlink" title="2.1 clear"></a>2.1 clear</h3><p>作用：clear方法清除字典中所有的项，这是一个原地操作，所以无返回值（或则说返回None）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;&#125;``d[``<span class="string">&#x27;Tom&#x27;</span>``]=<span class="number">8777</span>``d[``<span class="string">&#x27;Jack&#x27;</span>``]=<span class="number">9999</span>``</span><br><span class="line">print(d)                </span><br><span class="line"><span class="comment">#the result : &#123;``&#x27;Jack&#x27;``: 9999, ``&#x27;</span></span><br><span class="line">Tom<span class="string">&#x27;``: 8777&#125;``</span></span><br><span class="line"><span class="string">d.clear()``print(d)                </span></span><br><span class="line"><span class="string">#the result : &#123;&#125;`</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-2-copy"><a href="#2-2-copy" class="headerlink" title="2.2 copy"></a>2.2 copy</h3><p>作用：copy方法返回一个具有相同 ”键-值” 对的新字典，而不是副本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">&#x27;Tom&#x27;</span>:<span class="number">8777</span>,<span class="string">&#x27;Fly&#x27;</span>:<span class="number">6666</span>&#125;</span><br><span class="line">a = d.copy()</span><br><span class="line">a[<span class="string">&#x27;Tom&#x27;</span>] = <span class="string">&#x27;改变后的值&#x27;</span></span><br><span class="line">print(d)           </span><br><span class="line"><span class="comment">#&#123;``&#x27;Fly&#x27;``: 6666, ``&#x27;Tom&#x27;``: 8777&#125;</span></span><br><span class="line">print(a)           </span><br><span class="line"><span class="comment">#&#123;``&#x27;Fly&#x27;``: 6666, ``&#x27;Tom&#x27;: &#x27;改变后的值&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-fromkeys"><a href="#2-3-fromkeys" class="headerlink" title="2.3 fromkeys"></a>2.3 fromkeys</h3><p>作用：fromkeys方法使用给定的键建立新的字典，每个键都对应一个默认的值None。</p>
+<p>　　首先建造一个空字典，然后调用它的fromkeys方法，建立另一个字典</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">print(&#123;&#125;.fromkeys([<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;age&#x27;</span>]))    </span><br><span class="line"> <span class="comment">#the result　：　&#123;``&#x27;age&#x27;``: None, ``&#x27;name&#x27;``: None&#125;`</span></span><br><span class="line"><span class="comment">### 2.4  get</span></span><br><span class="line">作用：get方法是个更宽松的访问字典项的方法，如果试图访问字典中不存在的项时不会报错仅会 返回：<span class="literal">None</span></span><br><span class="line">```python</span><br><span class="line">d = &#123;``<span class="string">&#x27;Tom&#x27;</span>``:<span class="number">8777</span>,``<span class="string">&#x27;Jack&#x27;</span>``:<span class="number">8888</span>,``<span class="string">&#x27;Fly&#x27;</span>``:<span class="number">6666</span>&#125;</span><br><span class="line">print(d.``get``(``<span class="string">&#x27;Tom&#x27;</span>``))               </span><br><span class="line"> <span class="comment">#the result ：  8777``</span></span><br><span class="line"> print(d.``get``(``<span class="string">&#x27;not_exist&#x27;</span>``))             </span><br><span class="line"> <span class="comment">#the result ：   None`</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-for循环字典的三种方法"><a href="#2-5-for循环字典的三种方法" class="headerlink" title="2.5. for循环字典的三种方法"></a>2.5. for循环字典的三种方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;`Tom<span class="string">&#x27;:8777,&#x27;</span>Jack<span class="string">&#x27;:8888,&#x27;</span>Fly<span class="string">&#x27;:6666&#125;</span></span><br><span class="line"><span class="string">for` k,v  in d.items():</span></span><br><span class="line"><span class="string">	print(k,v)</span></span><br><span class="line"><span class="string">for` k  in d.values():  </span></span><br><span class="line"><span class="string">	print(k) </span></span><br><span class="line"><span class="string">for` k  in d.keys():  </span></span><br><span class="line"><span class="string">print(k)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-pop-1"><a href="#2-6-pop-1" class="headerlink" title="2.6  pop"></a>2.6  pop</h3><p>作用：pop方法用于获得对应与给定键的值，然后将这个”键-值”对从字典中移除</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">&#x27;Tom&#x27;</span>:<span class="number">8777</span>,<span class="string">&#x27;Jack&#x27;</span>:<span class="number">8888</span>,<span class="string">&#x27;Fly&#x27;</span>:<span class="number">6666</span>&#125;</span><br><span class="line">v = d.pop(<span class="string">&#x27;Tom&#x27;</span>)</span><br><span class="line">print(v)          </span><br><span class="line"><span class="comment">#8777</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-7-popitem"><a href="#2-7-popitem" class="headerlink" title="2.7  popitem"></a>2.7  popitem</h3><p>① popitem方法类似于list.pop，list.pop会弹出列表的最后一个元素，但是popitem仅仅会弹出随机的项，因为字典没有”最后的元素”或则其他有关顺序的概念 　　<br>② 所以想一个接一个的移除并处理字典中的项，popitem是非常有效的（因为不用获取键的列表） 　　<br>③ 尽管popitem和列表的pop方法很类似，但是字典中没有与append等价的方法，因为字典是无序的，类似于append得方法是没有任何意义的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">&#x27;Tom&#x27;</span>:<span class="number">8777</span>,<span class="string">&#x27;Jack&#x27;</span>:<span class="number">8888</span>,<span class="string">&#x27;Fly&#x27;</span>:<span class="number">6666</span>&#125;</span><br><span class="line">d.popitem()</span><br></pre></td></tr></table></figure>
+<h3 id="2-8-setdefault"><a href="#2-8-setdefault" class="headerlink" title="2.8  setdefault"></a>2.8  setdefault</h3><p>作用：setdefault方法在某种程度上类似于get方法，能够获得与给定键相关联的值，除此之外，setdefault还能在字典中不含有给定键的情况下设定相应的键值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">&#x27;Tom&#x27;</span>:<span class="number">8777</span>,<span class="string">&#x27;Jack&#x27;</span>:<span class="number">8888</span>,<span class="string">&#x27;Fly&#x27;</span>:<span class="number">6666</span>&#125;</span><br><span class="line">d.setdefault(``<span class="string">&#x27;Tom&#x27;</span>``)              </span><br><span class="line"><span class="comment">#the result ： 8777</span></span><br><span class="line">print(d.setdefault(<span class="string">&#x27;Test&#x27;</span>))          </span><br><span class="line"><span class="comment">#the result ： None</span></span><br><span class="line">print(d)                  </span><br><span class="line"><span class="comment">#&#123;&#x27;Fly&#x27;: 6666, &#x27;Jack&#x27;: 8888, &#x27;Tom&#x27;: 8777, &#x27;Test&#x27;: None&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-9-update"><a href="#2-9-update" class="headerlink" title="2.9  update"></a>2.9  update</h3><p>作用：update方法可以利用一个字典项更新另一个字典，提供的字典中的项会被添加到旧的字典中，如有相同的键则会被覆盖</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">&#x27;Tom&#x27;</span>:<span class="number">8777</span>,<span class="string">&#x27;Jack&#x27;</span>:<span class="number">8888</span>,<span class="string">&#x27;Fly&#x27;</span>:<span class="number">6666</span>&#125;``</span><br><span class="line">a = &#123;<span class="string">&#x27;Tom&#x27;</span>:<span class="number">110</span>,<span class="string">&#x27;Test&#x27;</span>:<span class="number">119</span>&#125;</span><br><span class="line">d.update(a)</span><br><span class="line">prin t(d)            </span><br><span class="line"><span class="comment">#the result ：&#123;&#x27;Fly&#x27;: 6666, &#x27;Test&#x27;: 119, &#x27;Jack&#x27;: 8888, &#x27;Tom&#x27;: 110&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-10-将两个列表组合成字典"><a href="#2-10-将两个列表组合成字典" class="headerlink" title="2.10 将两个列表组合成字典"></a>2.10 将两个列表组合成字典</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">keys = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]</span><br><span class="line">values = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="comment">#1、zip生成字典print(dict(zip(keys,values)))                   # &#123;&#x27;a&#x27;: 1, &#x27;b&#x27;: 2&#125;</span></span><br><span class="line"><span class="comment">#2、for循环推倒字典</span></span><br><span class="line">print(&#123;keys[i]: values[i] </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(keys))&#125;)       </span><br><span class="line"><span class="comment"># &#123;&#x27;a&#x27;: 1, &#x27;b&#x27;: 2&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><h2 id="1-集合作用"><a href="#1-集合作用" class="headerlink" title="1.集合作用　"></a>1.集合作用　</h2><p>1.1  去重 　　<br>1.2 取两个列表的交集 　<br>1.3 取两个列表的并集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">list_1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#1、去重(去除list_1中重复元素1,2)</span></span><br><span class="line">list_1 = set(list_1)                  </span><br><span class="line"></span><br><span class="line"><span class="comment">#去重： &#123;1, 2, 3, 4, 5&#125;</span></span><br><span class="line">print(list_1)</span><br><span class="line">list_2 = set([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#2、交集（在list_1和list_2中都有的元素4,5）</span></span><br><span class="line">print(list_1.intersection(list_2))           </span><br><span class="line"></span><br><span class="line"><span class="comment">#交集： &#123;4, 5&#125;`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#3、并集（在list_1和list_2中的元素全部打印出来，重复元素仅打印一次）</span></span><br><span class="line">print(list_1.union(list_2))               </span><br><span class="line"></span><br><span class="line"><span class="comment">#并集： &#123;1, 2, 3, 4, 5, 6, 7, 8&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#4、差集</span></span><br><span class="line">print(list_1.difference(list_2))            </span><br><span class="line"><span class="comment">#差集：在list_1中有在list_2中没有：  &#123;1, 2, 3&#125;</span></span><br><span class="line">print(list_2.difference(list_1))            </span><br><span class="line"></span><br><span class="line"><span class="comment">#差集：在list_1中有在list_2中没有：  &#123;8, 6, 7&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#5、子集</span></span><br><span class="line">print(list_1.issubset(list_2))             </span><br><span class="line"></span><br><span class="line"><span class="comment">#子集：  False  List_1中的元素是否全部在list2中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#6、父集</span></span><br><span class="line">print(list_1.issuperset(list_2))            </span><br><span class="line"></span><br><span class="line"><span class="comment">#父集：  False  List_1中是否包含list_2中的所有元素</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#7、交集</span></span><br><span class="line">print(list_1 &amp; list_2)                 </span><br><span class="line"></span><br><span class="line"><span class="comment">#交集  &#123;4, 5&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#8、union并集</span></span><br><span class="line">print(list_1 | list_2)                 </span><br><span class="line"></span><br><span class="line"><span class="comment">#并集： &#123;1, 2, 3, 4, 5, 6, 7, 8&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#9、difference差集</span></span><br><span class="line">print(list_1 - list_2)                 <span class="comment">#差集：  &#123;1, 2, 3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#10、在集合中添加一个元素999</span></span><br><span class="line">list_1.add(<span class="number">999</span>)</span><br><span class="line">print(list_1)                      </span><br><span class="line"></span><br><span class="line"><span class="comment">#Add()方法：     </span></span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">999</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#11、删除集合中任意一个元素不会打印删除的值</span></span><br><span class="line">list_1.pop()                      </span><br><span class="line"></span><br><span class="line"><span class="comment">#Pop()方法：      </span></span><br><span class="line">无返回值</span><br><span class="line"></span><br><span class="line"><span class="comment">#12、discard删除集合中的指定元素，如过没有则返回None</span></span><br><span class="line">print(list_1.discard(<span class="string">&quot;ddd&quot;</span>))       </span><br><span class="line"></span><br><span class="line"><span class="comment">#Discard()方法：  删除指定的值，没有返回None</span></span><br></pre></td></tr></table></figure>
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2019/03/28/python%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%93%8D%E4%BD%9C/">https://github.com/xuMr6/xumr6.github.io.git/2019/03/28/python%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%93%8D%E4%BD%9C/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2019/04/15/Redis使用教程/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Redis使用教程 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2019/03/01/Python常见基础算法题/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Python常见基础算法题 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84"><span class="toc-text">列表和元组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%97%E8%A1%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">1.列表基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%88%97%E8%A1%A8%E8%B5%8B%E5%80%BC"><span class="toc-text">1.1  列表赋值　</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%85%83%E7%B4%A0%E5%88%A0%E9%99%A4"><span class="toc-text">1.2 元素删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%88%86%E7%89%87%E8%B5%8B%E5%80%BC"><span class="toc-text">1.3 分片赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E4%BD%BF%E7%94%A8-for-i-in-range-10-1-1-%E7%94%9F%E6%88%90%E5%88%97%E8%A1%A8"><span class="toc-text">1.4 使用 for i in range(10,-1,-1) 生成列表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%97%E8%A1%A8%E6%96%B9%E6%B3%95"><span class="toc-text">2.列表方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-append"><span class="toc-text">2.1 append</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-count"><span class="toc-text">2.2  count</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-extend"><span class="toc-text">2.3   extend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-index"><span class="toc-text">2.4  index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-insert"><span class="toc-text">2.5  insert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-pop"><span class="toc-text">2.6  pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-remove"><span class="toc-text">2.7   remove</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-reverse"><span class="toc-text">2.8  reverse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-sort"><span class="toc-text">2.9  sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-enumrate"><span class="toc-text">2.10  enumrate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-range%E5%92%8Cxrange-%E6%8C%87%E5%AE%9A%E8%8C%83%E5%9B%B4%EF%BC%8C%E7%94%9F%E6%88%90%E6%8C%87%E5%AE%9A%E7%9A%84%E6%95%B0%E5%AD%97"><span class="toc-text">2.11 range和xrange 指定范围，生成指定的数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-12-%E5%88%97%E8%A1%A8%E5%8E%BB%E7%A9%BA"><span class="toc-text">2.12  列表去空</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%83%E7%BB%84%E5%AE%9A%E4%B9%89%EF%BC%9A%E5%85%83%E7%BB%84%E5%92%8C%E5%88%97%E8%A1%A8%E4%B8%80%E6%A0%B7%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%B8%80%E7%A7%8D%E5%BA%8F%E5%88%97%EF%BC%8C%E5%94%AF%E4%B8%80%E7%9A%84%E4%B8%8D%E5%90%8C%E6%98%AF%E5%85%83%E7%BB%84%E4%B8%8D%E8%83%BD%E4%BF%AE%E6%94%B9%E3%80%82"><span class="toc-text">3.元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA%E5%85%83%E7%BB%84%E4%B8%BE%E4%BE%8B"><span class="toc-text">3.1  创建元组举例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">4.列表和元组常用函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.字符串格式化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BD%BF%E7%94%A8%E7%99%BE%E5%88%86%E5%8F%B7%EF%BC%88-%EF%BC%89%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.1 使用百分号（%）字符串格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8format%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.2  使用format字符串格式化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95"><span class="toc-text">2.字符串方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-find%E6%96%B9%E6%B3%95"><span class="toc-text">2.1  find方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-join%E6%96%B9%E6%B3%95"><span class="toc-text">2.2  join方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-split%E6%96%B9%E6%B3%95"><span class="toc-text">2.3  split方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-strip"><span class="toc-text">2.4  strip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-replace"><span class="toc-text">2.5 replace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E9%A6%96%E5%AD%97%E6%AF%8D%E5%A4%A7%E5%86%99"><span class="toc-text">2.6 首字母大写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-Pinyin-%E6%A8%A1%E5%9D%97%EF%BC%8C%E5%B0%86%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3"><span class="toc-text">2.7 Pinyin 模块，将汉字转换成拼音</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E5%85%B8"><span class="toc-text">字典</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AD%97%E5%85%B8%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">1.字典基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%94%AE%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%AD%97%E5%85%B8%E7%9A%84%E9%94%AE%E4%B8%8D%E4%B8%80%E5%AE%9A%E4%B8%BA%E6%95%B4%E5%BD%A2%E6%95%B0%E6%8D%AE%EF%BC%8C%E9%94%AE%E5%8F%AF%E4%BB%A5%E6%98%AF%E4%BB%BB%E6%84%8F%E7%9A%84%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%B1%BB%E5%9E%8B%EF%BC%8C%E6%AF%94%E5%A6%82%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%88%E5%AE%9E%E8%A1%8C%EF%BC%89%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%96%E8%80%85%E5%85%83%E7%BB%84%E3%80%82-1-2-%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%EF%BC%9A%E5%8D%B3%E4%BD%BF%E9%94%AE%E8%B5%B7%E5%88%9D%E5%9C%A8%E5%AD%97%E5%85%B8%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%B8%BA%E4%BB%96%E8%B5%8B%E5%80%BC%EF%BC%8C%E8%BF%99%E6%A0%B7%E5%AD%97%E5%85%B8%E5%B0%B1%E4%BC%9A%E5%BB%BA%E7%AB%8B%E6%96%B0%E7%9A%84%E9%A1%B9%E3%80%82%E8%80%8C%EF%BC%88%E5%9C%A8%E4%B8%8D%E9%80%82%E7%94%A8append%E6%96%B9%E6%B3%95%E6%88%96%E8%80%85%E5%85%B6%E4%BB%96%E7%B1%BB%E4%BC%BC%E6%93%8D%E4%BD%9C%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%89%E4%B8%8D%E8%83%BD%E5%B0%86%E5%80%BC%E5%85%B3%E8%81%94%E5%88%B0%E5%88%97%E8%A1%A8%E4%B9%8B%E5%A4%96%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8A%E3%80%82"><span class="toc-text">1.1 键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。 ### 1.2 自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E5%85%B8%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">2.字典常用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-clear"><span class="toc-text">2.1 clear</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-copy"><span class="toc-text">2.2 copy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-fromkeys"><span class="toc-text">2.3 fromkeys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-for%E5%BE%AA%E7%8E%AF%E5%AD%97%E5%85%B8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-text">2.5. for循环字典的三种方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-pop-1"><span class="toc-text">2.6  pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-popitem"><span class="toc-text">2.7  popitem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-setdefault"><span class="toc-text">2.8  setdefault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-update"><span class="toc-text">2.9  update</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-%E5%B0%86%E4%B8%A4%E4%B8%AA%E5%88%97%E8%A1%A8%E7%BB%84%E5%90%88%E6%88%90%E5%AD%97%E5%85%B8"><span class="toc-text">2.10 将两个列表组合成字典</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%86%E5%90%88"><span class="toc-text">集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9B%86%E5%90%88%E4%BD%9C%E7%94%A8"><span class="toc-text">1.集合作用　</span></a></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84"><span class="toc-text">列表和元组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%97%E8%A1%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">1.列表基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%88%97%E8%A1%A8%E8%B5%8B%E5%80%BC"><span class="toc-text">1.1  列表赋值　</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%85%83%E7%B4%A0%E5%88%A0%E9%99%A4"><span class="toc-text">1.2 元素删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%88%86%E7%89%87%E8%B5%8B%E5%80%BC"><span class="toc-text">1.3 分片赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E4%BD%BF%E7%94%A8-for-i-in-range-10-1-1-%E7%94%9F%E6%88%90%E5%88%97%E8%A1%A8"><span class="toc-text">1.4 使用 for i in range(10,-1,-1) 生成列表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%97%E8%A1%A8%E6%96%B9%E6%B3%95"><span class="toc-text">2.列表方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-append"><span class="toc-text">2.1 append</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-count"><span class="toc-text">2.2  count</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-extend"><span class="toc-text">2.3   extend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-index"><span class="toc-text">2.4  index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-insert"><span class="toc-text">2.5  insert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-pop"><span class="toc-text">2.6  pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-remove"><span class="toc-text">2.7   remove</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-reverse"><span class="toc-text">2.8  reverse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-sort"><span class="toc-text">2.9  sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-enumrate"><span class="toc-text">2.10  enumrate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-range%E5%92%8Cxrange-%E6%8C%87%E5%AE%9A%E8%8C%83%E5%9B%B4%EF%BC%8C%E7%94%9F%E6%88%90%E6%8C%87%E5%AE%9A%E7%9A%84%E6%95%B0%E5%AD%97"><span class="toc-text">2.11 range和xrange 指定范围，生成指定的数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-12-%E5%88%97%E8%A1%A8%E5%8E%BB%E7%A9%BA"><span class="toc-text">2.12  列表去空</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%83%E7%BB%84%E5%AE%9A%E4%B9%89%EF%BC%9A%E5%85%83%E7%BB%84%E5%92%8C%E5%88%97%E8%A1%A8%E4%B8%80%E6%A0%B7%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%B8%80%E7%A7%8D%E5%BA%8F%E5%88%97%EF%BC%8C%E5%94%AF%E4%B8%80%E7%9A%84%E4%B8%8D%E5%90%8C%E6%98%AF%E5%85%83%E7%BB%84%E4%B8%8D%E8%83%BD%E4%BF%AE%E6%94%B9%E3%80%82"><span class="toc-text">3.元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA%E5%85%83%E7%BB%84%E4%B8%BE%E4%BE%8B"><span class="toc-text">3.1  创建元组举例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">4.列表和元组常用函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.字符串格式化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BD%BF%E7%94%A8%E7%99%BE%E5%88%86%E5%8F%B7%EF%BC%88-%EF%BC%89%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.1 使用百分号（%）字符串格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8format%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.2  使用format字符串格式化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95"><span class="toc-text">2.字符串方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-find%E6%96%B9%E6%B3%95"><span class="toc-text">2.1  find方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-join%E6%96%B9%E6%B3%95"><span class="toc-text">2.2  join方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-split%E6%96%B9%E6%B3%95"><span class="toc-text">2.3  split方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-strip"><span class="toc-text">2.4  strip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-replace"><span class="toc-text">2.5 replace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E9%A6%96%E5%AD%97%E6%AF%8D%E5%A4%A7%E5%86%99"><span class="toc-text">2.6 首字母大写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-Pinyin-%E6%A8%A1%E5%9D%97%EF%BC%8C%E5%B0%86%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3"><span class="toc-text">2.7 Pinyin 模块，将汉字转换成拼音</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E5%85%B8"><span class="toc-text">字典</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AD%97%E5%85%B8%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">1.字典基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%94%AE%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%AD%97%E5%85%B8%E7%9A%84%E9%94%AE%E4%B8%8D%E4%B8%80%E5%AE%9A%E4%B8%BA%E6%95%B4%E5%BD%A2%E6%95%B0%E6%8D%AE%EF%BC%8C%E9%94%AE%E5%8F%AF%E4%BB%A5%E6%98%AF%E4%BB%BB%E6%84%8F%E7%9A%84%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%B1%BB%E5%9E%8B%EF%BC%8C%E6%AF%94%E5%A6%82%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%88%E5%AE%9E%E8%A1%8C%EF%BC%89%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%96%E8%80%85%E5%85%83%E7%BB%84%E3%80%82-1-2-%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%EF%BC%9A%E5%8D%B3%E4%BD%BF%E9%94%AE%E8%B5%B7%E5%88%9D%E5%9C%A8%E5%AD%97%E5%85%B8%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%B8%BA%E4%BB%96%E8%B5%8B%E5%80%BC%EF%BC%8C%E8%BF%99%E6%A0%B7%E5%AD%97%E5%85%B8%E5%B0%B1%E4%BC%9A%E5%BB%BA%E7%AB%8B%E6%96%B0%E7%9A%84%E9%A1%B9%E3%80%82%E8%80%8C%EF%BC%88%E5%9C%A8%E4%B8%8D%E9%80%82%E7%94%A8append%E6%96%B9%E6%B3%95%E6%88%96%E8%80%85%E5%85%B6%E4%BB%96%E7%B1%BB%E4%BC%BC%E6%93%8D%E4%BD%9C%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%89%E4%B8%8D%E8%83%BD%E5%B0%86%E5%80%BC%E5%85%B3%E8%81%94%E5%88%B0%E5%88%97%E8%A1%A8%E4%B9%8B%E5%A4%96%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8A%E3%80%82"><span class="toc-text">1.1 键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。 ### 1.2 自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E5%85%B8%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">2.字典常用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-clear"><span class="toc-text">2.1 clear</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-copy"><span class="toc-text">2.2 copy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-fromkeys"><span class="toc-text">2.3 fromkeys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-for%E5%BE%AA%E7%8E%AF%E5%AD%97%E5%85%B8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-text">2.5. for循环字典的三种方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-pop-1"><span class="toc-text">2.6  pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-popitem"><span class="toc-text">2.7  popitem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-setdefault"><span class="toc-text">2.8  setdefault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-update"><span class="toc-text">2.9  update</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-%E5%B0%86%E4%B8%A4%E4%B8%AA%E5%88%97%E8%A1%A8%E7%BB%84%E5%90%88%E6%88%90%E5%AD%97%E5%85%B8"><span class="toc-text">2.10 将两个列表组合成字典</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%86%E5%90%88"><span class="toc-text">集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9B%86%E5%90%88%E4%BD%9C%E7%94%A8"><span class="toc-text">1.集合作用　</span></a></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84"><span class="toc-text">列表和元组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%97%E8%A1%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">1.列表基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%88%97%E8%A1%A8%E8%B5%8B%E5%80%BC"><span class="toc-text">1.1  列表赋值　</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%85%83%E7%B4%A0%E5%88%A0%E9%99%A4"><span class="toc-text">1.2 元素删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%88%86%E7%89%87%E8%B5%8B%E5%80%BC"><span class="toc-text">1.3 分片赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E4%BD%BF%E7%94%A8-for-i-in-range-10-1-1-%E7%94%9F%E6%88%90%E5%88%97%E8%A1%A8"><span class="toc-text">1.4 使用 for i in range(10,-1,-1) 生成列表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%97%E8%A1%A8%E6%96%B9%E6%B3%95"><span class="toc-text">2.列表方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-append"><span class="toc-text">2.1 append</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-count"><span class="toc-text">2.2  count</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-extend"><span class="toc-text">2.3   extend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-index"><span class="toc-text">2.4  index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-insert"><span class="toc-text">2.5  insert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-pop"><span class="toc-text">2.6  pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-remove"><span class="toc-text">2.7   remove</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-reverse"><span class="toc-text">2.8  reverse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-sort"><span class="toc-text">2.9  sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-enumrate"><span class="toc-text">2.10  enumrate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-range%E5%92%8Cxrange-%E6%8C%87%E5%AE%9A%E8%8C%83%E5%9B%B4%EF%BC%8C%E7%94%9F%E6%88%90%E6%8C%87%E5%AE%9A%E7%9A%84%E6%95%B0%E5%AD%97"><span class="toc-text">2.11 range和xrange 指定范围，生成指定的数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-12-%E5%88%97%E8%A1%A8%E5%8E%BB%E7%A9%BA"><span class="toc-text">2.12  列表去空</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%83%E7%BB%84%E5%AE%9A%E4%B9%89%EF%BC%9A%E5%85%83%E7%BB%84%E5%92%8C%E5%88%97%E8%A1%A8%E4%B8%80%E6%A0%B7%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%B8%80%E7%A7%8D%E5%BA%8F%E5%88%97%EF%BC%8C%E5%94%AF%E4%B8%80%E7%9A%84%E4%B8%8D%E5%90%8C%E6%98%AF%E5%85%83%E7%BB%84%E4%B8%8D%E8%83%BD%E4%BF%AE%E6%94%B9%E3%80%82"><span class="toc-text">3.元组定义：元组和列表一样，也是一种序列，唯一的不同是元组不能修改。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA%E5%85%83%E7%BB%84%E4%B8%BE%E4%BE%8B"><span class="toc-text">3.1  创建元组举例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">4.列表和元组常用函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.字符串格式化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BD%BF%E7%94%A8%E7%99%BE%E5%88%86%E5%8F%B7%EF%BC%88-%EF%BC%89%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.1 使用百分号（%）字符串格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8format%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">1.2  使用format字符串格式化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95"><span class="toc-text">2.字符串方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-find%E6%96%B9%E6%B3%95"><span class="toc-text">2.1  find方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-join%E6%96%B9%E6%B3%95"><span class="toc-text">2.2  join方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-split%E6%96%B9%E6%B3%95"><span class="toc-text">2.3  split方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-strip"><span class="toc-text">2.4  strip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-replace"><span class="toc-text">2.5 replace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E9%A6%96%E5%AD%97%E6%AF%8D%E5%A4%A7%E5%86%99"><span class="toc-text">2.6 首字母大写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-Pinyin-%E6%A8%A1%E5%9D%97%EF%BC%8C%E5%B0%86%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3"><span class="toc-text">2.7 Pinyin 模块，将汉字转换成拼音</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E5%85%B8"><span class="toc-text">字典</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AD%97%E5%85%B8%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">1.字典基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%94%AE%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%AD%97%E5%85%B8%E7%9A%84%E9%94%AE%E4%B8%8D%E4%B8%80%E5%AE%9A%E4%B8%BA%E6%95%B4%E5%BD%A2%E6%95%B0%E6%8D%AE%EF%BC%8C%E9%94%AE%E5%8F%AF%E4%BB%A5%E6%98%AF%E4%BB%BB%E6%84%8F%E7%9A%84%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%B1%BB%E5%9E%8B%EF%BC%8C%E6%AF%94%E5%A6%82%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%88%E5%AE%9E%E8%A1%8C%EF%BC%89%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%96%E8%80%85%E5%85%83%E7%BB%84%E3%80%82-1-2-%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%EF%BC%9A%E5%8D%B3%E4%BD%BF%E9%94%AE%E8%B5%B7%E5%88%9D%E5%9C%A8%E5%AD%97%E5%85%B8%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%B8%BA%E4%BB%96%E8%B5%8B%E5%80%BC%EF%BC%8C%E8%BF%99%E6%A0%B7%E5%AD%97%E5%85%B8%E5%B0%B1%E4%BC%9A%E5%BB%BA%E7%AB%8B%E6%96%B0%E7%9A%84%E9%A1%B9%E3%80%82%E8%80%8C%EF%BC%88%E5%9C%A8%E4%B8%8D%E9%80%82%E7%94%A8append%E6%96%B9%E6%B3%95%E6%88%96%E8%80%85%E5%85%B6%E4%BB%96%E7%B1%BB%E4%BC%BC%E6%93%8D%E4%BD%9C%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%89%E4%B8%8D%E8%83%BD%E5%B0%86%E5%80%BC%E5%85%B3%E8%81%94%E5%88%B0%E5%88%97%E8%A1%A8%E4%B9%8B%E5%A4%96%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8A%E3%80%82"><span class="toc-text">1.1 键类型：字典的键不一定为整形数据，键可以是任意的不可变类型，比如浮点型（实行），字符串或者元组。 ### 1.2 自动添加：即使键起初在字典中不存在，也可以为他赋值，这样字典就会建立新的项。而（在不适用append方法或者其他类似操作的情况下）不能将值关联到列表之外的索引上。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E5%85%B8%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">2.字典常用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-clear"><span class="toc-text">2.1 clear</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-copy"><span class="toc-text">2.2 copy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-fromkeys"><span class="toc-text">2.3 fromkeys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-for%E5%BE%AA%E7%8E%AF%E5%AD%97%E5%85%B8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-text">2.5. for循环字典的三种方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-pop-1"><span class="toc-text">2.6  pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-popitem"><span class="toc-text">2.7  popitem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-setdefault"><span class="toc-text">2.8  setdefault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-update"><span class="toc-text">2.9  update</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-%E5%B0%86%E4%B8%A4%E4%B8%AA%E5%88%97%E8%A1%A8%E7%BB%84%E5%90%88%E6%88%90%E5%AD%97%E5%85%B8"><span class="toc-text">2.10 将两个列表组合成字典</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%86%E5%90%88"><span class="toc-text">集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9B%86%E5%90%88%E4%BD%9C%E7%94%A8"><span class="toc-text">1.集合作用　</span></a></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

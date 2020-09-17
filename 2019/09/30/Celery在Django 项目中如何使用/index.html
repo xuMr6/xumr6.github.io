@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Celery在Django 项目中如何使用">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2019/09/30/Celery%E5%9C%A8Django%20%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2019-09-30">
+  <meta property="og:article:modified_time" content="2020-09-10">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Celery在Django 项目中如何使用
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-09-29T18:56:00.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2019-09-30</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/celery/" class="post-meta-link">celery</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>3.2k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="创建目录celery-pro，并在celery-pro下创建下面两个文件"><a href="#创建目录celery-pro，并在celery-pro下创建下面两个文件" class="headerlink" title="创建目录celery_pro，并在celery_pro下创建下面两个文件"></a>创建目录celery_pro，并在celery_pro下创建下面两个文件</h3><p>celery.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># celery.py</span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line">#1. absolute_import 可以使导入的celery是python绝对路基的celery模块，不是当前我们创建的celery.py</span><br><span class="line">#2. unicode_literals 模块可能是python2和3兼容的，不知道</span><br><span class="line">from celery import Celery</span><br><span class="line"># from .celery import Celery        #这样才是导入当前目录下的celery</span><br><span class="line">			# 填写你的项目名</span><br><span class="line">app &#x3D; Celery(&#39;project&#39;,</span><br><span class="line">             broker&#x3D;&#39;redis:&#x2F;&#x2F;localhost&#39;,</span><br><span class="line">             backend&#x3D;&#39;redis:&#x2F;&#x2F;localhost&#39;,</span><br><span class="line">             include&#x3D;[&#39;celery_pro.tasks&#39;,</span><br><span class="line">                      &#39;celery_pro.tasks2&#39;,</span><br><span class="line">                      ])</span><br><span class="line">#celery——pro是存放celery文件的文件夹名字</span><br><span class="line"></span><br><span class="line">#实例化时可以添加下面这个属性</span><br><span class="line">app.conf.update(</span><br><span class="line">   result_expires&#x3D;3600,        #执行结果放到redis里，一个小时没人取就丢弃</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 配置定时任务：每5秒钟执行 调用一次celery_pro下tasks.py文件中的add函数</span><br><span class="line">app.conf.beat_schedule &#x3D; &#123;</span><br><span class="line">    &#39;add-every-5-seconds&#39;: &#123;</span><br><span class="line">        &#39;task&#39;: &#39;celery_pro.tasks.add&#39;,  # 寻找tasks下面的add函数</span><br><span class="line">        &#39;schedule&#39;: 5.0,</span><br><span class="line">        &#39;args&#39;: (16, 16)</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line">app.conf.timezone &#x3D; &#39;UTC&#39;   # 配置的时间规范</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">   app.start()</span><br></pre></td></tr></table></figure>
+<h3 id="task-py"><a href="#task-py" class="headerlink" title="task.py"></a>task.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># task.py</span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line">from .celery import app       #从当前目录导入app</span><br><span class="line"></span><br><span class="line">#写一个add函数</span><br><span class="line">@app.task</span><br><span class="line">def add(x, y):</span><br><span class="line">    return x + y</span><br></pre></td></tr></table></figure>
+
+<h3 id="task2-py"><a href="#task2-py" class="headerlink" title="task2.py"></a>task2.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># task2.py</span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line">from .celery import app</span><br><span class="line">import time,random</span><br><span class="line"></span><br><span class="line">@app.task</span><br><span class="line">def randnum(start,end):</span><br><span class="line">    time.sleep(3)</span><br><span class="line">    return random.randint(start,end)</span><br><span class="line"></span><br><span class="line">tasks2.py</span><br></pre></td></tr></table></figure>
+<p>touch <strong>init</strong>.py<br>在celery_pro目录下新建<strong>init</strong>.py文件，否则执行命令时会报错</p>
+<h3 id="执行下面两条命令即可让celery定时执行任务了"><a href="#执行下面两条命令即可让celery定时执行任务了" class="headerlink" title="执行下面两条命令即可让celery定时执行任务了"></a>执行下面两条命令即可让celery定时执行任务了</h3><ol>
+<li><p>启动一个worker：在celery_pro外层目录下执行<br>celery -A celery_pro worker -l info</p>
+</li>
+<li><p>启动任务调度器 celery beat<br>celery -A celery_pro beat -l info</p>
+</li>
+<li><p>执行效果<br>看到celery运行日志中每5秒回返回一次 add函数执行结果</p>
+</li>
+</ol>
+<h3 id="启动celery的worker：每台机器可以启动8个worker"><a href="#启动celery的worker：每台机器可以启动8个worker" class="headerlink" title="启动celery的worker：每台机器可以启动8个worker"></a>启动celery的worker：每台机器可以启动8个worker</h3><ol>
+<li>在pythondir目录下启动 /pythondir/celery_pro/ 目录下的worker</li>
+</ol>
+<p>celery -A celery_pro worker -l info</p>
+<ol start="2">
+<li>后台启动worker：/pythondir/celery_pro/目录下执行</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">celery multi start w1 -A celery_pro -l info             #在后台启动w1这个worker</span><br><span class="line"></span><br><span class="line">celery multi start w1 w2 -A celery_pro -l info       #一次性启动w1,w2两个worker</span><br><span class="line"></span><br><span class="line">celery -A celery_pro status                       #查看当前有哪些worker在运行</span><br><span class="line"></span><br><span class="line">celery multi stop w1 w2 -A celery_pro                   #停止w1,w2两个worker</span><br><span class="line"></span><br><span class="line">celery multi restart w1 w2 -A celery_pro               #重启w1,w2两个worker</span><br></pre></td></tr></table></figure>
+<h3 id="也可以手动给celery分配任务：在-pythondir-下执行"><a href="#也可以手动给celery分配任务：在-pythondir-下执行" class="headerlink" title="也可以手动给celery分配任务：在/pythondir/下执行"></a>也可以手动给celery分配任务：在/pythondir/下执行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python3</span><br><span class="line">from celery_pro import tasks,tasks2</span><br><span class="line"></span><br><span class="line">t1 &#x3D; tasks.add.delay(34,3)</span><br><span class="line">t2 &#x3D; tasks2.randnum.delay(1,10000)             </span><br><span class="line">t1.get()</span><br><span class="line">t2.get()</span><br><span class="line"></span><br><span class="line">手动给celery分配任务：在&#x2F;pythondir&#x2F;下执行</span><br></pre></td></tr></table></figure>
+
+<h3 id="celery与Django项目最佳实践"><a href="#celery与Django项目最佳实践" class="headerlink" title="celery与Django项目最佳实践"></a>celery与Django项目最佳实践</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pip3 install Django&#x3D;&#x3D;2.0.4</span><br><span class="line">pip3 install celery&#x3D;&#x3D;4.3.0</span><br><span class="line">pip3 install redis&#x3D;&#x3D;3.2.1</span><br><span class="line">pip3 install ipython&#x3D;&#x3D;7.6.1 </span><br><span class="line"></span><br><span class="line">find .&#x2F; -type f | xargs sed -i &#39;s&#x2F;\r$&#x2F;&#x2F;g&#39;     # 批量将当前文件夹下所有文件装换成unix格式</span><br><span class="line">celery  multi start celery_test -A celery_test -l debug --autoscale&#x3D;50,5        # celery并发数：最多50个，最少5个</span><br><span class="line">http:&#x2F;&#x2F;docs.celeryproject.org&#x2F;en&#x2F;latest&#x2F;reference&#x2F;celery.bin.worker.html#cmdoption-celery-worker-autoscale</span><br><span class="line">ps auxww|grep &quot;celery worker&quot;|grep -v grep|awk &#39;&#123;print $2&#125;&#39;|xargs kill -9       # 关闭所有celery进程</span><br></pre></td></tr></table></figure>
+
+<h3 id="在Django中使用celery介绍（celery无法再windows下运行）"><a href="#在Django中使用celery介绍（celery无法再windows下运行）" class="headerlink" title="在Django中使用celery介绍（celery无法再windows下运行）"></a>在Django中使用celery介绍（celery无法再windows下运行）</h3><ol>
+<li><p>在Django中使用celery时，celery文件必须以tasks.py</p>
+</li>
+<li><p>Django会自动到每个APP中找tasks.py文件</p>
+</li>
+</ol>
+<h3 id="创建一个Django项目celery-test，和app01"><a href="#创建一个Django项目celery-test，和app01" class="headerlink" title="创建一个Django项目celery_test，和app01"></a>创建一个Django项目celery_test，和app01</h3><h3 id="在与项目同名的目录下创建celery-py"><a href="#在与项目同名的目录下创建celery-py" class="headerlink" title="在与项目同名的目录下创建celery.py"></a>在与项目同名的目录下创建celery.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># celery.py</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">from __future__ import absolute_import</span><br><span class="line">import os</span><br><span class="line">from celery import Celery</span><br><span class="line"></span><br><span class="line"># 只要是想在自己的脚本中访问Django的数据库等文件就必须配置Django的环境变量</span><br><span class="line">os.environ.setdefault(&#39;DJANGO_SETTINGS_MODULE&#39;, &#39;celery_test.settings&#39;)</span><br><span class="line"></span><br><span class="line"># app名字</span><br><span class="line">app &#x3D; Celery(&#39;celery_test&#39;)</span><br><span class="line"></span><br><span class="line"># 配置celery</span><br><span class="line">class Config:</span><br><span class="line">    BROKER_URL &#x3D; &#39;redis:&#x2F;&#x2F;192.168.56.11:6379&#39;</span><br><span class="line">    CELERY_RESULT_BACKEND &#x3D; &#39;redis:&#x2F;&#x2F;192.168.56.11:6379&#39;</span><br><span class="line"></span><br><span class="line">app.config_from_object(Config)</span><br><span class="line"># 到各个APP里自动发现tasks.py文件</span><br><span class="line">app.autodiscover_tasks()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="在与项目同名的目录下的-init-py-文件中添加下面内容"><a href="#在与项目同名的目录下的-init-py-文件中添加下面内容" class="headerlink" title="在与项目同名的目录下的 init.py 文件中添加下面内容"></a>在与项目同名的目录下的 init.py 文件中添加下面内容</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># __init__.py </span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line"></span><br><span class="line"># 告诉Django在启动时别忘了检测我的celery文件</span><br><span class="line">from .celery import app as celery_ap</span><br><span class="line">__all__ &#x3D; [&#39;celery_app&#39;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="创建app01-tasks-py文件"><a href="#创建app01-tasks-py文件" class="headerlink" title="创建app01/tasks.py文件"></a>创建app01/tasks.py文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># tasks.py</span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line">from celery import shared_task</span><br><span class="line"></span><br><span class="line"># 这里不再使用@app.task,而是用@shared_task，是指定可以在其他APP中也可以调用这个任务</span><br><span class="line">@shared_task</span><br><span class="line">def add(x, y):</span><br><span class="line">   return x + y</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="在setings-py文件指定redis服务器的配置"><a href="#在setings-py文件指定redis服务器的配置" class="headerlink" title="在setings.py文件指定redis服务器的配置"></a>在setings.py文件指定redis服务器的配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line">CELERY_BROKER_URL &#x3D; &#39;redis:&#x2F;&#x2F;localhost&#39;</span><br><span class="line">CELERY_RESULT_BACKEND &#x3D; &#39;redis:&#x2F;&#x2F;localhost&#39;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="将celery-test这个Django项目拷贝到centos7-3的django-test文件夹中"><a href="#将celery-test这个Django项目拷贝到centos7-3的django-test文件夹中" class="headerlink" title="将celery_test这个Django项目拷贝到centos7.3的django_test文件夹中"></a>将celery_test这个Django项目拷贝到centos7.3的django_test文件夹中</h3><h3 id="保证启动了redis-server"><a href="#保证启动了redis-server" class="headerlink" title="保证启动了redis-server"></a>保证启动了redis-server</h3><h3 id="启动一个celery的worker"><a href="#启动一个celery的worker" class="headerlink" title="启动一个celery的worker"></a>启动一个celery的worker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery -A celery_test worker -l info</span><br></pre></td></tr></table></figure>
+
+<h3 id="在Linux中启动-Django项目"><a href="#在Linux中启动-Django项目" class="headerlink" title="在Linux中启动 Django项目"></a>在Linux中启动 Django项目</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver 0.0.0.0:9000</span><br></pre></td></tr></table></figure>
+<h3 id="访问http-1-1-1-3-9000-celery-call-获取任务id"><a href="#访问http-1-1-1-3-9000-celery-call-获取任务id" class="headerlink" title="访问http://1.1.1.3:9000/celery_call/ 获取任务id"></a>访问<a target="_blank" rel="noopener" href="http://1.1.1.3:9000/celery_call/">http://1.1.1.3:9000/celery_call/</a> 获取任务id</h3><p><img src="https://img-blog.csdnimg.cn/20200222231228719.png" alt="~~~~~~~~~"></p>
+<h3 id="根据11中的任务id获取对应的值"><a href="#根据11中的任务id获取对应的值" class="headerlink" title="根据11中的任务id获取对应的值"></a>根据11中的任务id获取对应的值</h3><p><a target="_blank" rel="noopener" href="http://1.1.1.3:9000/celery_result/?id=5065b65b-0c01-430a-a67f-9531fe3e8d90">http://1.1.1.3:9000/celery_result/?id=5065b65b-0c01-430a-a67f-9531fe3e8d90</a></p>
+<h3 id="基于步骤↑：在django中使用计划任务功能"><a href="#基于步骤↑：在django中使用计划任务功能" class="headerlink" title="基于步骤↑：在django中使用计划任务功能"></a>基于步骤↑：在django中使用计划任务功能</h3><h3 id="在Django中使用celery的定时任务需要安装django-celery-beat"><a href="#在Django中使用celery的定时任务需要安装django-celery-beat" class="headerlink" title="在Django中使用celery的定时任务需要安装django-celery-beat"></a>在Django中使用celery的定时任务需要安装django-celery-beat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install django-celery-beat</span><br></pre></td></tr></table></figure>
+
+<h3 id="在Django的settings中注册django-celery-beat"><a href="#在Django的settings中注册django-celery-beat" class="headerlink" title="在Django的settings中注册django_celery_beat"></a>在Django的settings中注册django_celery_beat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS &#x3D; (</span><br><span class="line">        ...,</span><br><span class="line">        &#39;django_celery_beat&#39;,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行创建表命令"><a href="#执行创建表命令" class="headerlink" title="执行创建表命令"></a>执行创建表命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py makemigrations</span><br><span class="line"></span><br><span class="line">python3 manage.py migrate</span><br><span class="line"></span><br><span class="line">python3 manage.py startsuperuser</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="运行Django项目"><a href="#运行Django项目" class="headerlink" title="运行Django项目"></a>运行Django项目</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">celery -A celery_test worker -l info</span><br><span class="line"></span><br><span class="line">python3 manage.py runserver 0.0.0.0:9000</span><br></pre></td></tr></table></figure>
+
+<h3 id="登录-http-1-1-1-3-9000-admin-可以看到多了三张表"><a href="#登录-http-1-1-1-3-9000-admin-可以看到多了三张表" class="headerlink" title="登录 http://1.1.1.3:9000/admin/ 可以看到多了三张表"></a>登录 <a target="_blank" rel="noopener" href="http://1.1.1.3:9000/admin/">http://1.1.1.3:9000/admin/</a> 可以看到多了三张表</h3><p><img src="https://img-blog.csdnimg.cn/20200222231719454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="~~~~~~"></p>
+<h3 id="在intervals表中添加一条每5秒钟执行一次的任务的时钟"><a href="#在intervals表中添加一条每5秒钟执行一次的任务的时钟" class="headerlink" title="在intervals表中添加一条每5秒钟执行一次的任务的时钟"></a>在intervals表中添加一条每5秒钟执行一次的任务的时钟</h3><p>![<del>~</del>`](<a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200222231733989.png">https://img-blog.csdnimg.cn/20200222231733989.png</a>)</p>
+<h3 id="在Periodic-tasks表中创建任务"><a href="#在Periodic-tasks表中创建任务" class="headerlink" title="在Periodic tasks表中创建任务"></a>在Periodic tasks表中创建任务</h3><p><img src="https://img-blog.csdnimg.cn/20200222231750136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="````````````"></p>
+<h3 id="在-django-test-celery-test-目录下执行下面命令"><a href="#在-django-test-celery-test-目录下执行下面命令" class="headerlink" title="在/django_test/celery_test/目录下执行下面命令"></a>在/django_test/celery_test/目录下执行下面命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">celery -A celery_test worker -l info                                                   #启动一个worker</span><br><span class="line"></span><br><span class="line">python manage.py runserver 0.0.0.0:9000                           #运行Django项目</span><br><span class="line"></span><br><span class="line">celery -A celery_test beat -l info -S django                                                   #启动心跳任务</span><br><span class="line"></span><br><span class="line">说明：</span><br><span class="line"></span><br><span class="line">运行上面命令后就可以看到在运行celery -A celery_test worker -l info         窗口中每5秒钟执行一次app01.tasks.add： 2+3&#x3D;5</span><br></pre></td></tr></table></figure>
+<h3 id="关于添加新任务必须重启心跳问题"><a href="#关于添加新任务必须重启心跳问题" class="headerlink" title="关于添加新任务必须重启心跳问题"></a>关于添加新任务必须重启心跳问题</h3><ol>
+<li><p>每次在Django表中添加一个任务就必须重启一下beat</p>
+</li>
+<li><p>但是Django中有一个djcelery插件可以帮助我们不必重启</p>
+<h3 id="cdjango-celery-redis实现异步周期任务"><a href="#cdjango-celery-redis实现异步周期任务" class="headerlink" title="cdjango+celery+redis实现异步周期任务"></a>cdjango+celery+redis实现异步周期任务</h3><h5 id="注：python的celery模块-4-2-0版本，-刚开始安装的未4-1-1版本，但是定时任务居然不执行"><a href="#注：python的celery模块-4-2-0版本，-刚开始安装的未4-1-1版本，但是定时任务居然不执行" class="headerlink" title="注：python的celery模块 4.2.0版本， 刚开始安装的未4.1.1版本，但是定时任务居然不执行"></a>注：python的celery模块 4.2.0版本， 刚开始安装的未4.1.1版本，但是定时任务居然不执行</h5></li>
+</ol>
+<h3 id="在settings-py中配置celery"><a href="#在settings-py中配置celery" class="headerlink" title="在settings.py中配置celery"></a>在settings.py中配置celery</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line">#1、如果在django中需要周期性执行，在这里需要注册 django_celery_beat 中间件</span><br><span class="line">INSTALLED_APPS &#x3D; [</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    &#39;django_celery_beat&#39;,</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">TIME_ZONE &#x3D; &#39;Asia&#x2F;Shanghai&#39;  # 将默认的UTC时区给成中国时区</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#2、celery：配置celery</span><br><span class="line">BROKER_URL &#x3D; &#39;redis:&#x2F;&#x2F;localhost:6379&#39;</span><br><span class="line">CELERY_RESULT_BACKEND &#x3D; &#39;redis:&#x2F;&#x2F;localhost:6379&#39;</span><br><span class="line">CELERY_ACCEPT_CONTENT &#x3D; [&#39;application&#x2F;json&#39;]</span><br><span class="line">CELERY_TASK_SERIALIZER &#x3D; &#39;json&#39;</span><br><span class="line">CELERY_RESULT_SERIALIZER &#x3D; &#39;json&#39;</span><br><span class="line">CELERY_TASK_RESULT_EXPIRES &#x3D; 60 * 60</span><br><span class="line">CELERY_TIMEZONE &#x3D; &#39;Asia&#x2F;Shanghai&#39;</span><br><span class="line">CELERY_ENABLE_UTC&#x3D;False</span><br><span class="line">CELERY_ANNOTATIONS &#x3D; &#123;&#39;*&#39;: &#123;&#39;rate_limit&#39;: &#39;500&#x2F;s&#39;&#125;&#125;</span><br><span class="line">CELERYBEAT_SCHEDULER &#x3D; &#39;djcelery.schedulers.DatabaseScheduler&#39;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="在与项目同名的目录下创建celery-py-1"><a href="#在与项目同名的目录下创建celery-py-1" class="headerlink" title="在与项目同名的目录下创建celery.py"></a>在与项目同名的目录下创建celery.py</h3><p>更多定时参考官网：<a target="_blank" rel="noopener" href="http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules">http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"># # -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">from __future__ import absolute_import</span><br><span class="line">import os</span><br><span class="line">from celery import Celery</span><br><span class="line">from celery.schedules import crontab</span><br><span class="line">from datetime import timedelta</span><br><span class="line">from kombu import Queue</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># set the default Django settings module for the &#39;celery&#39; program.</span><br><span class="line">os.environ.setdefault(&#39;DJANGO_SETTINGS_MODULE&#39;, &#39;celery_test.settings&#39;)</span><br><span class="line"></span><br><span class="line">from django.conf import settings</span><br><span class="line"></span><br><span class="line">app &#x3D; Celery(&#39;celery_test&#39;)</span><br><span class="line"></span><br><span class="line"># Using a string here means the worker will not have to</span><br><span class="line"># pickle the object when using Windows.</span><br><span class="line">class Config:</span><br><span class="line">    BROKER_URL &#x3D; &#39;redis:&#x2F;&#x2F;1.1.1.3:6379&#39;</span><br><span class="line">    CELERY_RESULT_BACKEND &#x3D; &#39;redis:&#x2F;&#x2F;1.1.1.3:6379&#39;</span><br><span class="line">    CELERY_ACCEPT_CONTENT &#x3D; [&#39;application&#x2F;json&#39;]</span><br><span class="line">    CELERY_TASK_SERIALIZER &#x3D; &#39;json&#39;</span><br><span class="line">    CELERY_RESULT_SERIALIZER &#x3D; &#39;json&#39;</span><br><span class="line">    CELERY_TIMEZONE &#x3D; &#39;Asia&#x2F;Shanghai&#39;</span><br><span class="line">    ENABLE_UTC &#x3D; False</span><br><span class="line">    CELERY_TASK_RESULT_EXPIRES &#x3D; 60 * 60</span><br><span class="line">    CELERY_ANNOTATIONS &#x3D; &#123;&#39;*&#39;: &#123;&#39;rate_limit&#39;: &#39;500&#x2F;s&#39;&#125;&#125;</span><br><span class="line">    # 每次取任务的数量</span><br><span class="line">    # CELERYD_PREFETCH_MULTIPLIER &#x3D; 10</span><br><span class="line">    # 每个worker执行多少次任务之后就销毁，防止内存泄漏。相当于--maxtasksperchild参数</span><br><span class="line">    CELERYD_MAX_TASKS_PER_CHILD &#x3D; 16</span><br><span class="line">    # 防止死锁</span><br><span class="line">    # CELERYD_FORCE_EXECV &#x3D; True</span><br><span class="line">    # 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行</span><br><span class="line">    # CELERY_DISABLE_RATE_LIMITS &#x3D; True</span><br><span class="line">    # CELERYBEAT_SCHEDULER &#x3D; &#39;djcelery.schedulers.DatabaseScheduler&#39;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.config_from_object(Config)</span><br><span class="line">app.autodiscover_tasks()</span><br><span class="line"></span><br><span class="line">#crontab config</span><br><span class="line">app.conf.update(</span><br><span class="line">    CELERYBEAT_SCHEDULE &#x3D; &#123;</span><br><span class="line">        # 每隔三分钟执行一次add函数</span><br><span class="line">        &#39;every-3-min-add&#39;: &#123;</span><br><span class="line">            &#39;task&#39;: &#39;app01.tasks.add&#39;,</span><br><span class="line">            &#39;schedule&#39;: timedelta(seconds&#x3D;180)</span><br><span class="line">        &#125;,</span><br><span class="line">        # 每天下午15:420执行</span><br><span class="line">        &#39;add-every-day-morning@14:50&#39;: &#123;</span><br><span class="line">            &#39;task&#39;: &#39;app01.tasks.minus&#39;,</span><br><span class="line">            &#39;schedule&#39;: crontab(hour&#x3D;15, minute&#x3D;20, day_of_week&#x3D;&#39;*&#x2F;1&#39;),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">Queue(&#39;transient&#39;, routing_key&#x3D;&#39;transient&#39;,delivery_mode&#x3D;1)</span><br><span class="line"></span><br><span class="line">celery.py</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">from __future__ import absolute_import</span><br><span class="line">import os</span><br><span class="line">from celery import Celery</span><br><span class="line">from celery.schedules import crontab</span><br><span class="line">from datetime import timedelta</span><br><span class="line">from kombu import Queue</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># set the default Django settings module for the &#39;celery&#39; program.</span><br><span class="line">os.environ.setdefault(&#39;DJANGO_SETTINGS_MODULE&#39;, &#39;celery_test.settings&#39;)</span><br><span class="line"></span><br><span class="line">from django.conf import settings</span><br><span class="line"></span><br><span class="line">app &#x3D; Celery(&#39;celery_test&#39;)</span><br><span class="line"></span><br><span class="line"># Using a string here means the worker will not have to</span><br><span class="line"># pickle the object when using Windows.</span><br><span class="line">class Config:</span><br><span class="line">    BROKER_URL &#x3D; &#39;redis:&#x2F;&#x2F;1.1.1.3:6379&#39;</span><br><span class="line">    CELERY_RESULT_BACKEND &#x3D; &#39;redis:&#x2F;&#x2F;1.1.1.3:6379&#39;</span><br><span class="line">    CELERY_ACCEPT_CONTENT &#x3D; [&#39;application&#x2F;json&#39;]</span><br><span class="line">    CELERY_TASK_SERIALIZER &#x3D; &#39;json&#39;</span><br><span class="line">    CELERY_RESULT_SERIALIZER &#x3D; &#39;json&#39;</span><br><span class="line">    CELERY_TIMEZONE &#x3D; &#39;Asia&#x2F;Shanghai&#39;</span><br><span class="line">    ENABLE_UTC &#x3D; False</span><br><span class="line">    CELERY_TASK_RESULT_EXPIRES &#x3D; 60 * 60</span><br><span class="line">    CELERY_ANNOTATIONS &#x3D; &#123;&#39;*&#39;: &#123;&#39;rate_limit&#39;: &#39;500&#x2F;s&#39;&#125;&#125;</span><br><span class="line">    # 每次取任务的数量</span><br><span class="line">    # CELERYD_PREFETCH_MULTIPLIER &#x3D; 10</span><br><span class="line">    # 每个worker执行多少次任务之后就销毁，防止内存泄漏。相当于--maxtasksperchild参数</span><br><span class="line">    CELERYD_MAX_TASKS_PER_CHILD &#x3D; 16</span><br><span class="line">    # 防止死锁</span><br><span class="line">    # CELERYD_FORCE_EXECV &#x3D; True</span><br><span class="line">    # 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行</span><br><span class="line">    # CELERY_DISABLE_RATE_LIMITS &#x3D; True</span><br><span class="line">    # CELERYBEAT_SCHEDULER &#x3D; &#39;djcelery.schedulers.DatabaseScheduler&#39;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.config_from_object(Config)</span><br><span class="line">app.autodiscover_tasks()</span><br><span class="line"></span><br><span class="line">#crontab config</span><br><span class="line">app.conf.update(</span><br><span class="line">    CELERYBEAT_SCHEDULE &#x3D; &#123;</span><br><span class="line">        # 每隔三分钟执行一次add函数</span><br><span class="line">        &#39;every-3-min-add&#39;: &#123;</span><br><span class="line">            &#39;task&#39;: &#39;app01.tasks.add&#39;,</span><br><span class="line">            &#39;schedule&#39;: timedelta(seconds&#x3D;180)</span><br><span class="line">        &#125;,</span><br><span class="line">        # 每天下午15:420执行</span><br><span class="line">        &#39;add-every-day-morning@14:50&#39;: &#123;</span><br><span class="line">            &#39;task&#39;: &#39;app01.tasks.minus&#39;,</span><br><span class="line">            &#39;schedule&#39;: crontab(hour&#x3D;15, minute&#x3D;20, day_of_week&#x3D;&#39;*&#x2F;1&#39;),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">Queue(&#39;transient&#39;, routing_key&#x3D;&#39;transient&#39;,delivery_mode&#x3D;1)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="在任意app下创建tasks-py-django会自动到各app中找到此tasks文件"><a href="#在任意app下创建tasks-py-django会自动到各app中找到此tasks文件" class="headerlink" title="在任意app下创建tasks.py (django会自动到各app中找到此tasks文件)"></a>在任意app下创建tasks.py (django会自动到各app中找到此tasks文件)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># tasks.py</span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line">from celery import shared_task</span><br><span class="line"></span><br><span class="line"># 这里不再使用@app.task,而是用@shared_task，是指定可以在其他APP中也可以调用这个任务</span><br><span class="line">@shared_task</span><br><span class="line">def add():</span><br><span class="line">   print &#39;app01.tasks.add&#39;</span><br><span class="line">   return 222 + 333</span><br><span class="line"></span><br><span class="line">@shared_task</span><br><span class="line">def minus():</span><br><span class="line">   print &#39;app01.tasks.minus&#39;</span><br><span class="line">   return 222 - 333</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="在与项目同名的目录下的-init-py-文件中添加下面内容-1"><a href="#在与项目同名的目录下的-init-py-文件中添加下面内容-1" class="headerlink" title="在与项目同名的目录下的 init.py 文件中添加下面内容"></a>在与项目同名的目录下的 init.py 文件中添加下面内容</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># __init__.py</span><br><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from __future__ import absolute_import, unicode_literals</span><br><span class="line"></span><br><span class="line"># 告诉Django在启动时别忘了检测我的celery文件</span><br><span class="line">from .celery import app as celery_ap</span><br><span class="line">__all__ &#x3D; [&#39;celery_app&#39;]</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="启动脚本（记得开启celery服务）"><a href="#启动脚本（记得开启celery服务）" class="headerlink" title="启动脚本（记得开启celery服务）"></a>启动脚本（记得开启celery服务）</h3><h3 id="启动django程序"><a href="#启动django程序" class="headerlink" title="启动django程序"></a>启动django程序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver 0.0.0.0:8000</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># service.sh</span><br><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env bash</span><br><span class="line"></span><br><span class="line">source ..&#x2F;env&#x2F;bin&#x2F;activate</span><br><span class="line"></span><br><span class="line">export DJANGO_SETTINGS_MODULE&#x3D;celery_test.settings</span><br><span class="line"></span><br><span class="line">base_dir&#x3D;&#96;pwd&#96;</span><br><span class="line">mup_pid() &#123;</span><br><span class="line">echo &#96;ps -ef | grep -E &quot;(manage.py)(.*):8000&quot; | grep -v grep| awk &#39;&#123;print $2&#125;&#39;&#96;</span><br><span class="line">&#125;</span><br><span class="line">start() &#123;</span><br><span class="line"> python $base_dir&#x2F;manage.py runserver 0.0.0.0:8000 &amp;&gt;&gt; $base_dir&#x2F;django.log 2&gt;&amp;1 &amp;</span><br><span class="line"> pid&#x3D;$(mup_pid)</span><br><span class="line"> echo -e &quot;\e[00;31mmup is running (pid: $pid)\e[00m&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stop() &#123;</span><br><span class="line"> pid&#x3D;$(mup_pid)</span><br><span class="line"> echo -e &quot;\e[00;31mmup is stop (pid: $pid)\e[00m&quot;</span><br><span class="line"> ps -ef | grep -E &quot;(manage.py)(.*):8000&quot; | grep -v grep| awk &#39;&#123;print $2&#125;&#39; | xargs kill -9 &amp;&gt; &#x2F;dev&#x2F;null</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">restart()&#123;</span><br><span class="line">    stop</span><br><span class="line">    start</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># See how we were called.</span><br><span class="line">case &quot;$1&quot; in</span><br><span class="line">  start)</span><br><span class="line">        start</span><br><span class="line">        ;;</span><br><span class="line">  stop)</span><br><span class="line">        stop</span><br><span class="line">        ;;</span><br><span class="line"></span><br><span class="line">  restart)</span><br><span class="line">        restart</span><br><span class="line">        ;;</span><br><span class="line"></span><br><span class="line">  *)</span><br><span class="line">        echo $&quot;Usage: $0 &#123;start|stop|restart&#125;&quot;</span><br><span class="line">        exit 2</span><br><span class="line">esac</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="启动celery的worker：每台机器可以启动8个worker-1"><a href="#启动celery的worker：每台机器可以启动8个worker-1" class="headerlink" title="启动celery的worker：每台机器可以启动8个worker"></a>启动celery的worker：每台机器可以启动8个worker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery -A celery_test worker -l info</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"># start-celery.sh</span><br><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">source ..&#x2F;env&#x2F;bin&#x2F;activate</span><br><span class="line">export C_FORCE_ROOT&#x3D;&quot;true&quot;</span><br><span class="line">base_dir&#x3D;&#96;pwd&#96;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">celery_pid() &#123;</span><br><span class="line">    echo &#96;ps -ef | grep -E &quot;celery -A celery_test worker&quot; | grep -v grep| awk &#39;&#123;print $2&#125;&#39;&#96;</span><br><span class="line">&#125;</span><br><span class="line">start() &#123;</span><br><span class="line">    celery  multi start celery_test -A celery_test -l debug --autoscale&#x3D;50,5 --logfile&#x3D;$base_dir&#x2F;var&#x2F;celery-%I.log --pidfile&#x3D;celery_test.pid</span><br><span class="line">&#125;</span><br><span class="line">restart() &#123;</span><br><span class="line">    celery  multi restart celery_test -A celery_test -l debug</span><br><span class="line">&#125;</span><br><span class="line">stop() &#123;</span><br><span class="line">    celery  multi stop celery_test -A celery_test -l debug</span><br><span class="line">&#125;</span><br><span class="line">#restart()&#123;</span><br><span class="line">#    stop</span><br><span class="line">#    start</span><br><span class="line">#&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># See how we were called.</span><br><span class="line">case &quot;$1&quot; in</span><br><span class="line">  start)</span><br><span class="line">        start</span><br><span class="line">        ;;</span><br><span class="line">  restart)</span><br><span class="line">        restart</span><br><span class="line">        ;;</span><br><span class="line">  stop)</span><br><span class="line">        stop</span><br><span class="line">        ;;</span><br><span class="line">  *)</span><br><span class="line">        echo $&quot;Usage: $0 &#123;start|stop|restart&#125;&quot;</span><br><span class="line">        exit 2</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">#nohup celery -A celery_test worker -l debug --concurrency&#x3D;10 --autoreload  &amp; &gt;&gt;celery.log</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="启动celery-定时任务运行"><a href="#启动celery-定时任务运行" class="headerlink" title="启动celery 定时任务运行"></a>启动celery 定时任务运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery -A celery_test beat -l debug</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"># celery-crond.sh</span><br><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">#celery 定时任务运行</span><br><span class="line">source ..&#x2F;env&#x2F;bin&#x2F;activate</span><br><span class="line">export C_FORCE_ROOT&#x3D;&quot;true&quot;</span><br><span class="line">base_dir&#x3D;&#96;pwd&#96;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">celery_pid() &#123;</span><br><span class="line">    echo &#96;ps -ef | grep -E &quot;celery -A celery_test beat&quot; | grep -v grep| awk &#39;&#123;print $2&#125;&#39;&#96;</span><br><span class="line">&#125;</span><br><span class="line">start() &#123;</span><br><span class="line">    #django 调度定时任务</span><br><span class="line">    #celery -A celery_test beat -l info -S django &gt;&gt; $base_dir&#x2F;var&#x2F;celery-cron.log 2&gt;&amp;1 &amp;</span><br><span class="line">    celery -A celery_test beat -l debug &gt;&gt; $base_dir&#x2F;var&#x2F;Scheduler.log 2&gt;&amp;1 &amp;</span><br><span class="line">    sleep 3</span><br><span class="line">    pid&#x3D;$(celery_pid)</span><br><span class="line">    echo -e &quot;\e[00;31mcelery is start (pid: $pid)\e[00m&quot;</span><br><span class="line">&#125;</span><br><span class="line">restart() &#123;</span><br><span class="line">    pid&#x3D;$(celery_pid)</span><br><span class="line">    echo -e &quot;\e[00;31mcelery is restart (pid: $pid)\e[00m&quot;</span><br><span class="line">    ps auxf | grep -E &quot;celery -A celery_test beat&quot; | grep -v grep| awk &#39;&#123;print $2&#125;&#39; | xargs kill -HUP &amp;&gt; &#x2F;dev&#x2F;null</span><br><span class="line">&#125;</span><br><span class="line">stop() &#123;</span><br><span class="line">    pid&#x3D;$(celery_pid)</span><br><span class="line">    echo -e &quot;\e[00;31mcelery is stop (pid: $pid)\e[00m&quot;</span><br><span class="line">    ps -ef | grep -E &quot;celery -A celery_test beat&quot; | grep -v grep| awk &#39;&#123;print $2&#125;&#39; | xargs kill -TERM &amp;&gt; &#x2F;dev&#x2F;null</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">case &quot;$1&quot; in</span><br><span class="line">  start)</span><br><span class="line">        start</span><br><span class="line">        ;;</span><br><span class="line">  restart)</span><br><span class="line">        restart</span><br><span class="line">        ;;</span><br><span class="line">  stop)</span><br><span class="line">        stop</span><br><span class="line">        ;;</span><br><span class="line">  *)</span><br><span class="line">        echo $&quot;Usage: $0 &#123;start|stop|restart&#125;&quot;</span><br><span class="line">        exit 2</span><br><span class="line">esac</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="windows下编写的脚本文件，放到Linux中无法识别格式"><a href="#windows下编写的脚本文件，放到Linux中无法识别格式" class="headerlink" title="windows下编写的脚本文件，放到Linux中无法识别格式"></a>windows下编写的脚本文件，放到Linux中无法识别格式</h3><p>在Linux中执行.sh脚本，异常/bin/sh^M: bad interpreter: No such file or directory</p>
+<p>set ff=unix</p>
+<p>dos2unix start-celery.sh<br>dos2unix celery-crond.sh</p>
+<h3 id="常见报错"><a href="#常见报错" class="headerlink" title="常见报错"></a>常见报错</h3><p>Received unregistered task of type ‘XXX’ Celery报错（定时任务中无法找到对应tasks.py文件）</p>
+<p>app = Celery(‘opwf’, include=[‘api_workflow.tasks’]) # api_workflow这个app中的tasks文件</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaonq/p/9303941.html">博客参考地址</a></p>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2019/09/30/Celery%E5%9C%A8Django%20%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8/">https://github.com/xuMr6/xumr6.github.io.git/2019/09/30/Celery%E5%9C%A8Django%20%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2019/10/14/gitee 分支 命令大全/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">gitee 分支 命令大全 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2019/09/27/Celery 的使用/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Celery 的使用 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95celery-pro%EF%BC%8C%E5%B9%B6%E5%9C%A8celery-pro%E4%B8%8B%E5%88%9B%E5%BB%BA%E4%B8%8B%E9%9D%A2%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-text">创建目录celery_pro，并在celery_pro下创建下面两个文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task-py"><span class="toc-text">task.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task2-py"><span class="toc-text">task2.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4%E5%8D%B3%E5%8F%AF%E8%AE%A9celery%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E4%BA%86"><span class="toc-text">执行下面两条命令即可让celery定时执行任务了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery%E7%9A%84worker%EF%BC%9A%E6%AF%8F%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A88%E4%B8%AAworker"><span class="toc-text">启动celery的worker：每台机器可以启动8个worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%89%8B%E5%8A%A8%E7%BB%99celery%E5%88%86%E9%85%8D%E4%BB%BB%E5%8A%A1%EF%BC%9A%E5%9C%A8-pythondir-%E4%B8%8B%E6%89%A7%E8%A1%8C"><span class="toc-text">也可以手动给celery分配任务：在&#x2F;pythondir&#x2F;下执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#celery%E4%B8%8EDjango%E9%A1%B9%E7%9B%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">celery与Django项目最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E4%B8%AD%E4%BD%BF%E7%94%A8celery%E4%BB%8B%E7%BB%8D%EF%BC%88celery%E6%97%A0%E6%B3%95%E5%86%8Dwindows%E4%B8%8B%E8%BF%90%E8%A1%8C%EF%BC%89"><span class="toc-text">在Django中使用celery介绍（celery无法再windows下运行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AADjango%E9%A1%B9%E7%9B%AEcelery-test%EF%BC%8C%E5%92%8Capp01"><span class="toc-text">创建一个Django项目celery_test，和app01</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcelery-py"><span class="toc-text">在与项目同名的目录下创建celery.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84-init-py-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9"><span class="toc-text">在与项目同名的目录下的 init.py 文件中添加下面内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAapp01-tasks-py%E6%96%87%E4%BB%B6"><span class="toc-text">创建app01&#x2F;tasks.py文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8setings-py%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9Aredis%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">在setings.py文件指定redis服务器的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86celery-test%E8%BF%99%E4%B8%AADjango%E9%A1%B9%E7%9B%AE%E6%8B%B7%E8%B4%9D%E5%88%B0centos7-3%E7%9A%84django-test%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%AD"><span class="toc-text">将celery_test这个Django项目拷贝到centos7.3的django_test文件夹中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E8%AF%81%E5%90%AF%E5%8A%A8%E4%BA%86redis-server"><span class="toc-text">保证启动了redis-server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAcelery%E7%9A%84worker"><span class="toc-text">启动一个celery的worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Linux%E4%B8%AD%E5%90%AF%E5%8A%A8-Django%E9%A1%B9%E7%9B%AE"><span class="toc-text">在Linux中启动 Django项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AEhttp-1-1-1-3-9000-celery-call-%E8%8E%B7%E5%8F%96%E4%BB%BB%E5%8A%A1id"><span class="toc-text">访问http:&#x2F;&#x2F;1.1.1.3:9000&#x2F;celery_call&#x2F; 获取任务id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE11%E4%B8%AD%E7%9A%84%E4%BB%BB%E5%8A%A1id%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94%E7%9A%84%E5%80%BC"><span class="toc-text">根据11中的任务id获取对应的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%A5%E9%AA%A4%E2%86%91%EF%BC%9A%E5%9C%A8django%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E5%8A%9F%E8%83%BD"><span class="toc-text">基于步骤↑：在django中使用计划任务功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E4%B8%AD%E4%BD%BF%E7%94%A8celery%E7%9A%84%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85django-celery-beat"><span class="toc-text">在Django中使用celery的定时任务需要安装django-celery-beat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E7%9A%84settings%E4%B8%AD%E6%B3%A8%E5%86%8Cdjango-celery-beat"><span class="toc-text">在Django的settings中注册django_celery_beat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%88%9B%E5%BB%BA%E8%A1%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">执行创建表命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8CDjango%E9%A1%B9%E7%9B%AE"><span class="toc-text">运行Django项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95-http-1-1-1-3-9000-admin-%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E5%A4%9A%E4%BA%86%E4%B8%89%E5%BC%A0%E8%A1%A8"><span class="toc-text">登录 http:&#x2F;&#x2F;1.1.1.3:9000&#x2F;admin&#x2F; 可以看到多了三张表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8intervals%E8%A1%A8%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%80%E6%9D%A1%E6%AF%8F5%E7%A7%92%E9%92%9F%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%E7%9A%84%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%97%B6%E9%92%9F"><span class="toc-text">在intervals表中添加一条每5秒钟执行一次的任务的时钟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Periodic-tasks%E8%A1%A8%E4%B8%AD%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1"><span class="toc-text">在Periodic tasks表中创建任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-django-test-celery-test-%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%A7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E5%91%BD%E4%BB%A4"><span class="toc-text">在&#x2F;django_test&#x2F;celery_test&#x2F;目录下执行下面命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B7%BB%E5%8A%A0%E6%96%B0%E4%BB%BB%E5%8A%A1%E5%BF%85%E9%A1%BB%E9%87%8D%E5%90%AF%E5%BF%83%E8%B7%B3%E9%97%AE%E9%A2%98"><span class="toc-text">关于添加新任务必须重启心跳问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cdjango-celery-redis%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E5%91%A8%E6%9C%9F%E4%BB%BB%E5%8A%A1"><span class="toc-text">cdjango+celery+redis实现异步周期任务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9Apython%E7%9A%84celery%E6%A8%A1%E5%9D%97-4-2-0%E7%89%88%E6%9C%AC%EF%BC%8C-%E5%88%9A%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85%E7%9A%84%E6%9C%AA4-1-1%E7%89%88%E6%9C%AC%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%B1%85%E7%84%B6%E4%B8%8D%E6%89%A7%E8%A1%8C"><span class="toc-text">注：python的celery模块 4.2.0版本， 刚开始安装的未4.1.1版本，但是定时任务居然不执行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8settings-py%E4%B8%AD%E9%85%8D%E7%BD%AEcelery"><span class="toc-text">在settings.py中配置celery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcelery-py-1"><span class="toc-text">在与项目同名的目录下创建celery.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%BB%BB%E6%84%8Fapp%E4%B8%8B%E5%88%9B%E5%BB%BAtasks-py-django%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%88%B0%E5%90%84app%E4%B8%AD%E6%89%BE%E5%88%B0%E6%AD%A4tasks%E6%96%87%E4%BB%B6"><span class="toc-text">在任意app下创建tasks.py (django会自动到各app中找到此tasks文件)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84-init-py-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9-1"><span class="toc-text">在与项目同名的目录下的 init.py 文件中添加下面内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC%EF%BC%88%E8%AE%B0%E5%BE%97%E5%BC%80%E5%90%AFcelery%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="toc-text">启动脚本（记得开启celery服务）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8django%E7%A8%8B%E5%BA%8F"><span class="toc-text">启动django程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery%E7%9A%84worker%EF%BC%9A%E6%AF%8F%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A88%E4%B8%AAworker-1"><span class="toc-text">启动celery的worker：每台机器可以启动8个worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C"><span class="toc-text">启动celery 定时任务运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E4%B8%8B%E7%BC%96%E5%86%99%E7%9A%84%E8%84%9A%E6%9C%AC%E6%96%87%E4%BB%B6%EF%BC%8C%E6%94%BE%E5%88%B0Linux%E4%B8%AD%E6%97%A0%E6%B3%95%E8%AF%86%E5%88%AB%E6%A0%BC%E5%BC%8F"><span class="toc-text">windows下编写的脚本文件，放到Linux中无法识别格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99"><span class="toc-text">常见报错</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95celery-pro%EF%BC%8C%E5%B9%B6%E5%9C%A8celery-pro%E4%B8%8B%E5%88%9B%E5%BB%BA%E4%B8%8B%E9%9D%A2%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-text">创建目录celery_pro，并在celery_pro下创建下面两个文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task-py"><span class="toc-text">task.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task2-py"><span class="toc-text">task2.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4%E5%8D%B3%E5%8F%AF%E8%AE%A9celery%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E4%BA%86"><span class="toc-text">执行下面两条命令即可让celery定时执行任务了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery%E7%9A%84worker%EF%BC%9A%E6%AF%8F%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A88%E4%B8%AAworker"><span class="toc-text">启动celery的worker：每台机器可以启动8个worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%89%8B%E5%8A%A8%E7%BB%99celery%E5%88%86%E9%85%8D%E4%BB%BB%E5%8A%A1%EF%BC%9A%E5%9C%A8-pythondir-%E4%B8%8B%E6%89%A7%E8%A1%8C"><span class="toc-text">也可以手动给celery分配任务：在&#x2F;pythondir&#x2F;下执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#celery%E4%B8%8EDjango%E9%A1%B9%E7%9B%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">celery与Django项目最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E4%B8%AD%E4%BD%BF%E7%94%A8celery%E4%BB%8B%E7%BB%8D%EF%BC%88celery%E6%97%A0%E6%B3%95%E5%86%8Dwindows%E4%B8%8B%E8%BF%90%E8%A1%8C%EF%BC%89"><span class="toc-text">在Django中使用celery介绍（celery无法再windows下运行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AADjango%E9%A1%B9%E7%9B%AEcelery-test%EF%BC%8C%E5%92%8Capp01"><span class="toc-text">创建一个Django项目celery_test，和app01</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcelery-py"><span class="toc-text">在与项目同名的目录下创建celery.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84-init-py-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9"><span class="toc-text">在与项目同名的目录下的 init.py 文件中添加下面内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAapp01-tasks-py%E6%96%87%E4%BB%B6"><span class="toc-text">创建app01&#x2F;tasks.py文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8setings-py%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9Aredis%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">在setings.py文件指定redis服务器的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86celery-test%E8%BF%99%E4%B8%AADjango%E9%A1%B9%E7%9B%AE%E6%8B%B7%E8%B4%9D%E5%88%B0centos7-3%E7%9A%84django-test%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%AD"><span class="toc-text">将celery_test这个Django项目拷贝到centos7.3的django_test文件夹中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E8%AF%81%E5%90%AF%E5%8A%A8%E4%BA%86redis-server"><span class="toc-text">保证启动了redis-server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAcelery%E7%9A%84worker"><span class="toc-text">启动一个celery的worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Linux%E4%B8%AD%E5%90%AF%E5%8A%A8-Django%E9%A1%B9%E7%9B%AE"><span class="toc-text">在Linux中启动 Django项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AEhttp-1-1-1-3-9000-celery-call-%E8%8E%B7%E5%8F%96%E4%BB%BB%E5%8A%A1id"><span class="toc-text">访问http:&#x2F;&#x2F;1.1.1.3:9000&#x2F;celery_call&#x2F; 获取任务id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE11%E4%B8%AD%E7%9A%84%E4%BB%BB%E5%8A%A1id%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94%E7%9A%84%E5%80%BC"><span class="toc-text">根据11中的任务id获取对应的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%A5%E9%AA%A4%E2%86%91%EF%BC%9A%E5%9C%A8django%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E5%8A%9F%E8%83%BD"><span class="toc-text">基于步骤↑：在django中使用计划任务功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E4%B8%AD%E4%BD%BF%E7%94%A8celery%E7%9A%84%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85django-celery-beat"><span class="toc-text">在Django中使用celery的定时任务需要安装django-celery-beat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E7%9A%84settings%E4%B8%AD%E6%B3%A8%E5%86%8Cdjango-celery-beat"><span class="toc-text">在Django的settings中注册django_celery_beat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%88%9B%E5%BB%BA%E8%A1%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">执行创建表命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8CDjango%E9%A1%B9%E7%9B%AE"><span class="toc-text">运行Django项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95-http-1-1-1-3-9000-admin-%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E5%A4%9A%E4%BA%86%E4%B8%89%E5%BC%A0%E8%A1%A8"><span class="toc-text">登录 http:&#x2F;&#x2F;1.1.1.3:9000&#x2F;admin&#x2F; 可以看到多了三张表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8intervals%E8%A1%A8%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%80%E6%9D%A1%E6%AF%8F5%E7%A7%92%E9%92%9F%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%E7%9A%84%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%97%B6%E9%92%9F"><span class="toc-text">在intervals表中添加一条每5秒钟执行一次的任务的时钟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Periodic-tasks%E8%A1%A8%E4%B8%AD%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1"><span class="toc-text">在Periodic tasks表中创建任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-django-test-celery-test-%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%A7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E5%91%BD%E4%BB%A4"><span class="toc-text">在&#x2F;django_test&#x2F;celery_test&#x2F;目录下执行下面命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B7%BB%E5%8A%A0%E6%96%B0%E4%BB%BB%E5%8A%A1%E5%BF%85%E9%A1%BB%E9%87%8D%E5%90%AF%E5%BF%83%E8%B7%B3%E9%97%AE%E9%A2%98"><span class="toc-text">关于添加新任务必须重启心跳问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cdjango-celery-redis%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E5%91%A8%E6%9C%9F%E4%BB%BB%E5%8A%A1"><span class="toc-text">cdjango+celery+redis实现异步周期任务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9Apython%E7%9A%84celery%E6%A8%A1%E5%9D%97-4-2-0%E7%89%88%E6%9C%AC%EF%BC%8C-%E5%88%9A%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85%E7%9A%84%E6%9C%AA4-1-1%E7%89%88%E6%9C%AC%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%B1%85%E7%84%B6%E4%B8%8D%E6%89%A7%E8%A1%8C"><span class="toc-text">注：python的celery模块 4.2.0版本， 刚开始安装的未4.1.1版本，但是定时任务居然不执行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8settings-py%E4%B8%AD%E9%85%8D%E7%BD%AEcelery"><span class="toc-text">在settings.py中配置celery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcelery-py-1"><span class="toc-text">在与项目同名的目录下创建celery.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%BB%BB%E6%84%8Fapp%E4%B8%8B%E5%88%9B%E5%BB%BAtasks-py-django%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%88%B0%E5%90%84app%E4%B8%AD%E6%89%BE%E5%88%B0%E6%AD%A4tasks%E6%96%87%E4%BB%B6"><span class="toc-text">在任意app下创建tasks.py (django会自动到各app中找到此tasks文件)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84-init-py-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9-1"><span class="toc-text">在与项目同名的目录下的 init.py 文件中添加下面内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC%EF%BC%88%E8%AE%B0%E5%BE%97%E5%BC%80%E5%90%AFcelery%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="toc-text">启动脚本（记得开启celery服务）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8django%E7%A8%8B%E5%BA%8F"><span class="toc-text">启动django程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery%E7%9A%84worker%EF%BC%9A%E6%AF%8F%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A88%E4%B8%AAworker-1"><span class="toc-text">启动celery的worker：每台机器可以启动8个worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C"><span class="toc-text">启动celery 定时任务运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E4%B8%8B%E7%BC%96%E5%86%99%E7%9A%84%E8%84%9A%E6%9C%AC%E6%96%87%E4%BB%B6%EF%BC%8C%E6%94%BE%E5%88%B0Linux%E4%B8%AD%E6%97%A0%E6%B3%95%E8%AF%86%E5%88%AB%E6%A0%BC%E5%BC%8F"><span class="toc-text">windows下编写的脚本文件，放到Linux中无法识别格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99"><span class="toc-text">常见报错</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95celery-pro%EF%BC%8C%E5%B9%B6%E5%9C%A8celery-pro%E4%B8%8B%E5%88%9B%E5%BB%BA%E4%B8%8B%E9%9D%A2%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-text">创建目录celery_pro，并在celery_pro下创建下面两个文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task-py"><span class="toc-text">task.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task2-py"><span class="toc-text">task2.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4%E5%8D%B3%E5%8F%AF%E8%AE%A9celery%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E4%BA%86"><span class="toc-text">执行下面两条命令即可让celery定时执行任务了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery%E7%9A%84worker%EF%BC%9A%E6%AF%8F%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A88%E4%B8%AAworker"><span class="toc-text">启动celery的worker：每台机器可以启动8个worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%89%8B%E5%8A%A8%E7%BB%99celery%E5%88%86%E9%85%8D%E4%BB%BB%E5%8A%A1%EF%BC%9A%E5%9C%A8-pythondir-%E4%B8%8B%E6%89%A7%E8%A1%8C"><span class="toc-text">也可以手动给celery分配任务：在&#x2F;pythondir&#x2F;下执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#celery%E4%B8%8EDjango%E9%A1%B9%E7%9B%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">celery与Django项目最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E4%B8%AD%E4%BD%BF%E7%94%A8celery%E4%BB%8B%E7%BB%8D%EF%BC%88celery%E6%97%A0%E6%B3%95%E5%86%8Dwindows%E4%B8%8B%E8%BF%90%E8%A1%8C%EF%BC%89"><span class="toc-text">在Django中使用celery介绍（celery无法再windows下运行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AADjango%E9%A1%B9%E7%9B%AEcelery-test%EF%BC%8C%E5%92%8Capp01"><span class="toc-text">创建一个Django项目celery_test，和app01</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcelery-py"><span class="toc-text">在与项目同名的目录下创建celery.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84-init-py-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9"><span class="toc-text">在与项目同名的目录下的 init.py 文件中添加下面内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAapp01-tasks-py%E6%96%87%E4%BB%B6"><span class="toc-text">创建app01&#x2F;tasks.py文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8setings-py%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9Aredis%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">在setings.py文件指定redis服务器的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86celery-test%E8%BF%99%E4%B8%AADjango%E9%A1%B9%E7%9B%AE%E6%8B%B7%E8%B4%9D%E5%88%B0centos7-3%E7%9A%84django-test%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%AD"><span class="toc-text">将celery_test这个Django项目拷贝到centos7.3的django_test文件夹中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E8%AF%81%E5%90%AF%E5%8A%A8%E4%BA%86redis-server"><span class="toc-text">保证启动了redis-server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAcelery%E7%9A%84worker"><span class="toc-text">启动一个celery的worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Linux%E4%B8%AD%E5%90%AF%E5%8A%A8-Django%E9%A1%B9%E7%9B%AE"><span class="toc-text">在Linux中启动 Django项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AEhttp-1-1-1-3-9000-celery-call-%E8%8E%B7%E5%8F%96%E4%BB%BB%E5%8A%A1id"><span class="toc-text">访问http:&#x2F;&#x2F;1.1.1.3:9000&#x2F;celery_call&#x2F; 获取任务id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE11%E4%B8%AD%E7%9A%84%E4%BB%BB%E5%8A%A1id%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94%E7%9A%84%E5%80%BC"><span class="toc-text">根据11中的任务id获取对应的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%A5%E9%AA%A4%E2%86%91%EF%BC%9A%E5%9C%A8django%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E5%8A%9F%E8%83%BD"><span class="toc-text">基于步骤↑：在django中使用计划任务功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E4%B8%AD%E4%BD%BF%E7%94%A8celery%E7%9A%84%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85django-celery-beat"><span class="toc-text">在Django中使用celery的定时任务需要安装django-celery-beat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Django%E7%9A%84settings%E4%B8%AD%E6%B3%A8%E5%86%8Cdjango-celery-beat"><span class="toc-text">在Django的settings中注册django_celery_beat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%88%9B%E5%BB%BA%E8%A1%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">执行创建表命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8CDjango%E9%A1%B9%E7%9B%AE"><span class="toc-text">运行Django项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95-http-1-1-1-3-9000-admin-%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E5%A4%9A%E4%BA%86%E4%B8%89%E5%BC%A0%E8%A1%A8"><span class="toc-text">登录 http:&#x2F;&#x2F;1.1.1.3:9000&#x2F;admin&#x2F; 可以看到多了三张表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8intervals%E8%A1%A8%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%80%E6%9D%A1%E6%AF%8F5%E7%A7%92%E9%92%9F%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%E7%9A%84%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%97%B6%E9%92%9F"><span class="toc-text">在intervals表中添加一条每5秒钟执行一次的任务的时钟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Periodic-tasks%E8%A1%A8%E4%B8%AD%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1"><span class="toc-text">在Periodic tasks表中创建任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-django-test-celery-test-%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%A7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E5%91%BD%E4%BB%A4"><span class="toc-text">在&#x2F;django_test&#x2F;celery_test&#x2F;目录下执行下面命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B7%BB%E5%8A%A0%E6%96%B0%E4%BB%BB%E5%8A%A1%E5%BF%85%E9%A1%BB%E9%87%8D%E5%90%AF%E5%BF%83%E8%B7%B3%E9%97%AE%E9%A2%98"><span class="toc-text">关于添加新任务必须重启心跳问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cdjango-celery-redis%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E5%91%A8%E6%9C%9F%E4%BB%BB%E5%8A%A1"><span class="toc-text">cdjango+celery+redis实现异步周期任务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9Apython%E7%9A%84celery%E6%A8%A1%E5%9D%97-4-2-0%E7%89%88%E6%9C%AC%EF%BC%8C-%E5%88%9A%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85%E7%9A%84%E6%9C%AA4-1-1%E7%89%88%E6%9C%AC%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%B1%85%E7%84%B6%E4%B8%8D%E6%89%A7%E8%A1%8C"><span class="toc-text">注：python的celery模块 4.2.0版本， 刚开始安装的未4.1.1版本，但是定时任务居然不执行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8settings-py%E4%B8%AD%E9%85%8D%E7%BD%AEcelery"><span class="toc-text">在settings.py中配置celery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcelery-py-1"><span class="toc-text">在与项目同名的目录下创建celery.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%BB%BB%E6%84%8Fapp%E4%B8%8B%E5%88%9B%E5%BB%BAtasks-py-django%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%88%B0%E5%90%84app%E4%B8%AD%E6%89%BE%E5%88%B0%E6%AD%A4tasks%E6%96%87%E4%BB%B6"><span class="toc-text">在任意app下创建tasks.py (django会自动到各app中找到此tasks文件)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%90%8C%E5%90%8D%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84-init-py-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9-1"><span class="toc-text">在与项目同名的目录下的 init.py 文件中添加下面内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC%EF%BC%88%E8%AE%B0%E5%BE%97%E5%BC%80%E5%90%AFcelery%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="toc-text">启动脚本（记得开启celery服务）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8django%E7%A8%8B%E5%BA%8F"><span class="toc-text">启动django程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery%E7%9A%84worker%EF%BC%9A%E6%AF%8F%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A88%E4%B8%AAworker-1"><span class="toc-text">启动celery的worker：每台机器可以启动8个worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8celery-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C"><span class="toc-text">启动celery 定时任务运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E4%B8%8B%E7%BC%96%E5%86%99%E7%9A%84%E8%84%9A%E6%9C%AC%E6%96%87%E4%BB%B6%EF%BC%8C%E6%94%BE%E5%88%B0Linux%E4%B8%AD%E6%97%A0%E6%B3%95%E8%AF%86%E5%88%AB%E6%A0%BC%E5%BC%8F"><span class="toc-text">windows下编写的脚本文件，放到Linux中无法识别格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99"><span class="toc-text">常见报错</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="requests模块初级用法&amp;高级用法">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/07/17/requests%E6%A8%A1%E5%9D%97%E5%88%9D%E7%BA%A7%E7%94%A8%E6%B3%95&amp;%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-07-17">
+  <meta property="og:article:modified_time" content="2020-09-04">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      requests模块初级用法&高级用法
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-07-16T23:01:12.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-07-17</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/爬虫/" class="post-meta-link">爬虫</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>2.4k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h2 id="1-requests模块初级用法"><a href="#1-requests模块初级用法" class="headerlink" title="1.requests模块初级用法"></a>1.requests模块初级用法</h2><h3 id="requests库的安装"><a href="#requests库的安装" class="headerlink" title="requests库的安装"></a>requests库的安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install requests</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="get请求"><a href="#get请求" class="headerlink" title="get请求:"></a>get请求:</h3><ul>
+<li>不携带参数的get请求</li>
+<li>不携带参数的get请求 + headers</li>
+<li>携带参数的get请求 + headers</li>
+</ul>
+<h3 id="post请求"><a href="#post请求" class="headerlink" title="post请求:"></a>post请求:</h3><ul>
+<li>构建参数的post请求</li>
+</ul>
+<h3 id="响应数据的获取与属性"><a href="#响应数据的获取与属性" class="headerlink" title="响应数据的获取与属性"></a>响应数据的获取与属性</h3><pre><code>(1).响应数据的获取:
+        res.text: 文本数据
+        res.json(): json数据
+        res.content: 流
+(2).响应的其他属性:
+        res.status_code: 获取响应状态码
+        res.headers: 响应头
+        res.cookie: cookie信息</code></pre>
+<hr>
+<h3 id="requests模块的get请求"><a href="#requests模块的get请求" class="headerlink" title="requests模块的get请求"></a>requests模块的get请求</h3><h4 id="1-不携带参数的get请求-爬取搜狗主页"><a href="#1-不携带参数的get请求-爬取搜狗主页" class="headerlink" title="1.不携带参数的get请求: 爬取搜狗主页"></a>1.不携带参数的get请求: 爬取搜狗主页</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.sogou.com&#x2F;&#39;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url)</span><br><span class="line">print(res)</span><br><span class="line">print(res.text)</span><br><span class="line"></span><br><span class="line">with open(&#39;sougou.html&#39;, &#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">    f.write(res.text)</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-不携带参数的get请求-headers-爬取知乎的发现页"><a href="#2-不携带参数的get请求-headers-爬取知乎的发现页" class="headerlink" title="2.不携带参数的get请求  +  headers: 爬取知乎的发现页"></a>2.不携带参数的get请求  +  headers: 爬取知乎的发现页</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agent&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.zhihu.com&#x2F;explore&#39;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">with open(&#39;zhihu.html&#39;, &#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">    f.write(res.text)</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="3-携带参数的get请求-headers-知乎的发现栏中搜索Python"><a href="#3-携带参数的get请求-headers-知乎的发现栏中搜索Python" class="headerlink" title="3.携带参数的get请求  +  headers: 知乎的发现栏中搜索Python"></a>3.携带参数的get请求  +  headers: 知乎的发现栏中搜索Python</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">url&#x3D; &#39;https:&#x2F;&#x2F;www.zhihu.com&#x2F;search?&#39;</span><br><span class="line">params &#x3D; &#123;</span><br><span class="line">    &#39;type&#39;:&#39;content&#39;,</span><br><span class="line">    &#39;q&#39;:&#39;python&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers, params&#x3D;params)</span><br><span class="line">print(res)</span><br><span class="line">print(res.text)</span><br><span class="line">with open(&#39;python.html&#39;, &#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">    f.write(res.text)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-requests模块的post请求"><a href="#4-requests模块的post请求" class="headerlink" title="4.requests模块的post请求:"></a>4.requests模块的post请求:</h3><h4 id="以post方式请求httpbin-org-post时会返回提交的请求信息"><a href="#以post方式请求httpbin-org-post时会返回提交的请求信息" class="headerlink" title="以post方式请求httpbin.org/post时会返回提交的请求信息"></a>以post方式请求httpbin.org/post时会返回提交的请求信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">     &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;httpbin.org&#x2F;post&#39;</span><br><span class="line">data &#x3D; &#123;</span><br><span class="line">    &#39;name&#39;: &#39;spiderman&#39;,</span><br><span class="line">    &#39;age&#39;: 8</span><br><span class="line">&#125;</span><br><span class="line">res &#x3D; requests.post(url&#x3D;url, headers&#x3D;headers, data&#x3D;data)</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure>
+<h4 id="以post方式请求百度翻译返回请求信息"><a href="#以post方式请求百度翻译返回请求信息" class="headerlink" title="以post方式请求百度翻译返回请求信息"></a>以post方式请求百度翻译返回请求信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">#  确定url,发送请求，响应数据</span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;fanyi.baidu.com&#x2F;sug&#39;</span><br><span class="line">while 1:</span><br><span class="line">    kw &#x3D; input(&#39;请输入需要查询的单词：&#39;)</span><br><span class="line">    if kw &#x3D;&#x3D; &#39;q&#39;:</span><br><span class="line">        break</span><br><span class="line">    params &#x3D; &#123;</span><br><span class="line">        &#39;kw&#39;:kw</span><br><span class="line">    &#125;</span><br><span class="line">    headers &#x3D; &#123;</span><br><span class="line">        &#39;User-agent&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;80.0.3987.106 Safari&#x2F;537.36&#39;</span><br><span class="line">    &#125;</span><br><span class="line">    res &#x3D; requests.post(url &#x3D; url,headers &#x3D; headers,params &#x3D; params).json()</span><br><span class="line">    # print(res)</span><br><span class="line">    kdata &#x3D; res[&#39;data&#39;][0][&#39;v&#39;]</span><br><span class="line">    print(kdata)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="json形式与流形式的响应数据示例"><a href="#json形式与流形式的响应数据示例" class="headerlink" title="json形式与流形式的响应数据示例"></a>json形式与流形式的响应数据示例</h3><h4 id="1-json形式响应数据示例-bilibili的Python视频教程-目录列表"><a href="#1-json形式响应数据示例-bilibili的Python视频教程-目录列表" class="headerlink" title="1.json形式响应数据示例: bilibili的Python视频教程, 目录列表"></a>1.json形式响应数据示例: bilibili的Python视频教程, 目录列表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">     &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;api.bilibili.com&#x2F;x&#x2F;web-interface&#x2F;view?aid&#x3D;14184325&amp;cid&#x3D;23153678&#39;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">print(res)</span><br><span class="line">print(res.status_code)</span><br><span class="line">print(res.headers)</span><br><span class="line">print(&#39;~~~~~~&#39;)</span><br><span class="line">print(res.json())</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-流形式响应数据示例-站长素材的简历模板"><a href="#2-流形式响应数据示例-站长素材的简历模板" class="headerlink" title="2.流形式响应数据示例: 站长素材的简历模板"></a>2.流形式响应数据示例: 站长素材的简历模板</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">     &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;fjdx.sc.chinaz.net&#x2F;Files&#x2F;DownLoad&#x2F;jianli&#x2F;201907&#x2F;jianli10810.rar&#39;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">print(res.content)</span><br><span class="line">with open(&#39;janli.rar&#39;, &#39;wb&#39;) as f:</span><br><span class="line">    f.write(res.content)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-requests模块高级用法"><a href="#2-requests模块高级用法" class="headerlink" title="2.requests模块高级用法"></a>2.requests模块高级用法</h2><h3 id="文件上传功能"><a href="#文件上传功能" class="headerlink" title="文件上传功能"></a>文件上传功能</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line"># 定义上传文件数据, 键为file, 值为文件句柄</span><br><span class="line">files &#x3D; &#123;</span><br><span class="line">&#39;file&#39;: open(&#39;favicon.ico&#39;, &#39;rb&#39;)</span><br><span class="line">&#125;</span><br><span class="line">r &#x3D; requests.post(&#39;http:&#x2F;&#x2F;httpbin.org&#x2F;post&#39;, files&#x3D;files)</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="cookie处理方法"><a href="#cookie处理方法" class="headerlink" title="cookie处理方法"></a>cookie处理方法</h3><ol>
+<li>headers添加cookie键值对</li>
+<li>RequestsCookieJar对象</li>
+</ol>
+<hr>
+<h4 id="headers内添加cookie键值对处理cookie"><a href="#headers内添加cookie键值对处理cookie" class="headerlink" title="headers内添加cookie键值对处理cookie"></a>headers内添加cookie键值对处理cookie</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.baidu.com&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;,</span><br><span class="line">    &#39;Cookies&#39;:&#39;BAIDUID&#x3D;79A570F8D90B2C45E42D40A3666ADC46:FG&#x3D;1; BIDUPSID&#x3D;79A570F8D90B2C45E42D40A3666ADC46; PSTM&#x3D;1551074009; BD_UPN&#x3D;12314753; sugstore&#x3D;0; BDORZ&#x3D;FFFB88E999055A3F8A630C64834BD6D0; yjs_js_security_passport&#x3D;10c9ca61409abe70ac5c03db796f78648e697d8f_1563711806_js; COOKIE_SESSION&#x3D;2860_2_2_7_3_5_0_0_2_4_106_0_3778_177561_116_109_1563714759_1563714752_1563714643%7C9%23177557_14_1563714643%7C7; delPer&#x3D;0; BD_HOME&#x3D;0; H_PS_PSSID&#x3D;1452_21117_29522_29521_28519_29099_28831_29221&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers)</span><br><span class="line">res.encoding &#x3D; &#39;utf-8&#39;</span><br><span class="line">with open(&#39;baidu_cookie.html&#39;, &#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">    f.write(res.text)</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="RequestsCookieJar对象处理cookie-用cookie维持百度登陆"><a href="#RequestsCookieJar对象处理cookie-用cookie维持百度登陆" class="headerlink" title="RequestsCookieJar对象处理cookie: 用cookie维持百度登陆"></a>RequestsCookieJar对象处理cookie: 用cookie维持百度登陆</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">cookies &#x3D; &#39;BAIDUID&#x3D;79A570F8D90B2C45E42D40A3666ADC46:FG&#x3D;1; BIDUPSID&#x3D;79A570F8D90B2C45E42D40A3666ADC46; PSTM&#x3D;1551074009; BD_UPN&#x3D;12314753; sugstore&#x3D;0; BDORZ&#x3D;FFFB88E999055A3F8A630C64834BD6D0; yjs_js_security_passport&#x3D;10c9ca61409abe70ac5c03db796f78648e697d8f_1563711806_js; COOKIE_SESSION&#x3D;2860_2_2_7_3_5_0_0_2_4_106_0_3778_177561_116_109_1563714759_1563714752_1563714643%7C9%23177557_14_1563714643%7C7; delPer&#x3D;0; BD_HOME&#x3D;0; H_PS_PSSID&#x3D;1452_21117_29522_29521_28519_29099_28831_29221; BDUSS&#x3D;lSVnBVVkRVNFpNZ2ZJZ2ZpNFpjblFFSX5EaW9DNzBpcnNkaDZIQVdRd2Z1bHhkRVFBQUFBJCQAAAAAAAAAAAEAAABwfMtW09rQodPjMDgyMGZyZWUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8tNV0fLTVdYX&#39;</span><br><span class="line">jar &#x3D; requests.cookies.RequestsCookieJar()</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agetn&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">for cookie in cookies.split(&#39;;&#39;):</span><br><span class="line">    key, value &#x3D; cookie.split(&#39;&#x3D;&#39;, 1)</span><br><span class="line">    jar.set(key, value)</span><br><span class="line">    </span><br><span class="line">res &#x3D; requests.get(&#39;http:&#x2F;&#x2F;www.baidu.com&#39;, cookies&#x3D;jar, headers&#x3D;headers)</span><br><span class="line">print(res.text)  # 响应数据中包含用户名信息, 说明cookie生效</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="会话维持"><a href="#会话维持" class="headerlink" title="会话维持"></a>会话维持</h3><h4 id="HTTP无状态"><a href="#HTTP无状态" class="headerlink" title="HTTP无状态:"></a>HTTP无状态:</h4><p>使用requests模块中的get()和post()方法请求网页时, 每一次请求都是独立的, 没有连续请求之间的状态保持. 假象, 如果你登陆了淘宝后向查看订单, 那么如果没有状态的维持就无法实现.</p>
+<hr>
+<h3 id="会话的维持-Session对象"><a href="#会话的维持-Session对象" class="headerlink" title="会话的维持: Session对象"></a>会话的维持: Session对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from requests import Session</span><br><span class="line">s &#x3D; Session()</span><br><span class="line">res &#x3D; s.get(&#39;https:&#x2F;&#x2F;www.baidu.com&#39;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="SSL证书验证"><a href="#SSL证书验证" class="headerlink" title="SSL证书验证"></a>SSL证书验证</h3><h4 id="1-SSL证书验证"><a href="#1-SSL证书验证" class="headerlink" title="1.SSL证书验证"></a>1.SSL证书验证</h4><p>requests提供了证书验证的功能. 当发起HTTP请求时, 模块会检查SSL证书. 但检查的行为可以用verify参数来控制.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">verify &#x3D; False  # 不检查SSL证书</span><br><span class="line">verify &#x3D; True  # 检查SSL证书</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-异常"><a href="#2-异常" class="headerlink" title="2.异常"></a>2.异常</h4><p>如果使用requests模块的SSL验证, 验证不通过会抛出异常, 此时可以将verify参数设置为False</p>
+<h4 id="3-www-12306-cn的证书验证"><a href="#3-www-12306-cn的证书验证" class="headerlink" title="3.www.12306.cn的证书验证:"></a>3.<a target="_blank" rel="noopener" href="http://www.12306.cn的证书验证/">www.12306.cn的证书验证</a>:</h4><h5 id="会抛出异常"><a href="#会抛出异常" class="headerlink" title="会抛出异常"></a>会抛出异常</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">response &#x3D; requests.get(&#39;https:&#x2F;&#x2F;www.12306.cn&#39;)</span><br><span class="line">print(response.status_code)</span><br></pre></td></tr></table></figure>
+
+<h5 id="不抛异常-但会出现警告"><a href="#不抛异常-但会出现警告" class="headerlink" title="不抛异常, 但会出现警告"></a>不抛异常, 但会出现警告</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">response &#x3D; requests.get(&#39;https:&#x2F;&#x2F;www.12306.cn&#39;, verify&#x3D;False)</span><br><span class="line">print(response.status_code)</span><br></pre></td></tr></table></figure>
+
+<h5 id="禁止警告"><a href="#禁止警告" class="headerlink" title="禁止警告"></a>禁止警告</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from requests.packages import urllib3</span><br><span class="line">urllib3.disable_warnings()</span><br><span class="line">response &#x3D; requests.get(url&#x3D;&#39;https:&#x2F;&#x2F;www.12306.cn&#39;, verify&#x3D;False)</span><br><span class="line">print(response.status_code)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="代理设置"><a href="#代理设置" class="headerlink" title="代理设置"></a>代理设置</h3><h5 id="代理-代理即代理ip"><a href="#代理-代理即代理ip" class="headerlink" title="代理: 代理即代理ip"></a>代理: 代理即代理ip</h5><p>代理ip是指在请求的过程中使用非本机ip进行请求, 避免大数据量频繁请求的过程中出现ip封禁, 限制数据的爬取.</p>
+<hr>
+<h5 id="代理ip分类"><a href="#代理ip分类" class="headerlink" title="代理ip分类:"></a>代理ip分类:</h5><ol>
+<li>透明代理ip: 请求时, 服务器知道请求的真实ip, 知道请求使用了代理</li>
+<li>匿名代理ip: 请求时, 服务器知道请求使用了代理, 但不知道请求的真实ip</li>
+<li>高匿代理ip: 请求时, 服务器不知道请求使用了代理, 也不知道请求的真实ip</li>
+</ol>
+<hr>
+<h4 id="requests模块使用代理ip"><a href="#requests模块使用代理ip" class="headerlink" title="requests模块使用代理ip"></a>requests模块使用代理ip</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;www.httpbin.org&#39;</span><br><span class="line">proxies &#x3D; &#123;</span><br><span class="line">    &#39;http&#39;: &#39;http:&#x2F;&#x2F;61.183.176.122:57210&#39;</span><br><span class="line">&#125;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, proxies&#x3D;proxies)</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="超时设置"><a href="#超时设置" class="headerlink" title="超时设置"></a>超时设置</h3><p>由于网络状况的不同, 服务器配置差异以及服务器处理并发的能力不同, 有时会出现服务器的响应时间过长, 甚至无法获取响应而抛出异常. requests模块发送请求可以设置超时时间, 在超时时间内未得到响应, 便会抛出异常.<br>一方面, 减少了请求的阻塞时间, 一方面, 可以进行异常处理, 执行相应的操作.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.baidu.com&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;User-Agent&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">res &#x3D; requests.get(url&#x3D;url, headers&#x3D;headers, timeout&#x3D;0.001)  # 在0.001秒为得到响应, 抛出requests.exceptions.ConnectTimeout异常</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="构建Request对象"><a href="#构建Request对象" class="headerlink" title="构建Request对象"></a>构建Request对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 1.Prepared Request</span><br><span class="line">利用 Prepared Request 数据结构构件Request对象. 其构建及使用步骤如下:</span><br><span class="line">from requests import Request, Session</span><br><span class="line"></span><br><span class="line"># 构建Request对象</span><br><span class="line">url &#x3D; &#39;...&#39;</span><br><span class="line">data &#x3D; &#123;...&#125;</span><br><span class="line">params &#x3D; &#123;...&#125;</span><br><span class="line">headers &#x3D; &#123;...&#125;</span><br><span class="line">session &#x3D; Session()</span><br><span class="line"></span><br><span class="line"># 构建post请求:</span><br><span class="line">req_post &#x3D; Request(method&#x3D;&#39;POST&#39;, url&#x3D;url, headers&#x3D;headers, data&#x3D;data)</span><br><span class="line">req_obj_post &#x3D; session.prepare_request(req_post)</span><br><span class="line"></span><br><span class="line"># 构建get请求:</span><br><span class="line">req_get &#x3D; Request(method&#x3D;&#39;GET&#39;, url&#x3D;url, headers&#x3D;headers, params&#x3D;params)</span><br><span class="line">req_obj_get &#x3D; session.prepare_request(req_get)</span><br><span class="line"></span><br><span class="line"># 利用构建的请求对象, 向服务器发送请求</span><br><span class="line">res &#x3D; session.send(req_obj_post)</span><br><span class="line">res &#x3D; session.send(req_obj_get)</span><br><span class="line"></span><br><span class="line"># 应用:</span><br><span class="line">通过此方法, 我们可以构建一个独立的request对象, 当需要请求的url很多时, 我们可以为每一个url构建一个request对象, 将所有request对象置于队列中, 便于调度.</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="构建Request对象-请求糗事百科获取页面"><a href="#构建Request对象-请求糗事百科获取页面" class="headerlink" title="构建Request对象, 请求糗事百科获取页面"></a>构建Request对象, 请求糗事百科获取页面</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from requests import Request, Session</span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.qiushibaike.com&#x2F;&#39;</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &quot;User-Agent&quot;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;75.0.3770.142 Safari&#x2F;537.36&#39;</span><br><span class="line">&#125;</span><br><span class="line">session &#x3D; Session()</span><br><span class="line">req_get &#x3D; Request(url&#x3D;url, headers&#x3D;headers, method&#x3D;&#39;GET&#39;)</span><br><span class="line">req_get_obj &#x3D; session.prepare_request(req_get)</span><br><span class="line">res &#x3D; session.send(req_get_obj)</span><br><span class="line">res.encoding &#x3D; &#39;utf-8&#39;</span><br><span class="line">with open(&#39;qb_reqobj.html&#39;, &#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">    f.write(res.text)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="urllib简单介绍"><a href="#urllib简单介绍" class="headerlink" title="urllib简单介绍"></a>urllib简单介绍</h3><h5 id="urllib简介"><a href="#urllib简介" class="headerlink" title="urllib简介:"></a>urllib简介:</h5><ul>
+<li>urllib模块是Python的一个请求模块</li>
+<li>Python2中是urllib和urllib2相结合实现请求的发送. Python3中同一为urllib库</li>
+<li>urllib是Python内置的请求库, 其包含4个模块:<ul>
+<li>request模块: 模拟发送请求</li>
+<li>error模块: 异常处理模块</li>
+<li>parse模块: 工具模块, 提供关于URL的处理方法, 如拆分, 解析, 合并等</li>
+<li>robotparser模块: 识别robots协议</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/07/17/requests%E6%A8%A1%E5%9D%97%E5%88%9D%E7%BA%A7%E7%94%A8%E6%B3%95&amp;%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/">https://github.com/xuMr6/xumr6.github.io.git/2018/07/17/requests%E6%A8%A1%E5%9D%97%E5%88%9D%E7%BA%A7%E7%94%A8%E6%B3%95&amp;%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/07/25/数据解析之正则&amp;BS4&amp;xpath/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">数据解析之正则&amp;BS4&amp;xpath </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/07/11/爬虫概述&amp;协议&amp;请求/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">爬虫概述&amp;协议&amp;请求 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-requests%E6%A8%A1%E5%9D%97%E5%88%9D%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-text">1.requests模块初级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E5%BA%93%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">requests库的安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get%E8%AF%B7%E6%B1%82"><span class="toc-text">get请求:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#post%E8%AF%B7%E6%B1%82"><span class="toc-text">post请求:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%9A%84%E8%8E%B7%E5%8F%96%E4%B8%8E%E5%B1%9E%E6%80%A7"><span class="toc-text">响应数据的获取与属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E7%9A%84get%E8%AF%B7%E6%B1%82"><span class="toc-text">requests模块的get请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8D%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-%E7%88%AC%E5%8F%96%E6%90%9C%E7%8B%97%E4%B8%BB%E9%A1%B5"><span class="toc-text">1.不携带参数的get请求: 爬取搜狗主页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%8D%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-headers-%E7%88%AC%E5%8F%96%E7%9F%A5%E4%B9%8E%E7%9A%84%E5%8F%91%E7%8E%B0%E9%A1%B5"><span class="toc-text">2.不携带参数的get请求  +  headers: 爬取知乎的发现页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-headers-%E7%9F%A5%E4%B9%8E%E7%9A%84%E5%8F%91%E7%8E%B0%E6%A0%8F%E4%B8%AD%E6%90%9C%E7%B4%A2Python"><span class="toc-text">3.携带参数的get请求  +  headers: 知乎的发现栏中搜索Python</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-requests%E6%A8%A1%E5%9D%97%E7%9A%84post%E8%AF%B7%E6%B1%82"><span class="toc-text">4.requests模块的post请求:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5post%E6%96%B9%E5%BC%8F%E8%AF%B7%E6%B1%82httpbin-org-post%E6%97%B6%E4%BC%9A%E8%BF%94%E5%9B%9E%E6%8F%90%E4%BA%A4%E7%9A%84%E8%AF%B7%E6%B1%82%E4%BF%A1%E6%81%AF"><span class="toc-text">以post方式请求httpbin.org&#x2F;post时会返回提交的请求信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5post%E6%96%B9%E5%BC%8F%E8%AF%B7%E6%B1%82%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91%E8%BF%94%E5%9B%9E%E8%AF%B7%E6%B1%82%E4%BF%A1%E6%81%AF"><span class="toc-text">以post方式请求百度翻译返回请求信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#json%E5%BD%A2%E5%BC%8F%E4%B8%8E%E6%B5%81%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B"><span class="toc-text">json形式与流形式的响应数据示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-json%E5%BD%A2%E5%BC%8F%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B-bilibili%E7%9A%84Python%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-%E7%9B%AE%E5%BD%95%E5%88%97%E8%A1%A8"><span class="toc-text">1.json形式响应数据示例: bilibili的Python视频教程, 目录列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B5%81%E5%BD%A2%E5%BC%8F%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B-%E7%AB%99%E9%95%BF%E7%B4%A0%E6%9D%90%E7%9A%84%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF"><span class="toc-text">2.流形式响应数据示例: 站长素材的简历模板</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-requests%E6%A8%A1%E5%9D%97%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-text">2.requests模块高级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8A%9F%E8%83%BD"><span class="toc-text">文件上传功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cookie%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">cookie处理方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#headers%E5%86%85%E6%B7%BB%E5%8A%A0cookie%E9%94%AE%E5%80%BC%E5%AF%B9%E5%A4%84%E7%90%86cookie"><span class="toc-text">headers内添加cookie键值对处理cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RequestsCookieJar%E5%AF%B9%E8%B1%A1%E5%A4%84%E7%90%86cookie-%E7%94%A8cookie%E7%BB%B4%E6%8C%81%E7%99%BE%E5%BA%A6%E7%99%BB%E9%99%86"><span class="toc-text">RequestsCookieJar对象处理cookie: 用cookie维持百度登陆</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E7%BB%B4%E6%8C%81"><span class="toc-text">会话维持</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">HTTP无状态:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E7%9A%84%E7%BB%B4%E6%8C%81-Session%E5%AF%B9%E8%B1%A1"><span class="toc-text">会话的维持: Session对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSL%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">SSL证书验证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-SSL%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">1.SSL证书验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%BC%82%E5%B8%B8"><span class="toc-text">2.异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-www-12306-cn%E7%9A%84%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">3.www.12306.cn的证书验证:</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%9A%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8"><span class="toc-text">会抛出异常</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8D%E6%8A%9B%E5%BC%82%E5%B8%B8-%E4%BD%86%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%AD%A6%E5%91%8A"><span class="toc-text">不抛异常, 但会出现警告</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A6%81%E6%AD%A2%E8%AD%A6%E5%91%8A"><span class="toc-text">禁止警告</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE"><span class="toc-text">代理设置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%90%86-%E4%BB%A3%E7%90%86%E5%8D%B3%E4%BB%A3%E7%90%86ip"><span class="toc-text">代理: 代理即代理ip</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%90%86ip%E5%88%86%E7%B1%BB"><span class="toc-text">代理ip分类:</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86ip"><span class="toc-text">requests模块使用代理ip</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E8%AE%BE%E7%BD%AE"><span class="toc-text">超时设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BARequest%E5%AF%B9%E8%B1%A1"><span class="toc-text">构建Request对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9E%84%E5%BB%BARequest%E5%AF%B9%E8%B1%A1-%E8%AF%B7%E6%B1%82%E7%B3%97%E4%BA%8B%E7%99%BE%E7%A7%91%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2"><span class="toc-text">构建Request对象, 请求糗事百科获取页面</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#urllib%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="toc-text">urllib简单介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#urllib%E7%AE%80%E4%BB%8B"><span class="toc-text">urllib简介:</span></a></li></ol></li></ol></li></ol></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-requests%E6%A8%A1%E5%9D%97%E5%88%9D%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-text">1.requests模块初级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E5%BA%93%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">requests库的安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get%E8%AF%B7%E6%B1%82"><span class="toc-text">get请求:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#post%E8%AF%B7%E6%B1%82"><span class="toc-text">post请求:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%9A%84%E8%8E%B7%E5%8F%96%E4%B8%8E%E5%B1%9E%E6%80%A7"><span class="toc-text">响应数据的获取与属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E7%9A%84get%E8%AF%B7%E6%B1%82"><span class="toc-text">requests模块的get请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8D%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-%E7%88%AC%E5%8F%96%E6%90%9C%E7%8B%97%E4%B8%BB%E9%A1%B5"><span class="toc-text">1.不携带参数的get请求: 爬取搜狗主页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%8D%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-headers-%E7%88%AC%E5%8F%96%E7%9F%A5%E4%B9%8E%E7%9A%84%E5%8F%91%E7%8E%B0%E9%A1%B5"><span class="toc-text">2.不携带参数的get请求  +  headers: 爬取知乎的发现页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-headers-%E7%9F%A5%E4%B9%8E%E7%9A%84%E5%8F%91%E7%8E%B0%E6%A0%8F%E4%B8%AD%E6%90%9C%E7%B4%A2Python"><span class="toc-text">3.携带参数的get请求  +  headers: 知乎的发现栏中搜索Python</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-requests%E6%A8%A1%E5%9D%97%E7%9A%84post%E8%AF%B7%E6%B1%82"><span class="toc-text">4.requests模块的post请求:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5post%E6%96%B9%E5%BC%8F%E8%AF%B7%E6%B1%82httpbin-org-post%E6%97%B6%E4%BC%9A%E8%BF%94%E5%9B%9E%E6%8F%90%E4%BA%A4%E7%9A%84%E8%AF%B7%E6%B1%82%E4%BF%A1%E6%81%AF"><span class="toc-text">以post方式请求httpbin.org&#x2F;post时会返回提交的请求信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5post%E6%96%B9%E5%BC%8F%E8%AF%B7%E6%B1%82%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91%E8%BF%94%E5%9B%9E%E8%AF%B7%E6%B1%82%E4%BF%A1%E6%81%AF"><span class="toc-text">以post方式请求百度翻译返回请求信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#json%E5%BD%A2%E5%BC%8F%E4%B8%8E%E6%B5%81%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B"><span class="toc-text">json形式与流形式的响应数据示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-json%E5%BD%A2%E5%BC%8F%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B-bilibili%E7%9A%84Python%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-%E7%9B%AE%E5%BD%95%E5%88%97%E8%A1%A8"><span class="toc-text">1.json形式响应数据示例: bilibili的Python视频教程, 目录列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B5%81%E5%BD%A2%E5%BC%8F%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B-%E7%AB%99%E9%95%BF%E7%B4%A0%E6%9D%90%E7%9A%84%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF"><span class="toc-text">2.流形式响应数据示例: 站长素材的简历模板</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-requests%E6%A8%A1%E5%9D%97%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-text">2.requests模块高级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8A%9F%E8%83%BD"><span class="toc-text">文件上传功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cookie%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">cookie处理方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#headers%E5%86%85%E6%B7%BB%E5%8A%A0cookie%E9%94%AE%E5%80%BC%E5%AF%B9%E5%A4%84%E7%90%86cookie"><span class="toc-text">headers内添加cookie键值对处理cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RequestsCookieJar%E5%AF%B9%E8%B1%A1%E5%A4%84%E7%90%86cookie-%E7%94%A8cookie%E7%BB%B4%E6%8C%81%E7%99%BE%E5%BA%A6%E7%99%BB%E9%99%86"><span class="toc-text">RequestsCookieJar对象处理cookie: 用cookie维持百度登陆</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E7%BB%B4%E6%8C%81"><span class="toc-text">会话维持</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">HTTP无状态:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E7%9A%84%E7%BB%B4%E6%8C%81-Session%E5%AF%B9%E8%B1%A1"><span class="toc-text">会话的维持: Session对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSL%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">SSL证书验证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-SSL%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">1.SSL证书验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%BC%82%E5%B8%B8"><span class="toc-text">2.异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-www-12306-cn%E7%9A%84%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">3.www.12306.cn的证书验证:</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%9A%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8"><span class="toc-text">会抛出异常</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8D%E6%8A%9B%E5%BC%82%E5%B8%B8-%E4%BD%86%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%AD%A6%E5%91%8A"><span class="toc-text">不抛异常, 但会出现警告</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A6%81%E6%AD%A2%E8%AD%A6%E5%91%8A"><span class="toc-text">禁止警告</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE"><span class="toc-text">代理设置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%90%86-%E4%BB%A3%E7%90%86%E5%8D%B3%E4%BB%A3%E7%90%86ip"><span class="toc-text">代理: 代理即代理ip</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%90%86ip%E5%88%86%E7%B1%BB"><span class="toc-text">代理ip分类:</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86ip"><span class="toc-text">requests模块使用代理ip</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E8%AE%BE%E7%BD%AE"><span class="toc-text">超时设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BARequest%E5%AF%B9%E8%B1%A1"><span class="toc-text">构建Request对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9E%84%E5%BB%BARequest%E5%AF%B9%E8%B1%A1-%E8%AF%B7%E6%B1%82%E7%B3%97%E4%BA%8B%E7%99%BE%E7%A7%91%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2"><span class="toc-text">构建Request对象, 请求糗事百科获取页面</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#urllib%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="toc-text">urllib简单介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#urllib%E7%AE%80%E4%BB%8B"><span class="toc-text">urllib简介:</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-requests%E6%A8%A1%E5%9D%97%E5%88%9D%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-text">1.requests模块初级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E5%BA%93%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">requests库的安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get%E8%AF%B7%E6%B1%82"><span class="toc-text">get请求:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#post%E8%AF%B7%E6%B1%82"><span class="toc-text">post请求:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%9A%84%E8%8E%B7%E5%8F%96%E4%B8%8E%E5%B1%9E%E6%80%A7"><span class="toc-text">响应数据的获取与属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E7%9A%84get%E8%AF%B7%E6%B1%82"><span class="toc-text">requests模块的get请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8D%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-%E7%88%AC%E5%8F%96%E6%90%9C%E7%8B%97%E4%B8%BB%E9%A1%B5"><span class="toc-text">1.不携带参数的get请求: 爬取搜狗主页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%8D%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-headers-%E7%88%AC%E5%8F%96%E7%9F%A5%E4%B9%8E%E7%9A%84%E5%8F%91%E7%8E%B0%E9%A1%B5"><span class="toc-text">2.不携带参数的get请求  +  headers: 爬取知乎的发现页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%90%BA%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84get%E8%AF%B7%E6%B1%82-headers-%E7%9F%A5%E4%B9%8E%E7%9A%84%E5%8F%91%E7%8E%B0%E6%A0%8F%E4%B8%AD%E6%90%9C%E7%B4%A2Python"><span class="toc-text">3.携带参数的get请求  +  headers: 知乎的发现栏中搜索Python</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-requests%E6%A8%A1%E5%9D%97%E7%9A%84post%E8%AF%B7%E6%B1%82"><span class="toc-text">4.requests模块的post请求:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5post%E6%96%B9%E5%BC%8F%E8%AF%B7%E6%B1%82httpbin-org-post%E6%97%B6%E4%BC%9A%E8%BF%94%E5%9B%9E%E6%8F%90%E4%BA%A4%E7%9A%84%E8%AF%B7%E6%B1%82%E4%BF%A1%E6%81%AF"><span class="toc-text">以post方式请求httpbin.org&#x2F;post时会返回提交的请求信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5post%E6%96%B9%E5%BC%8F%E8%AF%B7%E6%B1%82%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91%E8%BF%94%E5%9B%9E%E8%AF%B7%E6%B1%82%E4%BF%A1%E6%81%AF"><span class="toc-text">以post方式请求百度翻译返回请求信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#json%E5%BD%A2%E5%BC%8F%E4%B8%8E%E6%B5%81%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B"><span class="toc-text">json形式与流形式的响应数据示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-json%E5%BD%A2%E5%BC%8F%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B-bilibili%E7%9A%84Python%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-%E7%9B%AE%E5%BD%95%E5%88%97%E8%A1%A8"><span class="toc-text">1.json形式响应数据示例: bilibili的Python视频教程, 目录列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B5%81%E5%BD%A2%E5%BC%8F%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B-%E7%AB%99%E9%95%BF%E7%B4%A0%E6%9D%90%E7%9A%84%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF"><span class="toc-text">2.流形式响应数据示例: 站长素材的简历模板</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-requests%E6%A8%A1%E5%9D%97%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-text">2.requests模块高级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8A%9F%E8%83%BD"><span class="toc-text">文件上传功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cookie%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">cookie处理方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#headers%E5%86%85%E6%B7%BB%E5%8A%A0cookie%E9%94%AE%E5%80%BC%E5%AF%B9%E5%A4%84%E7%90%86cookie"><span class="toc-text">headers内添加cookie键值对处理cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RequestsCookieJar%E5%AF%B9%E8%B1%A1%E5%A4%84%E7%90%86cookie-%E7%94%A8cookie%E7%BB%B4%E6%8C%81%E7%99%BE%E5%BA%A6%E7%99%BB%E9%99%86"><span class="toc-text">RequestsCookieJar对象处理cookie: 用cookie维持百度登陆</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E7%BB%B4%E6%8C%81"><span class="toc-text">会话维持</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">HTTP无状态:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E7%9A%84%E7%BB%B4%E6%8C%81-Session%E5%AF%B9%E8%B1%A1"><span class="toc-text">会话的维持: Session对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSL%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">SSL证书验证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-SSL%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">1.SSL证书验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%BC%82%E5%B8%B8"><span class="toc-text">2.异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-www-12306-cn%E7%9A%84%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">3.www.12306.cn的证书验证:</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%9A%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8"><span class="toc-text">会抛出异常</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8D%E6%8A%9B%E5%BC%82%E5%B8%B8-%E4%BD%86%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%AD%A6%E5%91%8A"><span class="toc-text">不抛异常, 但会出现警告</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A6%81%E6%AD%A2%E8%AD%A6%E5%91%8A"><span class="toc-text">禁止警告</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE"><span class="toc-text">代理设置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%90%86-%E4%BB%A3%E7%90%86%E5%8D%B3%E4%BB%A3%E7%90%86ip"><span class="toc-text">代理: 代理即代理ip</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%90%86ip%E5%88%86%E7%B1%BB"><span class="toc-text">代理ip分类:</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86ip"><span class="toc-text">requests模块使用代理ip</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E8%AE%BE%E7%BD%AE"><span class="toc-text">超时设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BARequest%E5%AF%B9%E8%B1%A1"><span class="toc-text">构建Request对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9E%84%E5%BB%BARequest%E5%AF%B9%E8%B1%A1-%E8%AF%B7%E6%B1%82%E7%B3%97%E4%BA%8B%E7%99%BE%E7%A7%91%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2"><span class="toc-text">构建Request对象, 请求糗事百科获取页面</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#urllib%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="toc-text">urllib简单介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#urllib%E7%AE%80%E4%BB%8B"><span class="toc-text">urllib简介:</span></a></li></ol></li></ol></li></ol></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

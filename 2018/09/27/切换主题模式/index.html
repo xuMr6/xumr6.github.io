@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="切换主题模式">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2018/09/27/%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%BC%8F/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2018-09-27">
+  <meta property="og:article:modified_time" content="2020-09-11">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      切换主题模式
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-09-26T23:43:12.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2018-09-27</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/django/" class="post-meta-link">django</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>411 words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h3 id="设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。"><a href="#设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。" class="headerlink" title="设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。"></a>设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。</h3><ol>
+<li>首先在前端查找控制背景色的style样式是由哪个属性控制的。<br><img src="/hugoblog/ppp.png" alt="~~~"></li>
+</ol>
+<h6 id="找到是-header中的background控制的。"><a href="#找到是-header中的background控制的。" class="headerlink" title="找到是.header中的background控制的。"></a>找到是.header中的background控制的。</h6><h6 id="从main-js发现样式是从-src-assets-bootstrap-style-css引入的。"><a href="#从main-js发现样式是从-src-assets-bootstrap-style-css引入的。" class="headerlink" title="从main.js发现样式是从/src/assets/bootstrap/style.css引入的。"></a>从main.js发现样式是从/src/assets/bootstrap/style.css引入的。</h6><hr>
+<h3 id="定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。"><a href="#定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。" class="headerlink" title="定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。"></a>定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/* 定义变量 */</span><br><span class="line"> :root&#123;</span><br><span class="line">  --bg-color:<span class="comment">#fff;</span></span><br><span class="line">  --a-color:black;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a.navbar-brand, a.logo &#123;</span><br><span class="line">  font-family: <span class="string">&quot;Lato&quot;</span>, <span class="string">&quot;Helvetica Neue&quot;</span>, Helvetica, Arial, sans-serif;</span><br><span class="line">  color: var(--a-color);</span><br><span class="line">  font-size: <span class="number">2</span>rem;</span><br><span class="line">  font-weight: bold;</span><br><span class="line">  margin-top: <span class="number">0</span>; &#125;</span><br><span class="line"></span><br><span class="line">.header &#123;</span><br><span class="line">  /* 使用变量 */</span><br><span class="line">  background:var(--bg-color);</span><br><span class="line">  min-height: <span class="number">7</span>em;</span><br></pre></td></tr></table></figure>
+<hr>
+<ol start="2">
+<li>定义变量<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">export default &#123;</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">	  //夜间模式切换开关信息</span><br><span class="line">	  style_night:<span class="string">&#x27;夜间模式&#x27;</span>,</span><br><span class="line">	  style:<span class="number">0</span>,</span><br><span class="line">	  &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<hr>
+<h3 id="在前端vue页面methods里定义开关切换主题方法。"><a href="#在前端vue页面methods里定义开关切换主题方法。" class="headerlink" title="在前端vue页面methods里定义开关切换主题方法。"></a>在前端vue页面methods里定义开关切换主题方法。</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> methods:&#123;</span><br><span class="line">      //按钮切换主题颜色方法</span><br><span class="line">      change_back:function()&#123;</span><br><span class="line">        console.log(this.style)</span><br><span class="line">          <span class="keyword">if</span>(this.style==true)&#123;</span><br><span class="line">                //获取样式表 所有节点</span><br><span class="line">                var styles = getComputedStyle(document.documentElement)</span><br><span class="line">                //动态更改 背景颜色</span><br><span class="line">                document.documentElement.style.setProperty(<span class="string">&quot;--bg-color&quot;</span>,<span class="string">&quot;#292a2d&quot;</span>);</span><br><span class="line">                //字体颜色</span><br><span class="line">                document.documentElement.style.setProperty(<span class="string">&quot;--a-color&quot;</span>,<span class="string">&quot;white&quot;</span>)</span><br><span class="line">          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">              //获取样式表 所有节点</span><br><span class="line">                var styles = getComputedStyle(document.documentElement)</span><br><span class="line">                //动态更改 背景颜色</span><br><span class="line">                document.documentElement.style.setProperty(<span class="string">&quot;--bg-color&quot;</span>,<span class="string">&quot;white&quot;</span>);</span><br><span class="line">                //字体颜色</span><br><span class="line">                document.documentElement.style.setProperty(<span class="string">&quot;--a-color&quot;</span>,<span class="string">&quot;black&quot;</span>)</span><br><span class="line">          &#125;</span><br><span class="line">          </span><br><span class="line">      &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="最后设置一个开关，绑定切换主题方法和变量。"><a href="#最后设置一个开关，绑定切换主题方法和变量。" class="headerlink" title="最后设置一个开关，绑定切换主题方法和变量。"></a>最后设置一个开关，绑定切换主题方法和变量。</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h-switch v-model=&quot;style&quot; @change=&quot;change_back&quot; &gt;&#123;&#123;style_night&#125;&#125;&lt;/h-switch&gt;</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2018/09/27/%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%BC%8F/">https://github.com/xuMr6/xumr6.github.io.git/2018/09/27/%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%BC%8F/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2018/10/02/实现微博第三方登录/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">实现微博第三方登录 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2018/09/22/七牛云存储/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">七牛云存储 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%BB%E9%A2%98%E6%8C%89%E9%92%AE%EF%BC%8C%E7%82%B9%E5%87%BB%E5%8D%B3%E4%BB%8E%E7%99%BD%E5%A4%A9%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2%E4%B8%BA%E6%9A%97%E9%BB%91%E6%A8%A1%E5%BC%8F%EF%BC%9A%E8%83%8C%E6%99%AF%E8%89%B2%E7%94%B1%E7%99%BD%E8%BD%AC%E9%BB%91%EF%BC%8C%E5%AD%97%E4%BD%93%E9%A2%9C%E8%89%B2%E7%94%B1%E9%BB%91%E8%BD%AC%E7%99%BD%E3%80%82"><span class="toc-text">设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%BE%E5%88%B0%E6%98%AF-header%E4%B8%AD%E7%9A%84background%E6%8E%A7%E5%88%B6%E7%9A%84%E3%80%82"><span class="toc-text">找到是.header中的background控制的。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%8Emain-js%E5%8F%91%E7%8E%B0%E6%A0%B7%E5%BC%8F%E6%98%AF%E4%BB%8E-src-assets-bootstrap-style-css%E5%BC%95%E5%85%A5%E7%9A%84%E3%80%82"><span class="toc-text">从main.js发现样式是从&#x2F;src&#x2F;assets&#x2F;bootstrap&#x2F;style.css引入的。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%EF%BC%8C%E7%84%B6%E5%90%8E%E5%B0%86%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8F%98%E9%87%8F%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%86%99%E6%AD%BB%E7%9A%84%E8%83%8C%E6%99%AF%E5%8F%98%E9%87%8F%EF%BC%9B%E7%84%B6%E5%90%8E%E5%89%8D%E7%AB%AF%E8%AE%BE%E7%BD%AE%E6%8C%89%E9%92%AE%EF%BC%8C%E5%B0%81%E8%A3%85%E6%94%B9%E5%8F%98%E8%83%8C%E6%99%AF%E5%8F%98%E9%87%8F%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-text">定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%89%8D%E7%AB%AFvue%E9%A1%B5%E9%9D%A2methods%E9%87%8C%E5%AE%9A%E4%B9%89%E5%BC%80%E5%85%B3%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-text">在前端vue页面methods里定义开关切换主题方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E8%AE%BE%E7%BD%AE%E4%B8%80%E4%B8%AA%E5%BC%80%E5%85%B3%EF%BC%8C%E7%BB%91%E5%AE%9A%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%96%B9%E6%B3%95%E5%92%8C%E5%8F%98%E9%87%8F%E3%80%82"><span class="toc-text">最后设置一个开关，绑定切换主题方法和变量。</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%BB%E9%A2%98%E6%8C%89%E9%92%AE%EF%BC%8C%E7%82%B9%E5%87%BB%E5%8D%B3%E4%BB%8E%E7%99%BD%E5%A4%A9%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2%E4%B8%BA%E6%9A%97%E9%BB%91%E6%A8%A1%E5%BC%8F%EF%BC%9A%E8%83%8C%E6%99%AF%E8%89%B2%E7%94%B1%E7%99%BD%E8%BD%AC%E9%BB%91%EF%BC%8C%E5%AD%97%E4%BD%93%E9%A2%9C%E8%89%B2%E7%94%B1%E9%BB%91%E8%BD%AC%E7%99%BD%E3%80%82"><span class="toc-text">设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%BE%E5%88%B0%E6%98%AF-header%E4%B8%AD%E7%9A%84background%E6%8E%A7%E5%88%B6%E7%9A%84%E3%80%82"><span class="toc-text">找到是.header中的background控制的。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%8Emain-js%E5%8F%91%E7%8E%B0%E6%A0%B7%E5%BC%8F%E6%98%AF%E4%BB%8E-src-assets-bootstrap-style-css%E5%BC%95%E5%85%A5%E7%9A%84%E3%80%82"><span class="toc-text">从main.js发现样式是从&#x2F;src&#x2F;assets&#x2F;bootstrap&#x2F;style.css引入的。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%EF%BC%8C%E7%84%B6%E5%90%8E%E5%B0%86%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8F%98%E9%87%8F%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%86%99%E6%AD%BB%E7%9A%84%E8%83%8C%E6%99%AF%E5%8F%98%E9%87%8F%EF%BC%9B%E7%84%B6%E5%90%8E%E5%89%8D%E7%AB%AF%E8%AE%BE%E7%BD%AE%E6%8C%89%E9%92%AE%EF%BC%8C%E5%B0%81%E8%A3%85%E6%94%B9%E5%8F%98%E8%83%8C%E6%99%AF%E5%8F%98%E9%87%8F%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-text">定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%89%8D%E7%AB%AFvue%E9%A1%B5%E9%9D%A2methods%E9%87%8C%E5%AE%9A%E4%B9%89%E5%BC%80%E5%85%B3%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-text">在前端vue页面methods里定义开关切换主题方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E8%AE%BE%E7%BD%AE%E4%B8%80%E4%B8%AA%E5%BC%80%E5%85%B3%EF%BC%8C%E7%BB%91%E5%AE%9A%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%96%B9%E6%B3%95%E5%92%8C%E5%8F%98%E9%87%8F%E3%80%82"><span class="toc-text">最后设置一个开关，绑定切换主题方法和变量。</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%BB%E9%A2%98%E6%8C%89%E9%92%AE%EF%BC%8C%E7%82%B9%E5%87%BB%E5%8D%B3%E4%BB%8E%E7%99%BD%E5%A4%A9%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2%E4%B8%BA%E6%9A%97%E9%BB%91%E6%A8%A1%E5%BC%8F%EF%BC%9A%E8%83%8C%E6%99%AF%E8%89%B2%E7%94%B1%E7%99%BD%E8%BD%AC%E9%BB%91%EF%BC%8C%E5%AD%97%E4%BD%93%E9%A2%9C%E8%89%B2%E7%94%B1%E9%BB%91%E8%BD%AC%E7%99%BD%E3%80%82"><span class="toc-text">设置主题按钮，点击即从白天模式切换为暗黑模式：背景色由白转黑，字体颜色由黑转白。</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%BE%E5%88%B0%E6%98%AF-header%E4%B8%AD%E7%9A%84background%E6%8E%A7%E5%88%B6%E7%9A%84%E3%80%82"><span class="toc-text">找到是.header中的background控制的。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%8Emain-js%E5%8F%91%E7%8E%B0%E6%A0%B7%E5%BC%8F%E6%98%AF%E4%BB%8E-src-assets-bootstrap-style-css%E5%BC%95%E5%85%A5%E7%9A%84%E3%80%82"><span class="toc-text">从main.js发现样式是从&#x2F;src&#x2F;assets&#x2F;bootstrap&#x2F;style.css引入的。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%EF%BC%8C%E7%84%B6%E5%90%8E%E5%B0%86%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8F%98%E9%87%8F%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%86%99%E6%AD%BB%E7%9A%84%E8%83%8C%E6%99%AF%E5%8F%98%E9%87%8F%EF%BC%9B%E7%84%B6%E5%90%8E%E5%89%8D%E7%AB%AF%E8%AE%BE%E7%BD%AE%E6%8C%89%E9%92%AE%EF%BC%8C%E5%B0%81%E8%A3%85%E6%94%B9%E5%8F%98%E8%83%8C%E6%99%AF%E5%8F%98%E9%87%8F%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-text">定义背景颜色变量，然后将定义的变量替换为写死的背景变量；然后前端设置按钮，封装改变背景变量的方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%89%8D%E7%AB%AFvue%E9%A1%B5%E9%9D%A2methods%E9%87%8C%E5%AE%9A%E4%B9%89%E5%BC%80%E5%85%B3%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-text">在前端vue页面methods里定义开关切换主题方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E8%AE%BE%E7%BD%AE%E4%B8%80%E4%B8%AA%E5%BC%80%E5%85%B3%EF%BC%8C%E7%BB%91%E5%AE%9A%E5%88%87%E6%8D%A2%E4%B8%BB%E9%A2%98%E6%96%B9%E6%B3%95%E5%92%8C%E5%8F%98%E9%87%8F%E3%80%82"><span class="toc-text">最后设置一个开关，绑定切换主题方法和变量。</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>

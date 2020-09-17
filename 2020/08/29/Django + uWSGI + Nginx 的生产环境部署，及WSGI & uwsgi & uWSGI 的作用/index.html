@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<meta  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <link rel="icon" href="/img/1.jpg">
+  <title>Mr xu</title>
+  
+  
+  <meta property="og:title" content="Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用">
+  
+  
+  <meta property="og:url" content="https://github.com/xuMr6/xumr6.github.io.git/2020/08/29/Django%20+%20uWSGI%20+%20Nginx%20%E7%9A%84%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%8F%8AWSGI%20&amp;%20uwsgi%20&amp;%20uWSGI%20%E7%9A%84%E4%BD%9C%E7%94%A8/index.html">
+  
+  
+  <meta property="og:img" content="/img/1.jpg">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2020-08-29">
+  <meta property="og:article:modified_time" content="2020-09-13">
+  <meta property="og:article:author" content="Mr xu">
+  
+  
+  <meta property="og:article:tag" content="python">
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js" as="script">
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_f7g5jnuftcf.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="XuMr" type="application/atom+xml">
+</head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/1.jpg">
+      
+      <span class="navbar-logo-dsc">Mr xu</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    首页
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    时间
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    标签
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    分类
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Django + uWSGI + Nginx 的生产环境部署，及WSGI & uwsgi & uWSGI 的作用
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-08-28T16:18:29.000Z" style="display: flex; align-items: center;">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2020-08-29</span>
+    </time>
+    
+    <span class="dot"></span>
+    
+    <a href="/categories/docker/" class="post-meta-link">docker</a>
+    
+    
+    
+    <span class="dot"></span>
+    <span>1.8k words</span>
+    
+  </div>
+  
+  <div class="post-meta post-show-meta" style="margin-top: -10px;">
+    <div style="display: flex; align-items: center;">
+      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
+      
+      
+        <a href="/tags/python/" class="post-meta-link">python</a>
+      
+    </div>
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <p>uWSGI的 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44685869/article/details/103951161">介绍 看这里</a></p>
+<h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h4><ol>
+<li>Nginx是一个Web服务器,其中的HTTP服务器功能和uWSGI功能很类似</li>
+<li>但是Nginx还可以用作更多用途，比如最常用的反向代理、负载均衡、拦截攻击等，而且性能极高</li>
+</ol>
+<h4 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h4><ol>
+<li>Django是一个Web框架，框架的作用在于处理request和 reponse，其他的不是框架所关心的内容。</li>
+<li>所以如何部署Django不是Django所需要关心的。</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200304220900982.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDY4NTg2OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">这里举个小例子：</span><br><span class="line">我们的浏览器是 出生在海外的华侨，通过HTTP(飞机) 从 Nginx(日本) 回到  (Python 中国)</span><br><span class="line">下飞机 到了之后发现语言不通，急忙的找到了我。</span><br><span class="line">他说日语(uwsgi)“こんにちは“</span><br><span class="line">我会日语啊 我把这句话 转换成了 汉语(uWSGI)给 别人听</span><br><span class="line">这样就可以 在 中国(Python) 让日本人(浏览器) 生活了。</span><br><span class="line">但是 博主是东北人 光会转义 日语-&gt;普通话 还不行 还要和我的家人们说东北话(WSGI)</span><br><span class="line">此时 就已经非常完美的解决了语言不通的问题了。</span><br><span class="line">12345678</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>请求处理整体流程</li>
+</ul>
+<ol>
+<li>nginx接收到浏览器发送过来的http请求，将包进行解析，分析url</li>
+<li>静态文件请求：就直接访问用户给nginx配置的静态文件目录，直接返回用户请求的静态文件</li>
+<li>动态接口请求：那么nginx就将请求转发给uWSGI，最后到达django处理</li>
+</ol>
+<ul>
+<li>各模块作用</li>
+</ul>
+<ol>
+<li><p>nginx：是对外的服务器，外部浏览器通过url访问nginx，nginx主要处理静态请求</p>
+</li>
+<li><p>uWSGI：是对内的服务器，主要用来处理动态请求</p>
+</li>
+<li><p>uwsgi：是一种web协议，接收到请求之后将包进行处理，处理成wsgi可以接受的格式，并发给wsgi</p>
+</li>
+<li><p>wsgi：是python专用的web协议，根据请求调用应用程序（django）的某个文件，某个文件的某个函数</p>
+</li>
+<li><p>django：是真正干活的，查询数据等资源，把处理的结果再次返回给WSGI， WSGI 将返回值进行打包，打包成uwsgi能够接收的格式</p>
+</li>
+<li><p>uwsgi接收wsgi发送的请求，并转发给nginx,nginx最终将返回值返回给浏览器</p>
+</li>
+</ol>
+<h3 id="Django-uwsgi方案"><a href="#Django-uwsgi方案" class="headerlink" title="Django + uwsgi方案"></a>Django + uwsgi方案</h3><ol>
+<li>没有nginx而只有uwsgi的服务器，则是Internet请求直接由uwsgi处理，并反馈到web项目中。</li>
+<li>nginx可以实现安全过滤，防DDOS等保护安全的操作，并且如果配置了多台服务器，nginx可以保证服务器的负载相对均衡。</li>
+<li>而uwsgi则是一个web服务器，实现了WSGI协议(Web Server Gateway Interface)，http协议等，它可以接收和处理请求，发出响应等。<br>所以只用uwsgi也是可以的。</li>
+</ol>
+<h3 id="nginx和uWSGI特点"><a href="#nginx和uWSGI特点" class="headerlink" title="nginx和uWSGI特点"></a>nginx和uWSGI特点</h3><ul>
+<li>nginx的作用</li>
+</ul>
+<ol>
+<li>反向代理，可以拦截一些web攻击，保护后端的web服务器</li>
+<li>负载均衡，根据轮询算法，分配请求到多节点web服务器</li>
+<li>缓存静态资源，加快访问速度，释放web服务器的内存占用，专项专用</li>
+</ol>
+<ul>
+<li>uWSGI的适用</li>
+</ul>
+<ol>
+<li><p>单节点服务器的简易部署</p>
+</li>
+<li><p>轻量级，好部署</p>
+</li>
+</ol>
+<p>Django + Uwsgi + Nginx 的生产环境部署</p>
+<h4 id="在centos-7中安装python3环境"><a href="#在centos-7中安装python3环境" class="headerlink" title="在centos 7中安装python3环境"></a>在centos 7中安装python3环境</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1、yum更新yum源</span></span><br><span class="line">yum update</span><br><span class="line"><span class="comment"># 2、安装Python 3.7所需的依赖否则安装后没有pip3包</span></span><br><span class="line">yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel gcc make</span><br><span class="line"><span class="comment"># 3、在官网下载所需版本，这里用的是3.7.0版本</span></span><br><span class="line">wget https://www.python.org/ftp/<span class="number">3.7</span><span class="number">.0</span>/Python<span class="number">-3.7</span><span class="number">.0</span>.tgz</span><br><span class="line"><span class="number">123456</span></span><br><span class="line"><span class="comment"># 1、yum更新yum源</span></span><br><span class="line">yum update</span><br><span class="line"><span class="comment"># 2、安装Python 3.7所需的依赖否则安装后没有pip3包</span></span><br><span class="line">yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel gcc make</span><br><span class="line"><span class="comment"># 3、在官网下载所需版本，这里用的是3.7.0版本</span></span><br><span class="line">wget https://www.python.org/ftp/<span class="number">3.7</span><span class="number">.0</span>/Python<span class="number">-3.7</span><span class="number">.0</span>.tgz</span><br><span class="line">　　<span class="number">2</span>、安装Python</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、解压</span></span><br><span class="line">tar -xvf Python<span class="number">-3.7</span><span class="number">.0</span>.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment">#2、配置编译</span></span><br><span class="line">cd Python<span class="number">-3.7</span><span class="number">.0</span></span><br><span class="line">./configure --prefix=/usr/local/python3  <span class="comment"># 配置编译的的路径（这里--prefix是指定编译安装的文件夹）</span></span><br><span class="line">./configure --enable-optimizations  <span class="comment"># 执行该代码后，会编译安装到 /usr/local/bin/ 下，且不用添加软连接或环境变量</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">ln -s /usr/local/python3/bin/python3 /usr/bin/python3  <span class="comment"># 添加软连接</span></span><br><span class="line">ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3</span><br><span class="line"></span><br><span class="line"><span class="comment">#3、将/usr/local/python3/bin加入PATH</span></span><br><span class="line">[root@linux-node1 testProj]<span class="comment"># vim /etc/profile</span></span><br><span class="line"><span class="comment">#然后在文件末尾添加</span></span><br><span class="line">export PATH=$PATH:/usr/local/python3/bin</span><br><span class="line"></span><br><span class="line">[root@linux-node1 testProj]<span class="comment"># source /etc/profile # 修改完后，还需要让这个环境变量在配置信息中生效，执行命令</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="初始化一个django项目"><a href="#初始化一个django项目" class="headerlink" title="初始化一个django项目"></a>初始化一个django项目</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化一个django项目</span></span><br><span class="line"></span><br><span class="line">[root@linux-node1 /] pip3 install django==<span class="number">2.0</span><span class="number">.4</span></span><br><span class="line">[root@linux-node1 /] mkdir /code/</span><br><span class="line">[root@linux-node1 /] cd /code/</span><br><span class="line">[root@linux-node1 testProj] django-admin startproject mmcsite</span><br><span class="line">[root@linux-node1 testProj] cd /code/mmcsite</span><br><span class="line">[root@linux-node1 testProj] python3 manage.py runserver <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8000</span></span><br><span class="line"></span><br><span class="line">页面中访问：http://<span class="number">192.168</span><span class="number">.56</span><span class="number">.11</span>:<span class="number">8000</span>/</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装uwsgi-并使用uWSGI启动这个服务"><a href="#安装uwsgi-并使用uWSGI启动这个服务" class="headerlink" title="安装uwsgi 并使用uWSGI启动这个服务"></a>安装uwsgi 并使用uWSGI启动这个服务</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;1. 安装uwsgi&#x27;&#x27;&#x27;</span></span><br><span class="line">[root@linux-node1 /]<span class="comment"># pip3 install uwsgi</span></span><br><span class="line">[root@linux-node1 /]<span class="comment"># ln -s /usr/local/python3/bin/uwsgi /usr/bin/uwsgi</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;2. 配置uwsgi.ini启动文件&#x27;&#x27;&#x27;</span></span><br><span class="line">[root@linux-node1 /]<span class="comment"># vim uwsgi.ini</span></span><br><span class="line">[uwsgi]</span><br><span class="line">socket = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">3031</span></span><br><span class="line">chdir = /code/mmcsite</span><br><span class="line">wsgi-file = /code/mmcsite/wsgi.py</span><br><span class="line">processes = <span class="number">5</span></span><br><span class="line">threads = <span class="number">30</span></span><br><span class="line">master = true</span><br><span class="line">daemonize = /code/mmcsite/uwsgi.log</span><br><span class="line">module=mmcsite.wsgi</span><br><span class="line">pidfile = /code/mmcsite/uwsgi.pid</span><br><span class="line">chmod-socket=<span class="number">666</span></span><br><span class="line">enable-threads = true</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;3. 使用uwsgi启动django：一定要在这个项目目录中&#x27;&#x27;&#x27;</span></span><br><span class="line">[root@linux-node1 /]<span class="comment"># uwsgi --http 192.168.56.11:80 --file mmcsite/wsgi.py --static-map=/static=static</span></span><br><span class="line">访问项目：http://<span class="number">192.168</span><span class="number">.56</span><span class="number">.11</span></span><br><span class="line"></span><br><span class="line">[root@linux-node2 demo2]<span class="comment"># vim /code/mmcsite/uwsgi.ini  # uwsgi.ini文件</span></span><br><span class="line">[uwsgi]</span><br><span class="line">socket = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">3031</span>                  <span class="comment"># 指定socket监听的地址和端口</span></span><br><span class="line">chdir = /code/mmcsite                  <span class="comment"># 项目路径 </span></span><br><span class="line">wsgi-file = /code/mmcsite/wsgi.py      <span class="comment"># django的wsgi文件路径</span></span><br><span class="line">processes = <span class="number">5</span>                          <span class="comment"># 启动五个进程</span></span><br><span class="line">threads = <span class="number">30</span>                           <span class="comment"># 每个进程启动30个线程</span></span><br><span class="line">master = true</span><br><span class="line">daemonize = /code/mmcsite/uwsgi.log    <span class="comment"># 日志存放路径</span></span><br><span class="line">module=mmcsite.wsgi                    <span class="comment"># 使用mmcsite.wsgi模块</span></span><br><span class="line">pidfile = /code/mmcsite/uwsgi.pid      <span class="comment"># uwsgi启动进程id存放路径</span></span><br><span class="line">chmod-socket=<span class="number">666</span>                       <span class="comment"># socket权限</span></span><br><span class="line">enable-threads = true                  <span class="comment"># 允许用内嵌的语言启动线程，这将允许你在app程序中产生一个子线程</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="安装配置nginx"><a href="#安装配置nginx" class="headerlink" title="安装配置nginx"></a>安装配置nginx</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;1. 配置nginx YUM源&#x27;&#x27;&#x27;</span></span><br><span class="line">[root@linux-node1 /] vim /etc/yum.repos.d/nginx.repo</span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<p>[nginx]<br>name=nginx repo</p>
+<h1 id="下面这行centos根据你自己的操作系统修改比如：OS-rehel"><a href="#下面这行centos根据你自己的操作系统修改比如：OS-rehel" class="headerlink" title="下面这行centos根据你自己的操作系统修改比如：OS/rehel"></a>下面这行centos根据你自己的操作系统修改比如：OS/rehel</h1><h1 id="6是你Linux系统的版本，可以通过URL查看路径是否正确"><a href="#6是你Linux系统的版本，可以通过URL查看路径是否正确" class="headerlink" title="6是你Linux系统的版本，可以通过URL查看路径是否正确"></a>6是你Linux系统的版本，可以通过URL查看路径是否正确</h1><p>baseurl=<a target="_blank" rel="noopener" href="http://nginx.org/packages/centos/7/$basearch/">http://nginx.org/packages/centos/7/$basearch/</a><br>gpgcheck=0<br>enabled=1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#39;&#39;&#39;2. 安装nginx&#39;&#39;&#39;</span><br><span class="line">[root@linux-node1 &#x2F;] yum -y install nginx</span><br><span class="line"></span><br><span class="line">安装nginx</span><br><span class="line">1234</span><br><span class="line">[root@linux-node1 &#x2F;]# vim &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;django.conf </span><br><span class="line">server &#123;</span><br><span class="line">    listen       8888;</span><br><span class="line">    server_name  192.168.56.11;</span><br><span class="line">    client_max_body_size 5M;</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_buffers 32 4K;#压缩在内存中缓冲32块 每块4K</span><br><span class="line">    gzip_comp_level 6 ;#压缩级别 推荐6</span><br><span class="line">    gzip_min_length 4000;#开始压缩的最小长度4bit</span><br><span class="line">        gzip_types text&#x2F;plain application&#x2F;json application&#x2F;javascript application&#x2F;x-javascript application&#x2F;css application&#x2F;xml application&#x2F;xml+rss text&#x2F;javascript application&#x2F;x-httpd-php image&#x2F;jpeg image&#x2F;gif image&#x2F;png image&#x2F;x-ms-bmp;</span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">              include uwsgi_params;</span><br><span class="line">              uwsgi_pass 127.0.0.1:3031;</span><br><span class="line">              uwsgi_ignore_client_abort on;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page 404 &#x2F;404.html;</span><br><span class="line">            location &#x3D; &#x2F;40x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page 500 502 503 504 &#x2F;50x.html;</span><br><span class="line">            location &#x3D; &#x2F;50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">配置nginx</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@linux-node1 demo2]<span class="comment"># systemctl restart nginx   # 开启nginx</span></span><br><span class="line">[root@linux-node1 demo2]<span class="comment"># uwsgi --ini uwsgi.ini     # 启动uwsgi的django项目</span></span><br><span class="line"><span class="comment"># http://192.168.56.11:8888/ 访问项目</span></span><br><span class="line">[root@linux-node1 demo2]<span class="comment"># uwsgi --stop uwsgi.pid    # 关闭uwsgi</span></span><br></pre></td></tr></table></figure>
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/about">Mr xu</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/xuMr6/xumr6.github.io.git/2020/08/29/Django%20+%20uWSGI%20+%20Nginx%20%E7%9A%84%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%8F%8AWSGI%20&amp;%20uwsgi%20&amp;%20uWSGI%20%E7%9A%84%E4%BD%9C%E7%94%A8/">https://github.com/xuMr6/xumr6.github.io.git/2020/08/29/Django%20+%20uWSGI%20+%20Nginx%20%E7%9A%84%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2%EF%BC%8C%E5%8F%8AWSGI%20&amp;%20uwsgi%20&amp;%20uWSGI%20%E7%9A%84%E4%BD%9C%E7%94%A8/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2020/09/06/Python基础知识点大全/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">Prev</div>
+        
+        <div class="nav-title">Python基础知识点大全 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2020/08/27/Docker 的基本常用命令/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">Docker 的基本常用命令 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Django"><span class="toc-text">Django</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django-uwsgi%E6%96%B9%E6%A1%88"><span class="toc-text">Django + uwsgi方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E5%92%8CuWSGI%E7%89%B9%E7%82%B9"><span class="toc-text">nginx和uWSGI特点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8centos-7%E4%B8%AD%E5%AE%89%E8%A3%85python3%E7%8E%AF%E5%A2%83"><span class="toc-text">在centos 7中安装python3环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%AAdjango%E9%A1%B9%E7%9B%AE"><span class="toc-text">初始化一个django项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85uwsgi-%E5%B9%B6%E4%BD%BF%E7%94%A8uWSGI%E5%90%AF%E5%8A%A8%E8%BF%99%E4%B8%AA%E6%9C%8D%E5%8A%A1"><span class="toc-text">安装uwsgi 并使用uWSGI启动这个服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEnginx"><span class="toc-text">安装配置nginx</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8B%E9%9D%A2%E8%BF%99%E8%A1%8Ccentos%E6%A0%B9%E6%8D%AE%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BF%AE%E6%94%B9%E6%AF%94%E5%A6%82%EF%BC%9AOS-rehel"><span class="toc-text">下面这行centos根据你自己的操作系统修改比如：OS&#x2F;rehel</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6%E6%98%AF%E4%BD%A0Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%89%88%E6%9C%AC%EF%BC%8C%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87URL%E6%9F%A5%E7%9C%8B%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="toc-text">6是你Linux系统的版本，可以通过URL查看路径是否正确</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE"><span class="toc-text">启动项目</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/1.jpg" class="author-img">
+
+<p class="author-name">Mr xu</p>
+<p class="author-description"></p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>113</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>18</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>2</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Django"><span class="toc-text">Django</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django-uwsgi%E6%96%B9%E6%A1%88"><span class="toc-text">Django + uwsgi方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E5%92%8CuWSGI%E7%89%B9%E7%82%B9"><span class="toc-text">nginx和uWSGI特点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8centos-7%E4%B8%AD%E5%AE%89%E8%A3%85python3%E7%8E%AF%E5%A2%83"><span class="toc-text">在centos 7中安装python3环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%AAdjango%E9%A1%B9%E7%9B%AE"><span class="toc-text">初始化一个django项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85uwsgi-%E5%B9%B6%E4%BD%BF%E7%94%A8uWSGI%E5%90%AF%E5%8A%A8%E8%BF%99%E4%B8%AA%E6%9C%8D%E5%8A%A1"><span class="toc-text">安装uwsgi 并使用uWSGI启动这个服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEnginx"><span class="toc-text">安装配置nginx</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8B%E9%9D%A2%E8%BF%99%E8%A1%8Ccentos%E6%A0%B9%E6%8D%AE%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BF%AE%E6%94%B9%E6%AF%94%E5%A6%82%EF%BC%9AOS-rehel"><span class="toc-text">下面这行centos根据你自己的操作系统修改比如：OS&#x2F;rehel</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6%E6%98%AF%E4%BD%A0Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%89%88%E6%9C%AC%EF%BC%8C%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87URL%E6%9F%A5%E7%9C%8B%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="toc-text">6是你Linux系统的版本，可以通过URL查看路径是否正确</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE"><span class="toc-text">启动项目</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+      <a href="/categories/celery">
+        <div class="categories-list-item">
+          celery
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/docker">
+        <div class="categories-list-item">
+          docker
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/djangobook">
+        <div class="categories-list-item">
+          djangobook
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/django">
+        <div class="categories-list-item">
+          django
+          <span class="categories-list-item-badge">22</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ES检索">
+        <div class="categories-list-item">
+          ES检索
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/jwt">
+        <div class="categories-list-item">
+          jwt
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/linux">
+        <div class="categories-list-item">
+          linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">13</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mysql">
+        <div class="categories-list-item">
+          mysql
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/nginx">
+        <div class="categories-list-item">
+          nginx
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/支付宝扫码">
+        <div class="categories-list-item">
+          支付宝扫码
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/redis">
+        <div class="categories-list-item">
+          redis
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/爬虫">
+        <div class="categories-list-item">
+          爬虫
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/vue">
+        <div class="categories-list-item">
+          vue
+          <span class="categories-list-item-badge">8</span>
+        </div>
+      </a>
+    
+      <a href="/categories/git">
+        <div class="categories-list-item">
+          git
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/mongodb">
+        <div class="categories-list-item">
+          mongodb
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/编程">
+        <div class="categories-list-item">
+          编程
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/算法">
+        <div class="categories-list-item">
+          算法
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+    <a href="\tags\python" title="python"><div class="tags-list-item">python</div></a>
+    
+    <a href="\tags\Linux" title="Linux"><div class="tags-list-item">Linux</div></a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Django"><span class="toc-text">Django</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django-uwsgi%E6%96%B9%E6%A1%88"><span class="toc-text">Django + uwsgi方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E5%92%8CuWSGI%E7%89%B9%E7%82%B9"><span class="toc-text">nginx和uWSGI特点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8centos-7%E4%B8%AD%E5%AE%89%E8%A3%85python3%E7%8E%AF%E5%A2%83"><span class="toc-text">在centos 7中安装python3环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%AAdjango%E9%A1%B9%E7%9B%AE"><span class="toc-text">初始化一个django项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85uwsgi-%E5%B9%B6%E4%BD%BF%E7%94%A8uWSGI%E5%90%AF%E5%8A%A8%E8%BF%99%E4%B8%AA%E6%9C%8D%E5%8A%A1"><span class="toc-text">安装uwsgi 并使用uWSGI启动这个服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEnginx"><span class="toc-text">安装配置nginx</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8B%E9%9D%A2%E8%BF%99%E8%A1%8Ccentos%E6%A0%B9%E6%8D%AE%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BF%AE%E6%94%B9%E6%AF%94%E5%A6%82%EF%BC%9AOS-rehel"><span class="toc-text">下面这行centos根据你自己的操作系统修改比如：OS&#x2F;rehel</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6%E6%98%AF%E4%BD%A0Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%89%88%E6%9C%AC%EF%BC%8C%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87URL%E6%9F%A5%E7%9C%8B%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="toc-text">6是你Linux系统的版本，可以通过URL查看路径是否正确</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE"><span class="toc-text">启动项目</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-09-06</div>
+        <a href="/2020/09/06/Python基础知识点大全/"><div class="recent-posts-item-content">Python基础知识点大全</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-29</div>
+        <a href="/2020/08/29/Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用/"><div class="recent-posts-item-content">Django + uWSGI + Nginx 的生产环境部署，及WSGI &amp; uwsgi &amp; uWSGI 的作用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-27</div>
+        <a href="/2020/08/27/Docker 的基本常用命令/"><div class="recent-posts-item-content">Docker 的基本常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2020-08-25</div>
+        <a href="/2020/08/25/Docker 镜像 &amp; 容器和镜像的联系 读写层/"><div class="recent-posts-item-content">Docker 镜像 &amp; 容器和镜像的联系 读写层</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2020
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">Mr xu </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton" >
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('data-fslightbox', 'gallery');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+    }
+    refreshFsLightbox();
+  }
+</script>
+<script>loadScript("//cdn.jsdelivr.net/npm/fslightbox@3.1.0/index.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>
